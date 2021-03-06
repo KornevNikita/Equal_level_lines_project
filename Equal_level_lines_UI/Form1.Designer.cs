@@ -30,6 +30,13 @@
     {
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.button1 = new System.Windows.Forms.Button();
+      this.label13 = new System.Windows.Forms.Label();
+      this.tBox_NumOfGridLines = new System.Windows.Forms.TextBox();
+      this.cBox_AddGrid = new System.Windows.Forms.CheckBox();
+      this.cBox_AddYaxis = new System.Windows.Forms.CheckBox();
+      this.cBox_AddXaxis = new System.Windows.Forms.CheckBox();
       this.tBox_LimitFactor = new System.Windows.Forms.TextBox();
       this.label12 = new System.Windows.Forms.Label();
       this.cBox_LimitOn = new System.Windows.Forms.CheckBox();
@@ -59,19 +66,14 @@
       this.tBox_Ymin = new System.Windows.Forms.TextBox();
       this.label1 = new System.Windows.Forms.Label();
       this.tBox_funcIdx = new System.Windows.Forms.TextBox();
-      this.groupBox4 = new System.Windows.Forms.GroupBox();
-      this.cBox_AddXaxis = new System.Windows.Forms.CheckBox();
-      this.cBox_AddYaxis = new System.Windows.Forms.CheckBox();
-      this.cBox_AddGrid = new System.Windows.Forms.CheckBox();
-      this.tBox_NumOfGridLines = new System.Windows.Forms.TextBox();
-      this.label13 = new System.Windows.Forms.Label();
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-      this.button1 = new System.Windows.Forms.Button();
+      this.tBox_GridLinesThickness = new System.Windows.Forms.TextBox();
+      this.label14 = new System.Windows.Forms.Label();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
+      this.groupBox4.SuspendLayout();
       this.groupBox3.SuspendLayout();
       this.groupBox2.SuspendLayout();
-      this.groupBox4.SuspendLayout();
       this.SuspendLayout();
       // 
       // pictureBox1
@@ -109,6 +111,81 @@
       this.groupBox1.TabIndex = 1;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Parameters";
+      // 
+      // groupBox4
+      // 
+      this.groupBox4.Controls.Add(this.label14);
+      this.groupBox4.Controls.Add(this.tBox_GridLinesThickness);
+      this.groupBox4.Controls.Add(this.button1);
+      this.groupBox4.Controls.Add(this.label13);
+      this.groupBox4.Controls.Add(this.tBox_NumOfGridLines);
+      this.groupBox4.Controls.Add(this.cBox_AddGrid);
+      this.groupBox4.Controls.Add(this.cBox_AddYaxis);
+      this.groupBox4.Controls.Add(this.cBox_AddXaxis);
+      this.groupBox4.Location = new System.Drawing.Point(6, 245);
+      this.groupBox4.Name = "groupBox4";
+      this.groupBox4.Size = new System.Drawing.Size(313, 205);
+      this.groupBox4.TabIndex = 2;
+      this.groupBox4.TabStop = false;
+      this.groupBox4.Text = " Coordinate axes";
+      // 
+      // button1
+      // 
+      this.button1.Location = new System.Drawing.Point(206, 87);
+      this.button1.Name = "button1";
+      this.button1.Size = new System.Drawing.Size(100, 26);
+      this.button1.TabIndex = 2;
+      this.button1.Text = "Pick color";
+      this.button1.UseVisualStyleBackColor = true;
+      this.button1.Click += new System.EventHandler(this.Button1_Click);
+      // 
+      // label13
+      // 
+      this.label13.AutoSize = true;
+      this.label13.Location = new System.Drawing.Point(110, 26);
+      this.label13.Name = "label13";
+      this.label13.Size = new System.Drawing.Size(119, 20);
+      this.label13.TabIndex = 3;
+      this.label13.Text = "Number of lines";
+      // 
+      // tBox_NumOfGridLines
+      // 
+      this.tBox_NumOfGridLines.Location = new System.Drawing.Point(256, 23);
+      this.tBox_NumOfGridLines.Name = "tBox_NumOfGridLines";
+      this.tBox_NumOfGridLines.Size = new System.Drawing.Size(50, 26);
+      this.tBox_NumOfGridLines.TabIndex = 2;
+      this.tBox_NumOfGridLines.Text = "5";
+      this.tBox_NumOfGridLines.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // cBox_AddGrid
+      // 
+      this.cBox_AddGrid.AutoSize = true;
+      this.cBox_AddGrid.Location = new System.Drawing.Point(6, 25);
+      this.cBox_AddGrid.Name = "cBox_AddGrid";
+      this.cBox_AddGrid.Size = new System.Drawing.Size(87, 24);
+      this.cBox_AddGrid.TabIndex = 2;
+      this.cBox_AddGrid.Text = "Add grid";
+      this.cBox_AddGrid.UseVisualStyleBackColor = true;
+      // 
+      // cBox_AddYaxis
+      // 
+      this.cBox_AddYaxis.AutoSize = true;
+      this.cBox_AddYaxis.Location = new System.Drawing.Point(6, 89);
+      this.cBox_AddYaxis.Name = "cBox_AddYaxis";
+      this.cBox_AddYaxis.Size = new System.Drawing.Size(72, 24);
+      this.cBox_AddYaxis.TabIndex = 1;
+      this.cBox_AddYaxis.Text = "Add Y";
+      this.cBox_AddYaxis.UseVisualStyleBackColor = true;
+      // 
+      // cBox_AddXaxis
+      // 
+      this.cBox_AddXaxis.AutoSize = true;
+      this.cBox_AddXaxis.Location = new System.Drawing.Point(6, 57);
+      this.cBox_AddXaxis.Name = "cBox_AddXaxis";
+      this.cBox_AddXaxis.Size = new System.Drawing.Size(72, 24);
+      this.cBox_AddXaxis.TabIndex = 0;
+      this.cBox_AddXaxis.Text = "Add X";
+      this.cBox_AddXaxis.UseVisualStyleBackColor = true;
       // 
       // tBox_LimitFactor
       // 
@@ -394,82 +471,27 @@
       this.tBox_funcIdx.Text = "2";
       this.tBox_funcIdx.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
-      // groupBox4
-      // 
-      this.groupBox4.Controls.Add(this.button1);
-      this.groupBox4.Controls.Add(this.label13);
-      this.groupBox4.Controls.Add(this.tBox_NumOfGridLines);
-      this.groupBox4.Controls.Add(this.cBox_AddGrid);
-      this.groupBox4.Controls.Add(this.cBox_AddYaxis);
-      this.groupBox4.Controls.Add(this.cBox_AddXaxis);
-      this.groupBox4.Location = new System.Drawing.Point(6, 245);
-      this.groupBox4.Name = "groupBox4";
-      this.groupBox4.Size = new System.Drawing.Size(313, 205);
-      this.groupBox4.TabIndex = 2;
-      this.groupBox4.TabStop = false;
-      this.groupBox4.Text = " Coordinate axes";
-      // 
-      // cBox_AddXaxis
-      // 
-      this.cBox_AddXaxis.AutoSize = true;
-      this.cBox_AddXaxis.Location = new System.Drawing.Point(6, 55);
-      this.cBox_AddXaxis.Name = "cBox_AddXaxis";
-      this.cBox_AddXaxis.Size = new System.Drawing.Size(72, 24);
-      this.cBox_AddXaxis.TabIndex = 0;
-      this.cBox_AddXaxis.Text = "Add X";
-      this.cBox_AddXaxis.UseVisualStyleBackColor = true;
-      // 
-      // cBox_AddYaxis
-      // 
-      this.cBox_AddYaxis.AutoSize = true;
-      this.cBox_AddYaxis.Location = new System.Drawing.Point(6, 85);
-      this.cBox_AddYaxis.Name = "cBox_AddYaxis";
-      this.cBox_AddYaxis.Size = new System.Drawing.Size(72, 24);
-      this.cBox_AddYaxis.TabIndex = 1;
-      this.cBox_AddYaxis.Text = "Add Y";
-      this.cBox_AddYaxis.UseVisualStyleBackColor = true;
-      // 
-      // cBox_AddGrid
-      // 
-      this.cBox_AddGrid.AutoSize = true;
-      this.cBox_AddGrid.Location = new System.Drawing.Point(6, 25);
-      this.cBox_AddGrid.Name = "cBox_AddGrid";
-      this.cBox_AddGrid.Size = new System.Drawing.Size(87, 24);
-      this.cBox_AddGrid.TabIndex = 2;
-      this.cBox_AddGrid.Text = "Add grid";
-      this.cBox_AddGrid.UseVisualStyleBackColor = true;
-      // 
-      // tBox_NumOfGridLines
-      // 
-      this.tBox_NumOfGridLines.Location = new System.Drawing.Point(256, 20);
-      this.tBox_NumOfGridLines.Name = "tBox_NumOfGridLines";
-      this.tBox_NumOfGridLines.Size = new System.Drawing.Size(50, 26);
-      this.tBox_NumOfGridLines.TabIndex = 2;
-      this.tBox_NumOfGridLines.Text = "5";
-      this.tBox_NumOfGridLines.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
-      // label13
-      // 
-      this.label13.AutoSize = true;
-      this.label13.Location = new System.Drawing.Point(131, 26);
-      this.label13.Name = "label13";
-      this.label13.Size = new System.Drawing.Size(119, 20);
-      this.label13.TabIndex = 3;
-      this.label13.Text = "Number of lines";
-      // 
       // colorDialog1
       // 
       this.colorDialog1.AnyColor = true;
       // 
-      // button1
+      // tBox_GridLinesThickness
       // 
-      this.button1.Location = new System.Drawing.Point(135, 53);
-      this.button1.Name = "button1";
-      this.button1.Size = new System.Drawing.Size(100, 26);
-      this.button1.TabIndex = 2;
-      this.button1.Text = "Pick color";
-      this.button1.UseVisualStyleBackColor = true;
-      this.button1.Click += new System.EventHandler(this.Button1_Click);
+      this.tBox_GridLinesThickness.Location = new System.Drawing.Point(256, 55);
+      this.tBox_GridLinesThickness.Name = "tBox_GridLinesThickness";
+      this.tBox_GridLinesThickness.Size = new System.Drawing.Size(50, 26);
+      this.tBox_GridLinesThickness.TabIndex = 4;
+      this.tBox_GridLinesThickness.Text = "1";
+      this.tBox_GridLinesThickness.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // label14
+      // 
+      this.label14.AutoSize = true;
+      this.label14.Location = new System.Drawing.Point(110, 58);
+      this.label14.Name = "label14";
+      this.label14.Size = new System.Drawing.Size(140, 20);
+      this.label14.TabIndex = 5;
+      this.label14.Text = "Line thickness (px)";
       // 
       // Form1
       // 
@@ -483,12 +505,12 @@
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
       this.groupBox1.ResumeLayout(false);
       this.groupBox1.PerformLayout();
+      this.groupBox4.ResumeLayout(false);
+      this.groupBox4.PerformLayout();
       this.groupBox3.ResumeLayout(false);
       this.groupBox3.PerformLayout();
       this.groupBox2.ResumeLayout(false);
       this.groupBox2.PerformLayout();
-      this.groupBox4.ResumeLayout(false);
-      this.groupBox4.PerformLayout();
       this.ResumeLayout(false);
 
     }
@@ -534,6 +556,8 @@
     private System.Windows.Forms.CheckBox cBox_AddGrid;
     private System.Windows.Forms.Button button1;
     public System.Windows.Forms.ColorDialog colorDialog1;
+    private System.Windows.Forms.Label label14;
+    private System.Windows.Forms.TextBox tBox_GridLinesThickness;
   }
 }
 

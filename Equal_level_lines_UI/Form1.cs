@@ -44,6 +44,7 @@ namespace Equal_level_lines_UI
     // ============ End of Equal_level_lines.dll import functions ===========
 
     public static IntPtr ptrData, ptrSubLevelValues;
+    public static int GridLinesThickness = 1;
 
     public struct Point
     {
@@ -237,7 +238,7 @@ namespace Equal_level_lines_UI
 
         if (cBox_Grid)
         {
-          Pen p = new Pen(color, 1);
+          Pen p = new Pen(color, GridLinesThickness);
           float h = pic.Width / (NumOfGridLnes + 1);
           for (i = 1; i <= NumOfGridLnes; i++)
           {
@@ -255,6 +256,8 @@ namespace Equal_level_lines_UI
 
     private void btn_Run_click(object sender, EventArgs e)
     {
+      GridLinesThickness = int.Parse(tBox_GridLinesThickness.Text);
+
       int N = int.Parse(tBox_N.Text);
       int M1 = int.Parse(tBox_M1.Text);
       int M2 = int.Parse(tBox_M2.Text);
