@@ -31,6 +31,8 @@
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.label14 = new System.Windows.Forms.Label();
+      this.tBox_GridLinesThickness = new System.Windows.Forms.TextBox();
       this.button1 = new System.Windows.Forms.Button();
       this.label13 = new System.Windows.Forms.Label();
       this.tBox_NumOfGridLines = new System.Windows.Forms.TextBox();
@@ -39,7 +41,7 @@
       this.cBox_AddXaxis = new System.Windows.Forms.CheckBox();
       this.tBox_LimitFactor = new System.Windows.Forms.TextBox();
       this.label12 = new System.Windows.Forms.Label();
-      this.cBox_LimitOn = new System.Windows.Forms.CheckBox();
+      this.cBox_PrintLimit = new System.Windows.Forms.CheckBox();
       this.tBox_LimitIdx = new System.Windows.Forms.TextBox();
       this.label11 = new System.Windows.Forms.Label();
       this.btn_Clear = new System.Windows.Forms.Button();
@@ -67,8 +69,6 @@
       this.label1 = new System.Windows.Forms.Label();
       this.tBox_funcIdx = new System.Windows.Forms.TextBox();
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-      this.tBox_GridLinesThickness = new System.Windows.Forms.TextBox();
-      this.label14 = new System.Windows.Forms.Label();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       this.groupBox4.SuspendLayout();
@@ -93,7 +93,7 @@
       this.groupBox1.Controls.Add(this.groupBox4);
       this.groupBox1.Controls.Add(this.tBox_LimitFactor);
       this.groupBox1.Controls.Add(this.label12);
-      this.groupBox1.Controls.Add(this.cBox_LimitOn);
+      this.groupBox1.Controls.Add(this.cBox_PrintLimit);
       this.groupBox1.Controls.Add(this.tBox_LimitIdx);
       this.groupBox1.Controls.Add(this.label11);
       this.groupBox1.Controls.Add(this.btn_Clear);
@@ -128,6 +128,24 @@
       this.groupBox4.TabIndex = 2;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = " Coordinate axes";
+      // 
+      // label14
+      // 
+      this.label14.AutoSize = true;
+      this.label14.Location = new System.Drawing.Point(110, 58);
+      this.label14.Name = "label14";
+      this.label14.Size = new System.Drawing.Size(140, 20);
+      this.label14.TabIndex = 5;
+      this.label14.Text = "Line thickness (px)";
+      // 
+      // tBox_GridLinesThickness
+      // 
+      this.tBox_GridLinesThickness.Location = new System.Drawing.Point(256, 55);
+      this.tBox_GridLinesThickness.Name = "tBox_GridLinesThickness";
+      this.tBox_GridLinesThickness.Size = new System.Drawing.Size(50, 26);
+      this.tBox_GridLinesThickness.TabIndex = 4;
+      this.tBox_GridLinesThickness.Text = "1";
+      this.tBox_GridLinesThickness.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // button1
       // 
@@ -166,6 +184,7 @@
       this.cBox_AddGrid.TabIndex = 2;
       this.cBox_AddGrid.Text = "Add grid";
       this.cBox_AddGrid.UseVisualStyleBackColor = true;
+      this.cBox_AddGrid.CheckedChanged += new System.EventHandler(this.CBox_AddGrid_CheckedChanged);
       // 
       // cBox_AddYaxis
       // 
@@ -176,6 +195,7 @@
       this.cBox_AddYaxis.TabIndex = 1;
       this.cBox_AddYaxis.Text = "Add Y";
       this.cBox_AddYaxis.UseVisualStyleBackColor = true;
+      this.cBox_AddYaxis.CheckedChanged += new System.EventHandler(this.CBox_AddYaxis_CheckedChanged);
       // 
       // cBox_AddXaxis
       // 
@@ -186,6 +206,7 @@
       this.cBox_AddXaxis.TabIndex = 0;
       this.cBox_AddXaxis.Text = "Add X";
       this.cBox_AddXaxis.UseVisualStyleBackColor = true;
+      this.cBox_AddXaxis.CheckedChanged += new System.EventHandler(this.CBox_AddXaxis_CheckedChanged);
       // 
       // tBox_LimitFactor
       // 
@@ -205,15 +226,16 @@
       this.label12.TabIndex = 22;
       this.label12.Text = "Limit factor";
       // 
-      // cBox_LimitOn
+      // cBox_PrintLimit
       // 
-      this.cBox_LimitOn.AutoSize = true;
-      this.cBox_LimitOn.Location = new System.Drawing.Point(10, 59);
-      this.cBox_LimitOn.Name = "cBox_LimitOn";
-      this.cBox_LimitOn.Size = new System.Drawing.Size(113, 24);
-      this.cBox_LimitOn.TabIndex = 2;
-      this.cBox_LimitOn.Text = "Turn on limit";
-      this.cBox_LimitOn.UseVisualStyleBackColor = true;
+      this.cBox_PrintLimit.AutoSize = true;
+      this.cBox_PrintLimit.Location = new System.Drawing.Point(10, 59);
+      this.cBox_PrintLimit.Name = "cBox_PrintLimit";
+      this.cBox_PrintLimit.Size = new System.Drawing.Size(91, 24);
+      this.cBox_PrintLimit.TabIndex = 2;
+      this.cBox_PrintLimit.Text = "Print limit";
+      this.cBox_PrintLimit.UseVisualStyleBackColor = true;
+      this.cBox_PrintLimit.CheckedChanged += new System.EventHandler(this.CBox_LimitOn_CheckedChanged);
       // 
       // tBox_LimitIdx
       // 
@@ -475,24 +497,6 @@
       // 
       this.colorDialog1.AnyColor = true;
       // 
-      // tBox_GridLinesThickness
-      // 
-      this.tBox_GridLinesThickness.Location = new System.Drawing.Point(256, 55);
-      this.tBox_GridLinesThickness.Name = "tBox_GridLinesThickness";
-      this.tBox_GridLinesThickness.Size = new System.Drawing.Size(50, 26);
-      this.tBox_GridLinesThickness.TabIndex = 4;
-      this.tBox_GridLinesThickness.Text = "1";
-      this.tBox_GridLinesThickness.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
-      // label14
-      // 
-      this.label14.AutoSize = true;
-      this.label14.Location = new System.Drawing.Point(110, 58);
-      this.label14.Name = "label14";
-      this.label14.Size = new System.Drawing.Size(140, 20);
-      this.label14.TabIndex = 5;
-      this.label14.Text = "Line thickness (px)";
-      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -545,19 +549,19 @@
     private System.Windows.Forms.Button btn_Clear;
     private System.Windows.Forms.TextBox tBox_LimitIdx;
     private System.Windows.Forms.Label label11;
-    public System.Windows.Forms.CheckBox cBox_LimitOn;
+    public System.Windows.Forms.CheckBox cBox_PrintLimit;
     private System.Windows.Forms.Label label12;
     public System.Windows.Forms.TextBox tBox_LimitFactor;
     private System.Windows.Forms.GroupBox groupBox4;
-    private System.Windows.Forms.CheckBox cBox_AddYaxis;
-    private System.Windows.Forms.CheckBox cBox_AddXaxis;
     private System.Windows.Forms.Label label13;
     private System.Windows.Forms.TextBox tBox_NumOfGridLines;
-    private System.Windows.Forms.CheckBox cBox_AddGrid;
     private System.Windows.Forms.Button button1;
     public System.Windows.Forms.ColorDialog colorDialog1;
     private System.Windows.Forms.Label label14;
     private System.Windows.Forms.TextBox tBox_GridLinesThickness;
+    public System.Windows.Forms.CheckBox cBox_AddGrid;
+    public System.Windows.Forms.CheckBox cBox_AddYaxis;
+    public System.Windows.Forms.CheckBox cBox_AddXaxis;
   }
 }
 

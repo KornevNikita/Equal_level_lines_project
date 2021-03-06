@@ -33,9 +33,6 @@ namespace Equal_level_lines_UI
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
     public static extern void GetData(IntPtr _ptrData, IntPtr _SubLevelValues);
 
-    //[DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
-    //public static extern void DeleteData();
-
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
     public static extern void InitData(IntPtr _ptrData);
 
@@ -46,6 +43,7 @@ namespace Equal_level_lines_UI
 
     public static IntPtr ptrData, ptrSubLevelValues;
     public static int GridLinesThickness = 1;
+    public static bool AddGrid, AddXAxis, AddYAxis, PrintLimit;
 
     public struct Point
     {
@@ -92,8 +90,7 @@ namespace Equal_level_lines_UI
         pQ = new double[M + 1];
       }
 
-      public void SendLines(Graphics g, PictureBox pic, bool cBox_LimitOn,
-                            bool cBox_Xaxis, bool cBox_Yaxis, int LimitIdx,
+      public void SendLines(Graphics g, PictureBox pic, int LimitIdx,
                             bool cBox_Grid, int NumOfGridLnes, Color color,
                             int LimitFactor)
       {
@@ -198,12 +195,12 @@ namespace Equal_level_lines_UI
             }//Конец перебора всех Qu
           }
 
-        if (cBox_LimitOn)
+        if (PrintLimit)
         {
           for (i = 0; i < pic.Width / LimitFactor; ++i)
             for (j = 0; j < pic.Height / LimitFactor; ++j)
             {
-              
+
               float x = (float)(XMin + (float)(i) / (float)pic.Width * (XMax - XMin) * LimitFactor);
               float y = (float)(YMax - (float)j / (float)pic.Height * (YMax - YMin) * LimitFactor);
               if (!GetLimitValue(x, y, LimitIdx))
@@ -214,19 +211,19 @@ namespace Equal_level_lines_UI
             }
         }
 
-        if (cBox_Xaxis)
+        if (AddXAxis)
         {
             Pen p = new Pen(Color.Black, 1);
             g.DrawLine(p, 0, pic.Height / 2, pic.Width, pic.Height / 2);
         }
 
-        if (cBox_Yaxis)
+        if (AddYAxis)
         {
           Pen p = new Pen(Color.Black, 1);
           g.DrawLine(p, pic.Width / 2, 0, pic.Width / 2, pic.Height);
         }
 
-        if (cBox_Grid)
+        if (AddGrid)
         {
           Pen p = new Pen(color, GridLinesThickness);
           float h = pic.Width / (NumOfGridLnes + 1);
@@ -237,6 +234,14 @@ namespace Equal_level_lines_UI
           }
         }
       }
+    }
+
+    public void ParseArea()
+    {
+      XMin = Double.Parse(tBox_Xmin.Text);
+      XMax = Double.Parse(tBox_Xmax.Text);
+      YMin = Double.Parse(tBox_Ymin.Text);
+      YMax = Double.Parse(tBox_Ymax.Text);
     }
 
     static double XMin, XMax, YMin, YMax;
@@ -255,10 +260,7 @@ namespace Equal_level_lines_UI
       AllocMem(N, M1, M2, M3);
       Eque_lines.CreateData(N, M1, M2, M3);
 
-      XMin = Double.Parse(tBox_Xmin.Text);
-      XMax = Double.Parse(tBox_Xmax.Text);
-      YMin = Double.Parse(tBox_Ymin.Text);
-      YMax = Double.Parse(tBox_Ymax.Text);
+      ParseArea();
       SetArea(XMin, XMax, YMin, YMax);
 
       Stopwatch stopwatch = new Stopwatch();
@@ -274,9 +276,34 @@ namespace Equal_level_lines_UI
       pictureBox1.Invalidate();
     }
 
+    private void CBox_AddXaxis_CheckedChanged(object sender, EventArgs e)
+    {
+      AddXAxis = cBox_AddXaxis.Checked;
+      pictureBox1.Invalidate();
+    }
+
+    private void CBox_LimitOn_CheckedChanged(object sender, EventArgs e)
+    {
+      ParseArea();
+      PrintLimit = cBox_PrintLimit.Checked;
+      pictureBox1.Invalidate();
+    }
+
+    private void CBox_AddYaxis_CheckedChanged(object sender, EventArgs e)
+    {
+      AddYAxis = cBox_AddYaxis.Checked;
+      pictureBox1.Invalidate();
+    }
+
     private void Button1_Click(object sender, EventArgs e)
     {
       colorDialog1.ShowDialog();
+    }
+
+    private void CBox_AddGrid_CheckedChanged(object sender, EventArgs e)
+    {
+      AddGrid = cBox_AddGrid.Checked;
+      pictureBox1.Invalidate();
     }
 
     private void btn_Clear_click(object sender, EventArgs e)
@@ -331,8 +358,7 @@ namespace Equal_level_lines_UI
     {
       e.Graphics.SmoothingMode =
         System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-      Eque_lines.SendLines(e.Graphics, pictureBox1, cBox_LimitOn.Checked,
-                           cBox_AddXaxis.Checked, cBox_AddYaxis.Checked,
+      Eque_lines.SendLines(e.Graphics, pictureBox1,
                            int.Parse(tBox_LimitIdx.Text),
                            cBox_AddGrid.Checked,
                            int.Parse(tBox_NumOfGridLines.Text),
@@ -349,7 +375,7 @@ namespace Equal_level_lines_UI
         case 1:
           return x * x + y * y - 1 < 0;
         default:
-          return false;
+          return true;
       }
     }
   }
