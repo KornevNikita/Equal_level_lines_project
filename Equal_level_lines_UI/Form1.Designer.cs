@@ -62,6 +62,9 @@
       this.groupBox4 = new System.Windows.Forms.GroupBox();
       this.cBox_AddXaxis = new System.Windows.Forms.CheckBox();
       this.cBox_AddYaxis = new System.Windows.Forms.CheckBox();
+      this.cBox_AddGrid = new System.Windows.Forms.CheckBox();
+      this.tBox_NumOfGridLines = new System.Windows.Forms.TextBox();
+      this.label13 = new System.Windows.Forms.Label();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -391,6 +394,9 @@
       // 
       // groupBox4
       // 
+      this.groupBox4.Controls.Add(this.label13);
+      this.groupBox4.Controls.Add(this.tBox_NumOfGridLines);
+      this.groupBox4.Controls.Add(this.cBox_AddGrid);
       this.groupBox4.Controls.Add(this.cBox_AddYaxis);
       this.groupBox4.Controls.Add(this.cBox_AddXaxis);
       this.groupBox4.Location = new System.Drawing.Point(6, 245);
@@ -403,7 +409,7 @@
       // cBox_AddXaxis
       // 
       this.cBox_AddXaxis.AutoSize = true;
-      this.cBox_AddXaxis.Location = new System.Drawing.Point(3, 22);
+      this.cBox_AddXaxis.Location = new System.Drawing.Point(6, 55);
       this.cBox_AddXaxis.Name = "cBox_AddXaxis";
       this.cBox_AddXaxis.Size = new System.Drawing.Size(72, 24);
       this.cBox_AddXaxis.TabIndex = 0;
@@ -413,12 +419,40 @@
       // cBox_AddYaxis
       // 
       this.cBox_AddYaxis.AutoSize = true;
-      this.cBox_AddYaxis.Location = new System.Drawing.Point(3, 52);
+      this.cBox_AddYaxis.Location = new System.Drawing.Point(6, 85);
       this.cBox_AddYaxis.Name = "cBox_AddYaxis";
       this.cBox_AddYaxis.Size = new System.Drawing.Size(72, 24);
       this.cBox_AddYaxis.TabIndex = 1;
       this.cBox_AddYaxis.Text = "Add Y";
       this.cBox_AddYaxis.UseVisualStyleBackColor = true;
+      // 
+      // cBox_AddGrid
+      // 
+      this.cBox_AddGrid.AutoSize = true;
+      this.cBox_AddGrid.Location = new System.Drawing.Point(6, 25);
+      this.cBox_AddGrid.Name = "cBox_AddGrid";
+      this.cBox_AddGrid.Size = new System.Drawing.Size(87, 24);
+      this.cBox_AddGrid.TabIndex = 2;
+      this.cBox_AddGrid.Text = "Add grid";
+      this.cBox_AddGrid.UseVisualStyleBackColor = true;
+      // 
+      // tBox_NumOfGridLines
+      // 
+      this.tBox_NumOfGridLines.Location = new System.Drawing.Point(256, 20);
+      this.tBox_NumOfGridLines.Name = "tBox_NumOfGridLines";
+      this.tBox_NumOfGridLines.Size = new System.Drawing.Size(50, 26);
+      this.tBox_NumOfGridLines.TabIndex = 2;
+      this.tBox_NumOfGridLines.Text = "5";
+      this.tBox_NumOfGridLines.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // label13
+      // 
+      this.label13.AutoSize = true;
+      this.label13.Location = new System.Drawing.Point(131, 26);
+      this.label13.Name = "label13";
+      this.label13.Size = new System.Drawing.Size(119, 20);
+      this.label13.TabIndex = 3;
+      this.label13.Text = "Number of lines";
       // 
       // Form1
       // 
@@ -478,6 +512,9 @@
     private System.Windows.Forms.GroupBox groupBox4;
     private System.Windows.Forms.CheckBox cBox_AddYaxis;
     private System.Windows.Forms.CheckBox cBox_AddXaxis;
+    private System.Windows.Forms.Label label13;
+    private System.Windows.Forms.TextBox tBox_NumOfGridLines;
+    private System.Windows.Forms.CheckBox cBox_AddGrid;
   }
 }
 

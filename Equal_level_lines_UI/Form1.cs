@@ -101,7 +101,7 @@ namespace Equal_level_lines_UI
 
       public void SendLines(Graphics g, PictureBox pic, bool cBox_LimitOn,
                             bool cBox_Xaxis, bool cBox_Yaxis, int LimitIdx,
-                            int LimitFactor)
+                            bool cBox_Grid, int NumOfGridLnes, int LimitFactor)
       {
         int i, j, u, s;
         for (i = 0; i < N; i++)
@@ -231,6 +231,17 @@ namespace Equal_level_lines_UI
           Pen p = new Pen(Color.Black, 1);
           g.DrawLine(p, pic.Width / 2, 0, pic.Width / 2, pic.Height);
         }
+
+        if (cBox_Grid)
+        {
+          Pen p = new Pen(Color.Black, 1);
+          float h = pic.Width / (NumOfGridLnes + 1);
+          for (i = 1; i <= NumOfGridLnes; i++)
+          {
+            g.DrawLine(p, i * h, 0, i * h, pic.Height);
+            g.DrawLine(p, 0, i * h, pic.Width, i * h);
+          }
+        }
       }
     }
 
@@ -316,10 +327,13 @@ namespace Equal_level_lines_UI
 
     private void pBox_Paint(object sender, PaintEventArgs e)
     {
-      e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+      e.Graphics.SmoothingMode =
+        System.Drawing.Drawing2D.SmoothingMode.HighQuality;
       Eque_lines.SendLines(e.Graphics, pictureBox1, cBox_LimitOn.Checked,
                            cBox_AddXaxis.Checked, cBox_AddYaxis.Checked,
                            int.Parse(tBox_LimitIdx.Text),
+                           cBox_AddGrid.Checked,
+                           int.Parse(tBox_NumOfGridLines.Text),
                            int.Parse(tBox_LimitFactor.Text));
     }
 
