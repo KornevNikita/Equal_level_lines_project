@@ -106,3 +106,9 @@ void InitArrays(DrawPoints<Lines::Point>* array, double *SubLevelValues,
   array->AllocMem(array->Count);
   SubLevelValues = new double[SLVSize];
 }
+
+void DeleteArrays(DrawPoints<Lines::Point> *Data, double *SubLevelValues) {
+  Data->FreeMem();
+  delete[] SubLevelValues;
+  delete lines;
+}

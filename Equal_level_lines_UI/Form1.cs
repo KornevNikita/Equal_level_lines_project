@@ -33,13 +33,17 @@ namespace Equal_level_lines_UI
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
     public static extern void GetData(IntPtr _ptrData, IntPtr _SubLevelValues);
 
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void DeleteData();
+    //[DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    //public static extern void DeleteData();
 
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
     public static extern void InitArrays(IntPtr _ptrData,
                                          IntPtr _ptrSubLevelValues,
                                          int SLVSize);
+
+    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void DeleteArrays(IntPtr _ptrData,
+                                         IntPtr _ptrSubLevelValues);
 
     // ============ End of Equal_level_lines.dll import functions ===========
 
@@ -91,16 +95,16 @@ namespace Equal_level_lines_UI
         pQ = new double[M + 1];
       }
 
-      public void DeleteData()
-      {
-        N = 0;
-        M1 = 0;
-        M2 = 0;
-        M3 = 0;
-        M = 0;
-        pDat = null;
-        pQ = null;
-      }
+      //public void DeleteData()
+      //{
+      //  N = 0;
+      //  M1 = 0;
+      //  M2 = 0;
+      //  M3 = 0;
+      //  M = 0;
+      //  pDat = null;
+      //  pQ = null;
+      //}
 
       public void SendLines(Graphics g, PictureBox pic, bool cBox_LimitOn,
                             bool cBox_Xaxis, bool cBox_Yaxis, int LimitIdx,
@@ -291,7 +295,7 @@ namespace Equal_level_lines_UI
 
     private void btn_Clear_click(object sender, EventArgs e)
     {
-      Eque_lines.DeleteData();
+      //Eque_lines.DeleteData();
       pictureBox1.Image = null;
     }
 
@@ -316,6 +320,7 @@ namespace Equal_level_lines_UI
       Marshal.Copy(Data.Points, drawpoints, 0, Data.Count * 3);
 
       ParseReceivedData(drawpoints, Eque_lines.pQ, (N + 1) * (N + 1));
+      DeleteArrays(ptrData, ptrSubLevelValues);
 
       Marshal.FreeHGlobal(ptrData);
       Marshal.FreeHGlobal(ptrSubLevelValues);
