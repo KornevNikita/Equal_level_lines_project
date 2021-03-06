@@ -320,7 +320,7 @@ namespace Equal_level_lines_UI
       Marshal.Copy(Data.Points, drawpoints, 0, Data.Count * 3);
 
       ParseReceivedData(drawpoints, Eque_lines.pQ, (N + 1) * (N + 1));
-      DeleteArrays(ptrData, ptrSubLevelValues);
+      //DeleteArrays(ptrData, ptrSubLevelValues);
 
       Marshal.FreeHGlobal(ptrData);
       Marshal.FreeHGlobal(ptrSubLevelValues);

@@ -23,8 +23,6 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
 }
 
 void Calculate(int funcIdx) {
-  ofstream fout("debug_log.txt", ios_base::trunc);
-  fout << "Function #" << funcIdx << endl;
   double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ;
   double hx = (lines->area.XMax - lines->area.XMin) / lines->N; // вычисление шага по x
   double hy = (lines->area.YMax - lines->area.YMin) / lines->N; // вычисление шага по y
@@ -40,7 +38,6 @@ void Calculate(int funcIdx) {
          hy * j;
        // значение функции в узле
        QQ = lines->Data[(lines->N + 1) * i + j].Q = F(x, y, funcIdx);
-       //fout << "(" << x << ";" << y << ") : " << QQ << endl;
 
       // поиск минимального и максимального значения на сетке
       if ((i == 0) && (j == 0) || (QQ < Qmin))
@@ -54,7 +51,6 @@ void Calculate(int funcIdx) {
   for (int i = 0; i < lines->M1; i++) // вычисление значений функции на основных уровнях 
   {
     lines->SubLevelValues[ku++] = Qmax - hQ1 * i;
-    fout << lines->SubLevelValues[ku - 1] << endl;
   }
     
 
@@ -62,14 +58,12 @@ void Calculate(int funcIdx) {
   for (int i = 1; i <= lines->M2; i++) // вычисление значений функции на подуровнях
   {
     lines->SubLevelValues[ku++] = lines->SubLevelValues[lines->M1 - 1] - hQ2 * i;
-    fout << lines->SubLevelValues[ku - 1] << endl;
   }
 
   for (int i = 1; i <= lines->M3; i++) // вычисление значений функции на "под-подуровнях"
   {
     lines->SubLevelValues[ku++] = lines->SubLevelValues[lines->M1 + lines->M2 - 1] -
       (hQ2 / (lines->M3 + 1)) * i;
-    fout << lines->SubLevelValues[ku - 1] << endl;
   }
 }
 
