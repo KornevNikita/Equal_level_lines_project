@@ -179,7 +179,7 @@ namespace Equal_level_lines_UI
                 {
                   for (s = 0; s < kt - 1; s++)
                   {
-                    Pen p = new Pen(Color.DimGray, 2);
+                    Pen p = new Pen(Color.DimGray, 1);
                     g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
                       (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
                       (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
@@ -190,7 +190,8 @@ namespace Equal_level_lines_UI
                 {
                   for (s = 0; s < kt - 1; s++)
                   {
-                    Pen p = new Pen(Color.DimGray, 2);
+                    Pen p = new Pen(Color.DimGray, 1);
+                    p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
                     g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
                       (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
                       (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
@@ -302,7 +303,7 @@ namespace Equal_level_lines_UI
 
     private void pBox_Paint(object sender, PaintEventArgs e)
     {
-      e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+      e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
       Eque_lines.SendLines(e.Graphics, pictureBox1, cBox_LimitOn.Checked,
                           int.Parse(tBox_LimitIdx.Text), 
                           int.Parse(tBox_LimitFactor.Text));
