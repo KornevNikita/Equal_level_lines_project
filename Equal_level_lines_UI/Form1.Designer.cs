@@ -30,6 +30,8 @@
     {
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.tBox_LimitFactor = new System.Windows.Forms.TextBox();
+      this.label12 = new System.Windows.Forms.Label();
       this.cBox_LimitOn = new System.Windows.Forms.CheckBox();
       this.tBox_LimitIdx = new System.Windows.Forms.TextBox();
       this.label11 = new System.Windows.Forms.Label();
@@ -57,12 +59,14 @@
       this.tBox_Ymin = new System.Windows.Forms.TextBox();
       this.label1 = new System.Windows.Forms.Label();
       this.tBox_funcIdx = new System.Windows.Forms.TextBox();
-      this.label12 = new System.Windows.Forms.Label();
-      this.tBox_LimitFactor = new System.Windows.Forms.TextBox();
+      this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.cBox_AddXaxis = new System.Windows.Forms.CheckBox();
+      this.cBox_AddYaxis = new System.Windows.Forms.CheckBox();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       this.groupBox3.SuspendLayout();
       this.groupBox2.SuspendLayout();
+      this.groupBox4.SuspendLayout();
       this.SuspendLayout();
       // 
       // pictureBox1
@@ -79,6 +83,7 @@
       // groupBox1
       // 
       this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLight;
+      this.groupBox1.Controls.Add(this.groupBox4);
       this.groupBox1.Controls.Add(this.tBox_LimitFactor);
       this.groupBox1.Controls.Add(this.label12);
       this.groupBox1.Controls.Add(this.cBox_LimitOn);
@@ -95,10 +100,28 @@
       this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
       this.groupBox1.Location = new System.Drawing.Point(12, 12);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(325, 398);
+      this.groupBox1.Size = new System.Drawing.Size(325, 657);
       this.groupBox1.TabIndex = 1;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Parameters";
+      // 
+      // tBox_LimitFactor
+      // 
+      this.tBox_LimitFactor.Location = new System.Drawing.Point(262, 57);
+      this.tBox_LimitFactor.Name = "tBox_LimitFactor";
+      this.tBox_LimitFactor.Size = new System.Drawing.Size(50, 26);
+      this.tBox_LimitFactor.TabIndex = 23;
+      this.tBox_LimitFactor.Text = "4";
+      this.tBox_LimitFactor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // label12
+      // 
+      this.label12.AutoSize = true;
+      this.label12.Location = new System.Drawing.Point(169, 60);
+      this.label12.Name = "label12";
+      this.label12.Size = new System.Drawing.Size(87, 20);
+      this.label12.TabIndex = 22;
+      this.label12.Text = "Limit factor";
       // 
       // cBox_LimitOn
       // 
@@ -130,7 +153,7 @@
       // 
       // btn_Clear
       // 
-      this.btn_Clear.Location = new System.Drawing.Point(14, 361);
+      this.btn_Clear.Location = new System.Drawing.Point(10, 623);
       this.btn_Clear.Name = "btn_Clear";
       this.btn_Clear.Size = new System.Drawing.Size(100, 26);
       this.btn_Clear.TabIndex = 21;
@@ -141,7 +164,7 @@
       // label_Time
       // 
       this.label_Time.AutoSize = true;
-      this.label_Time.Location = new System.Drawing.Point(120, 332);
+      this.label_Time.Location = new System.Drawing.Point(116, 594);
       this.label_Time.Name = "label_Time";
       this.label_Time.Size = new System.Drawing.Size(47, 20);
       this.label_Time.TabIndex = 20;
@@ -149,7 +172,7 @@
       // 
       // btn_Run
       // 
-      this.btn_Run.Location = new System.Drawing.Point(14, 329);
+      this.btn_Run.Location = new System.Drawing.Point(10, 591);
       this.btn_Run.Name = "btn_Run";
       this.btn_Run.Size = new System.Drawing.Size(100, 26);
       this.btn_Run.TabIndex = 2;
@@ -161,7 +184,7 @@
       // 
       this.label10.AutoSize = true;
       this.label10.BackColor = System.Drawing.SystemColors.ControlLight;
-      this.label10.Location = new System.Drawing.Point(10, 242);
+      this.label10.Location = new System.Drawing.Point(6, 504);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(224, 80);
       this.label10.TabIndex = 18;
@@ -366,23 +389,36 @@
       this.tBox_funcIdx.Text = "2";
       this.tBox_funcIdx.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
-      // label12
+      // groupBox4
       // 
-      this.label12.AutoSize = true;
-      this.label12.Location = new System.Drawing.Point(169, 60);
-      this.label12.Name = "label12";
-      this.label12.Size = new System.Drawing.Size(87, 20);
-      this.label12.TabIndex = 22;
-      this.label12.Text = "Limit factor";
+      this.groupBox4.Controls.Add(this.cBox_AddYaxis);
+      this.groupBox4.Controls.Add(this.cBox_AddXaxis);
+      this.groupBox4.Location = new System.Drawing.Point(6, 245);
+      this.groupBox4.Name = "groupBox4";
+      this.groupBox4.Size = new System.Drawing.Size(313, 205);
+      this.groupBox4.TabIndex = 2;
+      this.groupBox4.TabStop = false;
+      this.groupBox4.Text = " Coordinate axes";
       // 
-      // tBox_LimitFactor
+      // cBox_AddXaxis
       // 
-      this.tBox_LimitFactor.Location = new System.Drawing.Point(262, 57);
-      this.tBox_LimitFactor.Name = "tBox_LimitFactor";
-      this.tBox_LimitFactor.Size = new System.Drawing.Size(50, 26);
-      this.tBox_LimitFactor.TabIndex = 23;
-      this.tBox_LimitFactor.Text = "4";
-      this.tBox_LimitFactor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      this.cBox_AddXaxis.AutoSize = true;
+      this.cBox_AddXaxis.Location = new System.Drawing.Point(3, 22);
+      this.cBox_AddXaxis.Name = "cBox_AddXaxis";
+      this.cBox_AddXaxis.Size = new System.Drawing.Size(72, 24);
+      this.cBox_AddXaxis.TabIndex = 0;
+      this.cBox_AddXaxis.Text = "Add X";
+      this.cBox_AddXaxis.UseVisualStyleBackColor = true;
+      // 
+      // cBox_AddYaxis
+      // 
+      this.cBox_AddYaxis.AutoSize = true;
+      this.cBox_AddYaxis.Location = new System.Drawing.Point(3, 52);
+      this.cBox_AddYaxis.Name = "cBox_AddYaxis";
+      this.cBox_AddYaxis.Size = new System.Drawing.Size(72, 24);
+      this.cBox_AddYaxis.TabIndex = 1;
+      this.cBox_AddYaxis.Text = "Add Y";
+      this.cBox_AddYaxis.UseVisualStyleBackColor = true;
       // 
       // Form1
       // 
@@ -400,6 +436,8 @@
       this.groupBox3.PerformLayout();
       this.groupBox2.ResumeLayout(false);
       this.groupBox2.PerformLayout();
+      this.groupBox4.ResumeLayout(false);
+      this.groupBox4.PerformLayout();
       this.ResumeLayout(false);
 
     }
@@ -437,6 +475,9 @@
     public System.Windows.Forms.CheckBox cBox_LimitOn;
     private System.Windows.Forms.Label label12;
     public System.Windows.Forms.TextBox tBox_LimitFactor;
+    private System.Windows.Forms.GroupBox groupBox4;
+    private System.Windows.Forms.CheckBox cBox_AddYaxis;
+    private System.Windows.Forms.CheckBox cBox_AddXaxis;
   }
 }
 

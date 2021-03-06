@@ -100,7 +100,8 @@ namespace Equal_level_lines_UI
       }
 
       public void SendLines(Graphics g, PictureBox pic, bool cBox_LimitOn,
-                            int LimitIdx, int LimitFactor)
+                            bool cBox_Xaxis, bool cBox_Yaxis, int LimitIdx,
+                            int LimitFactor)
       {
         int i, j, u, s;
         for (i = 0; i < N; i++)
@@ -218,6 +219,18 @@ namespace Equal_level_lines_UI
               }
             }
         }
+
+        if (cBox_Xaxis)
+        {
+            Pen p = new Pen(Color.Black, 1);
+            g.DrawLine(p, 0, pic.Height / 2, pic.Width, pic.Height / 2);
+        }
+
+        if (cBox_Yaxis)
+        {
+          Pen p = new Pen(Color.Black, 1);
+          g.DrawLine(p, pic.Width / 2, 0, pic.Width / 2, pic.Height);
+        }
       }
     }
 
@@ -305,8 +318,9 @@ namespace Equal_level_lines_UI
     {
       e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
       Eque_lines.SendLines(e.Graphics, pictureBox1, cBox_LimitOn.Checked,
-                          int.Parse(tBox_LimitIdx.Text), 
-                          int.Parse(tBox_LimitFactor.Text));
+                           cBox_AddXaxis.Checked, cBox_AddYaxis.Checked,
+                           int.Parse(tBox_LimitIdx.Text),
+                           int.Parse(tBox_LimitFactor.Text));
     }
 
     public static bool GetLimitValue(double x, double y, int LimitIdx)
