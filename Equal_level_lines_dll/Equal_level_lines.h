@@ -63,11 +63,7 @@ extern "C" __declspec(dllexport)
 void GetData(DrawPoints<Lines::Point> *Points, double *SubLevelValues);
 
 extern "C" __declspec(dllexport)
-void DeleteData();
+void InitData(DrawPoints<Lines::Point> *Data);
 
 extern "C" __declspec(dllexport)
-void InitArrays(DrawPoints<Lines::Point> *Data, double *SubLevelValues,
-               int SLVSize);
-
-extern "C" __declspec(dllexport)
-void DeleteArrays(DrawPoints<Lines::Point> *Data, double *SubLevelValues);
+void DeleteData(DrawPoints<Lines::Point> *Data);

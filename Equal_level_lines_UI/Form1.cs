@@ -37,13 +37,10 @@ namespace Equal_level_lines_UI
     //public static extern void DeleteData();
 
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void InitArrays(IntPtr _ptrData,
-                                         IntPtr _ptrSubLevelValues,
-                                         int SLVSize);
+    public static extern void InitData(IntPtr _ptrData);
 
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void DeleteArrays(IntPtr _ptrData,
-                                         IntPtr _ptrSubLevelValues);
+    public static extern void DeleteData(IntPtr _ptrData);
 
     // ============ End of Equal_level_lines.dll import functions ===========
 
@@ -94,17 +91,6 @@ namespace Equal_level_lines_UI
         pDat = new Point[(N + 1) * (N + 1)];
         pQ = new double[M + 1];
       }
-
-      //public void DeleteData()
-      //{
-      //  N = 0;
-      //  M1 = 0;
-      //  M2 = 0;
-      //  M3 = 0;
-      //  M = 0;
-      //  pDat = null;
-      //  pQ = null;
-      //}
 
       public void SendLines(Graphics g, PictureBox pic, bool cBox_LimitOn,
                             bool cBox_Xaxis, bool cBox_Yaxis, int LimitIdx,
@@ -308,11 +294,10 @@ namespace Equal_level_lines_UI
 
       int sizeStruct = Marshal.SizeOf(typeof(DrawPoints)); // определяем размер управляемой структуры
       ptrData = Marshal.AllocHGlobal(sizeStruct); // выделяем память под неуправляемую структуру
-      sizeStruct = Marshal.SizeOf(typeof(Double));
-      ptrSubLevelValues = Marshal.AllocHGlobal(sizeStruct);
+      ptrSubLevelValues = Marshal.AllocCoTaskMem(M * sizeof(double));
 
       Marshal.StructureToPtr(Data, ptrData, false); // копируем данные из неуправляемой в управляемую
-      InitArrays(ptrData, ptrSubLevelValues, M);
+      InitData(ptrData);
       GetData(ptrData, ptrSubLevelValues);
       Data = (DrawPoints)Marshal.PtrToStructure(ptrData, typeof(DrawPoints));
 
@@ -320,10 +305,11 @@ namespace Equal_level_lines_UI
       Marshal.Copy(Data.Points, drawpoints, 0, Data.Count * 3);
 
       ParseReceivedData(drawpoints, Eque_lines.pQ, (N + 1) * (N + 1));
-      //DeleteArrays(ptrData, ptrSubLevelValues);
+      //DeleteData(ptrData);
 
       Marshal.FreeHGlobal(ptrData);
-      Marshal.FreeHGlobal(ptrSubLevelValues);
+      Marshal.FreeCoTaskMem(ptrSubLevelValues);
+      //Marshal.FreeHGlobal(ptrSubLevelValues);
     }
 
     public static void ParseReceivedData(double[] drawpoints,

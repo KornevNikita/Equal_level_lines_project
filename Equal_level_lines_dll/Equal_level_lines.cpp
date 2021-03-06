@@ -84,25 +84,17 @@ double F(double x, double y, int funcIdx) {
 }
 
 void GetData(DrawPoints<Lines::Point>* Points, double* SubLevelValues) {
-  for (int i = 0; i < lines->Data.size(); ++i)
-    Points->Data[i] = lines->Data[i];
+  Points->Data = lines->Data.data();
 
-  for (int i = 0; i < lines->SubLevelValues.size(); ++i)
-    SubLevelValues[i] = lines->SubLevelValues[i];
+  copy(lines->SubLevelValues.begin(), lines->SubLevelValues.end(),
+       SubLevelValues);
 }
 
-void DeleteData() {
-  delete lines;
-}
-
-void InitArrays(DrawPoints<Lines::Point>* array, double *SubLevelValues,
-               int SLVSize) {
+void InitData(DrawPoints<Lines::Point>* array) {
   array->AllocMem(array->Count);
-  SubLevelValues = new double[SLVSize];
 }
 
-void DeleteArrays(DrawPoints<Lines::Point> *Data, double *SubLevelValues) {
+void DeleteData(DrawPoints<Lines::Point> *Data) {
   Data->FreeMem();
-  delete[] SubLevelValues;
   delete lines;
 }
