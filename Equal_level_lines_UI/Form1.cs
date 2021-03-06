@@ -59,6 +59,8 @@ namespace Equal_level_lines_UI
     public Form1()
     {
       InitializeComponent();
+      colorDialog1.FullOpen = true;
+      colorDialog1.Color = Color.LightGreen;
     }
 
     public class eque_lines
@@ -101,7 +103,8 @@ namespace Equal_level_lines_UI
 
       public void SendLines(Graphics g, PictureBox pic, bool cBox_LimitOn,
                             bool cBox_Xaxis, bool cBox_Yaxis, int LimitIdx,
-                            bool cBox_Grid, int NumOfGridLnes, int LimitFactor)
+                            bool cBox_Grid, int NumOfGridLnes, Color color,
+                            int LimitFactor)
       {
         int i, j, u, s;
         for (i = 0; i < N; i++)
@@ -234,7 +237,7 @@ namespace Equal_level_lines_UI
 
         if (cBox_Grid)
         {
-          Pen p = new Pen(Color.Black, 1);
+          Pen p = new Pen(color, 1);
           float h = pic.Width / (NumOfGridLnes + 1);
           for (i = 1; i <= NumOfGridLnes; i++)
           {
@@ -276,6 +279,11 @@ namespace Equal_level_lines_UI
       GetDataFromDll(N, M1 + M2 + M3);
 
       pictureBox1.Invalidate();
+    }
+
+    private void Button1_Click(object sender, EventArgs e)
+    {
+      colorDialog1.ShowDialog();
     }
 
     private void btn_Clear_click(object sender, EventArgs e)
@@ -334,6 +342,7 @@ namespace Equal_level_lines_UI
                            int.Parse(tBox_LimitIdx.Text),
                            cBox_AddGrid.Checked,
                            int.Parse(tBox_NumOfGridLines.Text),
+                           colorDialog1.Color,
                            int.Parse(tBox_LimitFactor.Text));
     }
 

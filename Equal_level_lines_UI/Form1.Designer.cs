@@ -65,6 +65,8 @@
       this.cBox_AddGrid = new System.Windows.Forms.CheckBox();
       this.tBox_NumOfGridLines = new System.Windows.Forms.TextBox();
       this.label13 = new System.Windows.Forms.Label();
+      this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+      this.button1 = new System.Windows.Forms.Button();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -394,6 +396,7 @@
       // 
       // groupBox4
       // 
+      this.groupBox4.Controls.Add(this.button1);
       this.groupBox4.Controls.Add(this.label13);
       this.groupBox4.Controls.Add(this.tBox_NumOfGridLines);
       this.groupBox4.Controls.Add(this.cBox_AddGrid);
@@ -453,6 +456,20 @@
       this.label13.Size = new System.Drawing.Size(119, 20);
       this.label13.TabIndex = 3;
       this.label13.Text = "Number of lines";
+      // 
+      // colorDialog1
+      // 
+      this.colorDialog1.AnyColor = true;
+      // 
+      // button1
+      // 
+      this.button1.Location = new System.Drawing.Point(135, 53);
+      this.button1.Name = "button1";
+      this.button1.Size = new System.Drawing.Size(100, 26);
+      this.button1.TabIndex = 2;
+      this.button1.Text = "Pick color";
+      this.button1.UseVisualStyleBackColor = true;
+      this.button1.Click += new System.EventHandler(this.Button1_Click);
       // 
       // Form1
       // 
@@ -515,6 +532,8 @@
     private System.Windows.Forms.Label label13;
     private System.Windows.Forms.TextBox tBox_NumOfGridLines;
     private System.Windows.Forms.CheckBox cBox_AddGrid;
+    private System.Windows.Forms.Button button1;
+    public System.Windows.Forms.ColorDialog colorDialog1;
   }
 }
 
