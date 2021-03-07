@@ -127,7 +127,7 @@
       this.groupBox4.Controls.Add(this.cBox_AddXaxis);
       this.groupBox4.Location = new System.Drawing.Point(7, 278);
       this.groupBox4.Name = "groupBox4";
-      this.groupBox4.Size = new System.Drawing.Size(313, 205);
+      this.groupBox4.Size = new System.Drawing.Size(313, 118);
       this.groupBox4.TabIndex = 2;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = " Coordinate axes";
@@ -175,7 +175,7 @@
       this.tBox_NumOfGridLines.Name = "tBox_NumOfGridLines";
       this.tBox_NumOfGridLines.Size = new System.Drawing.Size(50, 26);
       this.tBox_NumOfGridLines.TabIndex = 2;
-      this.tBox_NumOfGridLines.Text = "5";
+      this.tBox_NumOfGridLines.Text = "4";
       this.tBox_NumOfGridLines.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // cBox_AddGrid
@@ -259,7 +259,7 @@
       // 
       // btn_Clear
       // 
-      this.btn_Clear.Location = new System.Drawing.Point(10, 623);
+      this.btn_Clear.Location = new System.Drawing.Point(6, 514);
       this.btn_Clear.Name = "btn_Clear";
       this.btn_Clear.Size = new System.Drawing.Size(100, 26);
       this.btn_Clear.TabIndex = 21;
@@ -270,7 +270,7 @@
       // label_Time
       // 
       this.label_Time.AutoSize = true;
-      this.label_Time.Location = new System.Drawing.Point(116, 594);
+      this.label_Time.Location = new System.Drawing.Point(112, 485);
       this.label_Time.Name = "label_Time";
       this.label_Time.Size = new System.Drawing.Size(47, 20);
       this.label_Time.TabIndex = 20;
@@ -278,7 +278,7 @@
       // 
       // btn_Run
       // 
-      this.btn_Run.Location = new System.Drawing.Point(10, 591);
+      this.btn_Run.Location = new System.Drawing.Point(6, 482);
       this.btn_Run.Name = "btn_Run";
       this.btn_Run.Size = new System.Drawing.Size(100, 26);
       this.btn_Run.TabIndex = 2;
@@ -290,7 +290,7 @@
       // 
       this.label10.AutoSize = true;
       this.label10.BackColor = System.Drawing.SystemColors.ControlLight;
-      this.label10.Location = new System.Drawing.Point(6, 504);
+      this.label10.Location = new System.Drawing.Point(6, 399);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(224, 80);
       this.label10.TabIndex = 18;
@@ -321,7 +321,7 @@
       this.tBox_N.Name = "tBox_N";
       this.tBox_N.Size = new System.Drawing.Size(50, 26);
       this.tBox_N.TabIndex = 14;
-      this.tBox_N.Text = "50";
+      this.tBox_N.Text = "100";
       this.tBox_N.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // tBox_M1

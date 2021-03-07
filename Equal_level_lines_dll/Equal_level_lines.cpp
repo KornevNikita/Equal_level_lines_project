@@ -4,7 +4,8 @@
 
 #include <limits>
 #include <fstream>
-#include <cmath>
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <iomanip>
 
 void AllocMem(int _N, int _M1, int _M2, int _M3) {
@@ -87,15 +88,22 @@ void CalculateLimit(int LimitIdx, int LimitFactor, int Width, int Height) {
 
 double F(double x, double y, int funcIdx) {
   switch (funcIdx) {
-  case 0:
-    return 100.0 * pow((x - y * y), 2) + pow(y - 1, 2);
-
-  case 1:
-    return (-1.5 * x * x * exp(1 - x * x - 20.25 * (x - y) * (x - y)) -
-           pow(0.5 * (x - 1) * (y - 1), 4) * exp(2 - pow(0.5 * (x - 1), 4) - pow(y - 1, 4)));
+  case 1: 
+    return (-1.5 * x * x * exp(1 - x * x - 20.25 * pow((x - y), 2))) -
+      pow(0.5 * (x - 1) * (y - 1), 4) * exp(2 - pow(0.5 * (x - 1), 4) -
+      pow(y - 1, 4));
   case 2:
-    return ((4 - 2.1 * x * x + pow(x, 4) / 3) * x * x + x * y + (4 * y * y - 4) * y * y);
-
+    return ((4 - 2.1 * x * x + pow(x, 4) / 3) * x * x +
+      x * y + (4 * y * y - 4) * y * y);
+  case 3: 
+    return 0.01 * (x * y + pow(x - M_PI, 2) +
+      3 * pow(y * y - M_PI, 2)) - pow(sin(x) * sin(2 * y), 2);
+  case 4:
+    return (x * x - cos(18 * x * x)) + (y * y - cos(18 * y * y));
+  case 5: 
+    return M_PI / 2 * (pow(10 * (sin(M_PI * (1 + (x - 1) / 4))), 2) +
+      pow((x - 1) / 4, 2) * (1 + 10 * pow(sin(M_PI * (1 + (y - 1) / 4)), 2)) +
+      pow((y - 1) / 4, 2));
   default:
     return 0.0;
   }
