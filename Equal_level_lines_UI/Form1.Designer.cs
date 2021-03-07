@@ -69,6 +69,8 @@
       this.label1 = new System.Windows.Forms.Label();
       this.tBox_funcIdx = new System.Windows.Forms.TextBox();
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+      this.colorDialog2 = new System.Windows.Forms.ColorDialog();
+      this.button2 = new System.Windows.Forms.Button();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       this.groupBox4.SuspendLayout();
@@ -90,6 +92,7 @@
       // groupBox1
       // 
       this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLight;
+      this.groupBox1.Controls.Add(this.button2);
       this.groupBox1.Controls.Add(this.groupBox4);
       this.groupBox1.Controls.Add(this.tBox_LimitFactor);
       this.groupBox1.Controls.Add(this.label12);
@@ -122,7 +125,7 @@
       this.groupBox4.Controls.Add(this.cBox_AddGrid);
       this.groupBox4.Controls.Add(this.cBox_AddYaxis);
       this.groupBox4.Controls.Add(this.cBox_AddXaxis);
-      this.groupBox4.Location = new System.Drawing.Point(6, 245);
+      this.groupBox4.Location = new System.Drawing.Point(7, 278);
       this.groupBox4.Name = "groupBox4";
       this.groupBox4.Size = new System.Drawing.Size(313, 205);
       this.groupBox4.TabIndex = 2;
@@ -305,7 +308,7 @@
       this.groupBox3.Controls.Add(this.tBox_M2);
       this.groupBox3.Controls.Add(this.label7);
       this.groupBox3.Controls.Add(this.label6);
-      this.groupBox3.Location = new System.Drawing.Point(168, 89);
+      this.groupBox3.Location = new System.Drawing.Point(169, 122);
       this.groupBox3.Name = "groupBox3";
       this.groupBox3.Size = new System.Drawing.Size(150, 150);
       this.groupBox3.TabIndex = 19;
@@ -395,7 +398,7 @@
       this.groupBox2.Controls.Add(this.tBox_Ymax);
       this.groupBox2.Controls.Add(this.tBox_Xmax);
       this.groupBox2.Controls.Add(this.tBox_Ymin);
-      this.groupBox2.Location = new System.Drawing.Point(10, 89);
+      this.groupBox2.Location = new System.Drawing.Point(11, 122);
       this.groupBox2.Name = "groupBox2";
       this.groupBox2.Size = new System.Drawing.Size(150, 150);
       this.groupBox2.TabIndex = 18;
@@ -495,6 +498,23 @@
       // colorDialog1
       // 
       this.colorDialog1.AnyColor = true;
+      this.colorDialog1.Color = System.Drawing.Color.Lime;
+      this.colorDialog1.FullOpen = true;
+      // 
+      // colorDialog2
+      // 
+      this.colorDialog2.Color = System.Drawing.Color.DeepSkyBlue;
+      this.colorDialog2.FullOpen = true;
+      // 
+      // button2
+      // 
+      this.button2.Location = new System.Drawing.Point(212, 90);
+      this.button2.Name = "button2";
+      this.button2.Size = new System.Drawing.Size(100, 26);
+      this.button2.TabIndex = 14;
+      this.button2.Text = "Pick color";
+      this.button2.UseVisualStyleBackColor = true;
+      this.button2.Click += new System.EventHandler(this.Button2_Click);
       // 
       // Form1
       // 
@@ -561,6 +581,8 @@
     public System.Windows.Forms.CheckBox cBox_AddGrid;
     public System.Windows.Forms.CheckBox cBox_AddYaxis;
     public System.Windows.Forms.CheckBox cBox_AddXaxis;
+    private System.Windows.Forms.Button button2;
+    public System.Windows.Forms.ColorDialog colorDialog2;
   }
 }
 

@@ -66,8 +66,8 @@ namespace Equal_level_lines_UI
     public Form1()
     {
       InitializeComponent();
-      colorDialog1.FullOpen = true;
-      colorDialog1.Color = Color.LightGreen;
+      LimitColor = colorDialog2.Color;
+      GridColor = colorDialog1.Color;
     }
 
     public class eque_lines
@@ -209,7 +209,7 @@ namespace Equal_level_lines_UI
             {
               if (Limit[i * pic.Width / LimitFactor + j] == 0)
               {
-                Pen pen = new Pen(Color.Gray, 0);
+                Pen pen = new Pen(LimitColor, 0);
                 g.DrawRectangle(pen, i * LimitFactor, j * LimitFactor, 1, 1);
               }
             }
@@ -229,7 +229,7 @@ namespace Equal_level_lines_UI
 
         if (AddGrid)
         {
-          Pen p = new Pen(color, GridLinesThickness);
+          Pen p = new Pen(GridColor, GridLinesThickness);
           float h = pic.Width / (NumOfGridLnes + 1);
           for (i = 1; i <= NumOfGridLnes; i++)
           {
@@ -260,6 +260,14 @@ namespace Equal_level_lines_UI
     static int N, M1, M2, M3;
     static eque_lines Eque_lines = new eque_lines();
     public static DrawPoints Data = new DrawPoints();
+    public static Color LimitColor, GridColor;
+
+    private void Button2_Click(object sender, EventArgs e)
+    {
+      colorDialog2.ShowDialog();
+      LimitColor = colorDialog2.Color;
+    }
+
     public static double[] drawpoints, pQ;
     public static int[] Limit;
 
@@ -320,6 +328,7 @@ namespace Equal_level_lines_UI
     private void Button1_Click(object sender, EventArgs e)
     {
       colorDialog1.ShowDialog();
+      GridColor = colorDialog1.Color;
     }
 
     private void CBox_AddGrid_CheckedChanged(object sender, EventArgs e)
