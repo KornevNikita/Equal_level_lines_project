@@ -44,7 +44,6 @@
       this.cBox_CalcLimit = new System.Windows.Forms.CheckBox();
       this.tBox_LimitIdx = new System.Windows.Forms.TextBox();
       this.label11 = new System.Windows.Forms.Label();
-      this.btn_Clear = new System.Windows.Forms.Button();
       this.label_Time = new System.Windows.Forms.Label();
       this.btn_Run = new System.Windows.Forms.Button();
       this.label10 = new System.Windows.Forms.Label();
@@ -71,11 +70,17 @@
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
       this.colorDialog2 = new System.Windows.Forms.ColorDialog();
       this.button2 = new System.Windows.Forms.Button();
+      this.groupBox5 = new System.Windows.Forms.GroupBox();
+      this.textBox1 = new System.Windows.Forms.TextBox();
+      this.textBox2 = new System.Windows.Forms.TextBox();
+      this.label15 = new System.Windows.Forms.Label();
+      this.label16 = new System.Windows.Forms.Label();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       this.groupBox4.SuspendLayout();
       this.groupBox3.SuspendLayout();
       this.groupBox2.SuspendLayout();
+      this.groupBox5.SuspendLayout();
       this.SuspendLayout();
       // 
       // pictureBox1
@@ -92,6 +97,7 @@
       // groupBox1
       // 
       this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLight;
+      this.groupBox1.Controls.Add(this.groupBox5);
       this.groupBox1.Controls.Add(this.button2);
       this.groupBox1.Controls.Add(this.groupBox4);
       this.groupBox1.Controls.Add(this.tBox_LimitFactor);
@@ -99,7 +105,6 @@
       this.groupBox1.Controls.Add(this.cBox_CalcLimit);
       this.groupBox1.Controls.Add(this.tBox_LimitIdx);
       this.groupBox1.Controls.Add(this.label11);
-      this.groupBox1.Controls.Add(this.btn_Clear);
       this.groupBox1.Controls.Add(this.label_Time);
       this.groupBox1.Controls.Add(this.btn_Run);
       this.groupBox1.Controls.Add(this.label10);
@@ -117,6 +122,7 @@
       // 
       // groupBox4
       // 
+      this.groupBox4.BackColor = System.Drawing.SystemColors.ScrollBar;
       this.groupBox4.Controls.Add(this.label14);
       this.groupBox4.Controls.Add(this.tBox_GridLinesThickness);
       this.groupBox4.Controls.Add(this.button1);
@@ -257,20 +263,10 @@
       this.label11.TabIndex = 2;
       this.label11.Text = "Limit #";
       // 
-      // btn_Clear
-      // 
-      this.btn_Clear.Location = new System.Drawing.Point(6, 514);
-      this.btn_Clear.Name = "btn_Clear";
-      this.btn_Clear.Size = new System.Drawing.Size(100, 26);
-      this.btn_Clear.TabIndex = 21;
-      this.btn_Clear.Text = "Clear";
-      this.btn_Clear.UseVisualStyleBackColor = true;
-      this.btn_Clear.Click += new System.EventHandler(this.btn_Clear_click);
-      // 
       // label_Time
       // 
       this.label_Time.AutoSize = true;
-      this.label_Time.Location = new System.Drawing.Point(112, 485);
+      this.label_Time.Location = new System.Drawing.Point(112, 550);
       this.label_Time.Name = "label_Time";
       this.label_Time.Size = new System.Drawing.Size(47, 20);
       this.label_Time.TabIndex = 20;
@@ -278,7 +274,7 @@
       // 
       // btn_Run
       // 
-      this.btn_Run.Location = new System.Drawing.Point(6, 482);
+      this.btn_Run.Location = new System.Drawing.Point(6, 547);
       this.btn_Run.Name = "btn_Run";
       this.btn_Run.Size = new System.Drawing.Size(100, 26);
       this.btn_Run.TabIndex = 2;
@@ -290,7 +286,7 @@
       // 
       this.label10.AutoSize = true;
       this.label10.BackColor = System.Drawing.SystemColors.ControlLight;
-      this.label10.Location = new System.Drawing.Point(6, 399);
+      this.label10.Location = new System.Drawing.Point(6, 464);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(224, 80);
       this.label10.TabIndex = 18;
@@ -299,7 +295,7 @@
       // 
       // groupBox3
       // 
-      this.groupBox3.BackColor = System.Drawing.SystemColors.ControlLight;
+      this.groupBox3.BackColor = System.Drawing.SystemColors.ScrollBar;
       this.groupBox3.Controls.Add(this.tBox_N);
       this.groupBox3.Controls.Add(this.tBox_M1);
       this.groupBox3.Controls.Add(this.label9);
@@ -389,7 +385,7 @@
       // 
       // groupBox2
       // 
-      this.groupBox2.BackColor = System.Drawing.SystemColors.ControlLight;
+      this.groupBox2.BackColor = System.Drawing.SystemColors.ScrollBar;
       this.groupBox2.Controls.Add(this.label2);
       this.groupBox2.Controls.Add(this.label3);
       this.groupBox2.Controls.Add(this.label4);
@@ -516,6 +512,52 @@
       this.button2.UseVisualStyleBackColor = true;
       this.button2.Click += new System.EventHandler(this.Button2_Click);
       // 
+      // groupBox5
+      // 
+      this.groupBox5.BackColor = System.Drawing.SystemColors.ScrollBar;
+      this.groupBox5.Controls.Add(this.label16);
+      this.groupBox5.Controls.Add(this.label15);
+      this.groupBox5.Controls.Add(this.textBox2);
+      this.groupBox5.Controls.Add(this.textBox1);
+      this.groupBox5.Location = new System.Drawing.Point(7, 402);
+      this.groupBox5.Name = "groupBox5";
+      this.groupBox5.Size = new System.Drawing.Size(312, 59);
+      this.groupBox5.TabIndex = 24;
+      this.groupBox5.TabStop = false;
+      this.groupBox5.Text = "Picture size";
+      // 
+      // textBox1
+      // 
+      this.textBox1.Location = new System.Drawing.Point(100, 22);
+      this.textBox1.Name = "textBox1";
+      this.textBox1.Size = new System.Drawing.Size(50, 26);
+      this.textBox1.TabIndex = 0;
+      // 
+      // textBox2
+      // 
+      this.textBox2.Location = new System.Drawing.Point(255, 22);
+      this.textBox2.Name = "textBox2";
+      this.textBox2.Size = new System.Drawing.Size(50, 26);
+      this.textBox2.TabIndex = 1;
+      // 
+      // label15
+      // 
+      this.label15.AutoSize = true;
+      this.label15.Location = new System.Drawing.Point(70, 25);
+      this.label15.Name = "label15";
+      this.label15.Size = new System.Drawing.Size(24, 20);
+      this.label15.TabIndex = 2;
+      this.label15.Text = "X:";
+      // 
+      // label16
+      // 
+      this.label16.AutoSize = true;
+      this.label16.Location = new System.Drawing.Point(225, 25);
+      this.label16.Name = "label16";
+      this.label16.Size = new System.Drawing.Size(24, 20);
+      this.label16.TabIndex = 3;
+      this.label16.Text = "Y:";
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -534,6 +576,8 @@
       this.groupBox3.PerformLayout();
       this.groupBox2.ResumeLayout(false);
       this.groupBox2.PerformLayout();
+      this.groupBox5.ResumeLayout(false);
+      this.groupBox5.PerformLayout();
       this.ResumeLayout(false);
 
     }
@@ -565,7 +609,6 @@
     private System.Windows.Forms.TextBox tBox_funcIdx;
     private System.Windows.Forms.Button btn_Run;
     private System.Windows.Forms.Label label_Time;
-    private System.Windows.Forms.Button btn_Clear;
     private System.Windows.Forms.TextBox tBox_LimitIdx;
     private System.Windows.Forms.Label label11;
     public System.Windows.Forms.CheckBox cBox_CalcLimit;
@@ -583,6 +626,11 @@
     public System.Windows.Forms.CheckBox cBox_AddXaxis;
     private System.Windows.Forms.Button button2;
     public System.Windows.Forms.ColorDialog colorDialog2;
+    private System.Windows.Forms.GroupBox groupBox5;
+    private System.Windows.Forms.Label label16;
+    private System.Windows.Forms.Label label15;
+    private System.Windows.Forms.TextBox textBox2;
+    private System.Windows.Forms.TextBox textBox1;
   }
 }
 
