@@ -22,8 +22,9 @@ struct DrawPoints {
 
 class Lines {
   struct Area {
-    double XMin, XMax, YMin, YMax;
-    Area() : XMin(0.0), XMax(0.0), YMin(0.0), YMax(0.0) {};
+    double XMin, XMax, YMin, YMax, Width, Height;
+    Area() : XMin(0.0), XMax(0.0), YMin(0.0), YMax(0.0),
+      Width(0.0), Height(0.0) {};
   };
 
 public:
@@ -43,12 +44,15 @@ public:
   int N, M1, M2, M3, M;
   vector<Point> Data;
   vector<double> SubLevelValues;
+  vector<int> LimitValues;
   Area area;
 };
 
 Lines* lines;
 
 double F(double x, double y, int funcIdx);
+
+bool Limit(double x, double y, int LimitIdx);
 
 extern "C" __declspec(dllexport)
 void AllocMem(int _N, int _M1, int _M2, int _M3);
@@ -60,7 +64,13 @@ extern "C" __declspec(dllexport)
 void Calculate(int funcIdx);
 
 extern "C" __declspec(dllexport)
+void CalculateLimit(int LimitIdx, int LimitFactor, int Width, int Height);
+
+extern "C" __declspec(dllexport)
 void GetData(DrawPoints<Lines::Point> *Points, double *SubLevelValues);
+
+extern "C" __declspec(dllexport)
+void GetLimitValues(int* LimitValues);
 
 extern "C" __declspec(dllexport)
 void InitData(DrawPoints<Lines::Point> *Data);

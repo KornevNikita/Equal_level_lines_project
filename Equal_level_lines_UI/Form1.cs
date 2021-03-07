@@ -31,7 +31,14 @@ namespace Equal_level_lines_UI
     public static extern void Calculate(int funcIdx);
 
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void CalculateLimit(int LimitIdx, int LimitFactor,
+                                             int Width, int Height);
+
+    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
     public static extern void GetData(IntPtr _ptrData, IntPtr _SubLevelValues);
+
+    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void GetLimitValues(IntPtr _ptrLimitValues);
 
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
     public static extern void InitData(IntPtr _ptrData);
@@ -42,8 +49,8 @@ namespace Equal_level_lines_UI
     // ============ End of Equal_level_lines.dll import functions ===========
 
     public static IntPtr ptrData, ptrSubLevelValues;
-    public static int GridLinesThickness = 1;
-    public static bool AddGrid, AddXAxis, AddYAxis, PrintLimit;
+    public static int GridLinesThickness = 1, LimitFactor, PicWidth, PicHeight;
+    public static bool AddGrid, AddXAxis, AddYAxis, CalcLimit;
 
     public struct Point
     {
@@ -195,17 +202,14 @@ namespace Equal_level_lines_UI
             }//Конец перебора всех Qu
           }
 
-        if (PrintLimit)
+        if (CalcLimit)
         {
           for (i = 0; i < pic.Width / LimitFactor; ++i)
             for (j = 0; j < pic.Height / LimitFactor; ++j)
             {
-
-              float x = (float)(XMin + (float)(i) / (float)pic.Width * (XMax - XMin) * LimitFactor);
-              float y = (float)(YMax - (float)j / (float)pic.Height * (YMax - YMin) * LimitFactor);
-              if (!GetLimitValue(x, y, LimitIdx))
+              if (Limit[i * pic.Width / LimitFactor + j] == 0)
               {
-                Pen pen = new Pen(Color.Gray, 1);
+                Pen pen = new Pen(Color.Gray, 0);
                 g.DrawRectangle(pen, i * LimitFactor, j * LimitFactor, 1, 1);
               }
             }
@@ -244,19 +248,27 @@ namespace Equal_level_lines_UI
       YMax = Double.Parse(tBox_Ymax.Text);
     }
 
+    public void ParseParameters()
+    {
+      N = int.Parse(tBox_N.Text);
+      M1 = int.Parse(tBox_M1.Text);
+      M2 = int.Parse(tBox_M2.Text);
+      M3 = int.Parse(tBox_M3.Text);
+    }
+
     static double XMin, XMax, YMin, YMax;
+    static int N, M1, M2, M3;
     static eque_lines Eque_lines = new eque_lines();
     public static DrawPoints Data = new DrawPoints();
     public static double[] drawpoints, pQ;
+    public static int[] Limit;
 
     private void btn_Run_click(object sender, EventArgs e)
     {
       GridLinesThickness = int.Parse(tBox_GridLinesThickness.Text);
+      CalcLimit = cBox_CalcLimit.Checked;
 
-      int N = int.Parse(tBox_N.Text);
-      int M1 = int.Parse(tBox_M1.Text);
-      int M2 = int.Parse(tBox_M2.Text);
-      int M3 = int.Parse(tBox_M3.Text);
+      ParseParameters();
       AllocMem(N, M1, M2, M3);
       Eque_lines.CreateData(N, M1, M2, M3);
 
@@ -267,13 +279,23 @@ namespace Equal_level_lines_UI
       stopwatch.Start();
 
       Calculate(int.Parse(tBox_funcIdx.Text));
+      GetDataFromDll(N, M1 + M2 + M3);
+
+      if (CalcLimit)
+      {
+        LimitFactor = int.Parse(tBox_LimitFactor.Text);
+        PicWidth = pictureBox1.Width;
+        PicHeight = pictureBox1.Height;
+        CalculateLimit(int.Parse(tBox_LimitIdx.Text), LimitFactor,
+                       PicWidth, PicHeight);
+        GetLimitData();
+      }
+
+
+      pictureBox1.Invalidate();
 
       label_Time.Text = "Time: " + stopwatch.Elapsed.TotalSeconds.ToString();
       label_Time.BackColor = Color.LightGreen;
-
-      GetDataFromDll(N, M1 + M2 + M3);
-
-      pictureBox1.Invalidate();
     }
 
     private void CBox_AddXaxis_CheckedChanged(object sender, EventArgs e)
@@ -285,7 +307,7 @@ namespace Equal_level_lines_UI
     private void CBox_LimitOn_CheckedChanged(object sender, EventArgs e)
     {
       ParseArea();
-      PrintLimit = cBox_PrintLimit.Checked;
+      CalcLimit = cBox_CalcLimit.Checked;
       pictureBox1.Invalidate();
     }
 
@@ -339,6 +361,16 @@ namespace Equal_level_lines_UI
       //Marshal.FreeHGlobal(ptrSubLevelValues);
     }
 
+    public static void GetLimitData()
+    {
+      int length = PicWidth / LimitFactor * PicHeight / LimitFactor;
+      Limit = new int[length];
+      IntPtr ptrLimitValues = Marshal.AllocCoTaskMem(length * sizeof(int));
+      GetLimitValues(ptrLimitValues);
+      Marshal.Copy(ptrLimitValues, Limit, 0, length);
+      Marshal.FreeCoTaskMem(ptrLimitValues);
+    }
+
     public static void ParseReceivedData(double[] drawpoints,
                                          double[] SubLevelValues, int size) {
       for (int i = 0; i < size; ++i)
@@ -364,19 +396,6 @@ namespace Equal_level_lines_UI
                            int.Parse(tBox_NumOfGridLines.Text),
                            colorDialog1.Color,
                            int.Parse(tBox_LimitFactor.Text));
-    }
-
-    public static bool GetLimitValue(double x, double y, int LimitIdx)
-    {
-      switch(LimitIdx)  // return true if g(x) < 0
-      {
-        case 0:
-          return x < 0 && y < 0;  // h(x,y) = (x < 0) U (y < 0)
-        case 1:
-          return x * x + y * y - 1 < 0;
-        default:
-          return true;
-      }
     }
   }
 }

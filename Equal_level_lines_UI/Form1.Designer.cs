@@ -41,7 +41,7 @@
       this.cBox_AddXaxis = new System.Windows.Forms.CheckBox();
       this.tBox_LimitFactor = new System.Windows.Forms.TextBox();
       this.label12 = new System.Windows.Forms.Label();
-      this.cBox_PrintLimit = new System.Windows.Forms.CheckBox();
+      this.cBox_CalcLimit = new System.Windows.Forms.CheckBox();
       this.tBox_LimitIdx = new System.Windows.Forms.TextBox();
       this.label11 = new System.Windows.Forms.Label();
       this.btn_Clear = new System.Windows.Forms.Button();
@@ -93,7 +93,7 @@
       this.groupBox1.Controls.Add(this.groupBox4);
       this.groupBox1.Controls.Add(this.tBox_LimitFactor);
       this.groupBox1.Controls.Add(this.label12);
-      this.groupBox1.Controls.Add(this.cBox_PrintLimit);
+      this.groupBox1.Controls.Add(this.cBox_CalcLimit);
       this.groupBox1.Controls.Add(this.tBox_LimitIdx);
       this.groupBox1.Controls.Add(this.label11);
       this.groupBox1.Controls.Add(this.btn_Clear);
@@ -226,16 +226,15 @@
       this.label12.TabIndex = 22;
       this.label12.Text = "Limit factor";
       // 
-      // cBox_PrintLimit
+      // cBox_CalcLimit
       // 
-      this.cBox_PrintLimit.AutoSize = true;
-      this.cBox_PrintLimit.Location = new System.Drawing.Point(10, 59);
-      this.cBox_PrintLimit.Name = "cBox_PrintLimit";
-      this.cBox_PrintLimit.Size = new System.Drawing.Size(91, 24);
-      this.cBox_PrintLimit.TabIndex = 2;
-      this.cBox_PrintLimit.Text = "Print limit";
-      this.cBox_PrintLimit.UseVisualStyleBackColor = true;
-      this.cBox_PrintLimit.CheckedChanged += new System.EventHandler(this.CBox_LimitOn_CheckedChanged);
+      this.cBox_CalcLimit.AutoSize = true;
+      this.cBox_CalcLimit.Location = new System.Drawing.Point(10, 59);
+      this.cBox_CalcLimit.Name = "cBox_CalcLimit";
+      this.cBox_CalcLimit.Size = new System.Drawing.Size(125, 24);
+      this.cBox_CalcLimit.TabIndex = 2;
+      this.cBox_CalcLimit.Text = "Calculate limit";
+      this.cBox_CalcLimit.UseVisualStyleBackColor = true;
       // 
       // tBox_LimitIdx
       // 
@@ -549,7 +548,7 @@
     private System.Windows.Forms.Button btn_Clear;
     private System.Windows.Forms.TextBox tBox_LimitIdx;
     private System.Windows.Forms.Label label11;
-    public System.Windows.Forms.CheckBox cBox_PrintLimit;
+    public System.Windows.Forms.CheckBox cBox_CalcLimit;
     private System.Windows.Forms.Label label12;
     public System.Windows.Forms.TextBox tBox_LimitFactor;
     private System.Windows.Forms.GroupBox groupBox4;

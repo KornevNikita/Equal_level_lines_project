@@ -20,12 +20,14 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
   area.XMax = _XMax;
   area.YMin = _YMin;
   area.YMax = _YMax;
+  area.Width = _XMax - _XMin;
+  area.Height = _YMax - _YMin;
 }
 
 void Calculate(int funcIdx) {
   double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ;
-  double hx = (lines->area.XMax - lines->area.XMin) / lines->N; // вычисление шага по x
-  double hy = (lines->area.YMax - lines->area.YMin) / lines->N; // вычисление шага по y
+  double hx = lines->area.Width / lines->N; // вычисление шага по x
+  double hy = lines->area.Height / lines->N; // вычисление шага по y
 
   // обход сетки
   for (int i = 0; i <= lines->N; i++)
@@ -67,6 +69,22 @@ void Calculate(int funcIdx) {
   }
 }
 
+void CalculateLimit(int LimitIdx, int LimitFactor, int Width, int Height) {
+  lines->LimitValues.resize(Width / LimitFactor * Height / LimitFactor, true);
+  int Count = 0;
+  for (int i = 0; i < Width / LimitFactor; ++i)
+  {
+    for (int j = 0; j < Height / LimitFactor; ++j)
+    {
+      double x = lines->area.XMin +
+        (double)(i) / (double)Width * (lines->area.Width) * LimitFactor;
+      double y = lines->area.YMax -
+        (double)j / (double)Height * lines->area.Height * LimitFactor;
+      lines->LimitValues[Count++] = Limit(x, y, LimitIdx);
+    }
+  }
+}
+
 double F(double x, double y, int funcIdx) {
   switch (funcIdx) {
   case 0:
@@ -83,11 +101,25 @@ double F(double x, double y, int funcIdx) {
   }
 }
 
+bool Limit(double x, double y, int LimitIdx) {
+  switch (LimitIdx) {
+  case 0:
+    return x < 0 && y < 0;  // h(x,y) = (x < 0) U (y < 0)
+  case 1:
+    return x * x + y * y - 1 < 0; // h(x, y) = x^2 + y^2 - 1 = 0
+  }
+}
+
 void GetData(DrawPoints<Lines::Point>* Points, double* SubLevelValues) {
   Points->Data = lines->Data.data();
 
   copy(lines->SubLevelValues.begin(), lines->SubLevelValues.end(),
        SubLevelValues);
+}
+
+void GetLimitValues(int* LimitValues) {
+  copy(lines->LimitValues.begin(), lines->LimitValues.end(),
+    LimitValues);
 }
 
 void InitData(DrawPoints<Lines::Point>* array) {
