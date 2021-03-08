@@ -262,6 +262,13 @@ namespace Equal_level_lines_UI
     public static DrawPoints Data = new DrawPoints();
     public static Color LimitColor, GridColor;
 
+    private void Button3_Click(object sender, EventArgs e)
+    {
+      pictureBox1.Width = int.Parse(tBox_PicWidth.Text);
+      pictureBox1.Height = int.Parse(tBox_PicHeight.Text);
+      pictureBox1.Invalidate();
+    }
+
     private void Button2_Click(object sender, EventArgs e)
     {
       colorDialog2.ShowDialog();
