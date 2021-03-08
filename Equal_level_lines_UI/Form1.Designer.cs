@@ -30,7 +30,11 @@
     {
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.groupBox6 = new System.Windows.Forms.GroupBox();
+      this.btn_LoadSettings = new System.Windows.Forms.Button();
+      this.btn_SaveSettings = new System.Windows.Forms.Button();
       this.groupBox5 = new System.Windows.Forms.GroupBox();
+      this.button3 = new System.Windows.Forms.Button();
       this.label16 = new System.Windows.Forms.Label();
       this.label15 = new System.Windows.Forms.Label();
       this.tBox_PicHeight = new System.Windows.Forms.TextBox();
@@ -75,9 +79,9 @@
       this.tBox_funcIdx = new System.Windows.Forms.TextBox();
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
       this.colorDialog2 = new System.Windows.Forms.ColorDialog();
-      this.button3 = new System.Windows.Forms.Button();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
+      this.groupBox6.SuspendLayout();
       this.groupBox5.SuspendLayout();
       this.groupBox4.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -98,6 +102,7 @@
       // groupBox1
       // 
       this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLight;
+      this.groupBox1.Controls.Add(this.groupBox6);
       this.groupBox1.Controls.Add(this.groupBox5);
       this.groupBox1.Controls.Add(this.button2);
       this.groupBox1.Controls.Add(this.groupBox4);
@@ -116,10 +121,42 @@
       this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
       this.groupBox1.Location = new System.Drawing.Point(12, 12);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(325, 619);
+      this.groupBox1.Size = new System.Drawing.Size(325, 660);
       this.groupBox1.TabIndex = 1;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Parameters";
+      // 
+      // groupBox6
+      // 
+      this.groupBox6.BackColor = System.Drawing.SystemColors.ScrollBar;
+      this.groupBox6.Controls.Add(this.btn_LoadSettings);
+      this.groupBox6.Controls.Add(this.btn_SaveSettings);
+      this.groupBox6.Location = new System.Drawing.Point(7, 463);
+      this.groupBox6.Name = "groupBox6";
+      this.groupBox6.Size = new System.Drawing.Size(312, 77);
+      this.groupBox6.TabIndex = 25;
+      this.groupBox6.TabStop = false;
+      this.groupBox6.Text = "Save/Load settings";
+      // 
+      // btn_LoadSettings
+      // 
+      this.btn_LoadSettings.Location = new System.Drawing.Point(162, 35);
+      this.btn_LoadSettings.Name = "btn_LoadSettings";
+      this.btn_LoadSettings.Size = new System.Drawing.Size(100, 26);
+      this.btn_LoadSettings.TabIndex = 27;
+      this.btn_LoadSettings.Text = "Load last";
+      this.btn_LoadSettings.UseVisualStyleBackColor = true;
+      this.btn_LoadSettings.Click += new System.EventHandler(this.btn_LoadSettings_Click);
+      // 
+      // btn_SaveSettings
+      // 
+      this.btn_SaveSettings.Location = new System.Drawing.Point(45, 35);
+      this.btn_SaveSettings.Name = "btn_SaveSettings";
+      this.btn_SaveSettings.Size = new System.Drawing.Size(100, 26);
+      this.btn_SaveSettings.TabIndex = 26;
+      this.btn_SaveSettings.Text = "Save";
+      this.btn_SaveSettings.UseVisualStyleBackColor = true;
+      this.btn_SaveSettings.Click += new System.EventHandler(this.btn_SaveSettings_Click);
       // 
       // groupBox5
       // 
@@ -131,15 +168,25 @@
       this.groupBox5.Controls.Add(this.tBox_PicWidth);
       this.groupBox5.Location = new System.Drawing.Point(7, 402);
       this.groupBox5.Name = "groupBox5";
-      this.groupBox5.Size = new System.Drawing.Size(312, 83);
+      this.groupBox5.Size = new System.Drawing.Size(312, 55);
       this.groupBox5.TabIndex = 24;
       this.groupBox5.TabStop = false;
       this.groupBox5.Text = "Picture size";
       // 
+      // button3
+      // 
+      this.button3.Location = new System.Drawing.Point(232, 23);
+      this.button3.Name = "button3";
+      this.button3.Size = new System.Drawing.Size(50, 26);
+      this.button3.TabIndex = 4;
+      this.button3.Text = "Ok";
+      this.button3.UseVisualStyleBackColor = true;
+      this.button3.Click += new System.EventHandler(this.Button3_Click);
+      // 
       // label16
       // 
       this.label16.AutoSize = true;
-      this.label16.Location = new System.Drawing.Point(225, 25);
+      this.label16.Location = new System.Drawing.Point(118, 26);
       this.label16.Name = "label16";
       this.label16.Size = new System.Drawing.Size(24, 20);
       this.label16.TabIndex = 3;
@@ -148,7 +195,7 @@
       // label15
       // 
       this.label15.AutoSize = true;
-      this.label15.Location = new System.Drawing.Point(70, 25);
+      this.label15.Location = new System.Drawing.Point(32, 26);
       this.label15.Name = "label15";
       this.label15.Size = new System.Drawing.Size(24, 20);
       this.label15.TabIndex = 2;
@@ -156,7 +203,7 @@
       // 
       // tBox_PicHeight
       // 
-      this.tBox_PicHeight.Location = new System.Drawing.Point(255, 22);
+      this.tBox_PicHeight.Location = new System.Drawing.Point(148, 23);
       this.tBox_PicHeight.Name = "tBox_PicHeight";
       this.tBox_PicHeight.Size = new System.Drawing.Size(50, 26);
       this.tBox_PicHeight.TabIndex = 1;
@@ -165,7 +212,7 @@
       // 
       // tBox_PicWidth
       // 
-      this.tBox_PicWidth.Location = new System.Drawing.Point(100, 22);
+      this.tBox_PicWidth.Location = new System.Drawing.Point(62, 23);
       this.tBox_PicWidth.Name = "tBox_PicWidth";
       this.tBox_PicWidth.Size = new System.Drawing.Size(50, 26);
       this.tBox_PicWidth.TabIndex = 0;
@@ -328,7 +375,7 @@
       // label_Time
       // 
       this.label_Time.AutoSize = true;
-      this.label_Time.Location = new System.Drawing.Point(112, 589);
+      this.label_Time.Location = new System.Drawing.Point(112, 629);
       this.label_Time.Name = "label_Time";
       this.label_Time.Size = new System.Drawing.Size(47, 20);
       this.label_Time.TabIndex = 20;
@@ -336,7 +383,7 @@
       // 
       // btn_Run
       // 
-      this.btn_Run.Location = new System.Drawing.Point(6, 586);
+      this.btn_Run.Location = new System.Drawing.Point(6, 626);
       this.btn_Run.Name = "btn_Run";
       this.btn_Run.Size = new System.Drawing.Size(100, 26);
       this.btn_Run.TabIndex = 2;
@@ -348,7 +395,7 @@
       // 
       this.label10.AutoSize = true;
       this.label10.BackColor = System.Drawing.SystemColors.ControlLight;
-      this.label10.Location = new System.Drawing.Point(6, 503);
+      this.label10.Location = new System.Drawing.Point(6, 543);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(224, 80);
       this.label10.TabIndex = 18;
@@ -564,16 +611,6 @@
       this.colorDialog2.Color = System.Drawing.Color.DeepSkyBlue;
       this.colorDialog2.FullOpen = true;
       // 
-      // button3
-      // 
-      this.button3.Location = new System.Drawing.Point(255, 54);
-      this.button3.Name = "button3";
-      this.button3.Size = new System.Drawing.Size(50, 26);
-      this.button3.TabIndex = 4;
-      this.button3.Text = "Ok";
-      this.button3.UseVisualStyleBackColor = true;
-      this.button3.Click += new System.EventHandler(this.Button3_Click);
-      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -586,6 +623,7 @@
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
       this.groupBox1.ResumeLayout(false);
       this.groupBox1.PerformLayout();
+      this.groupBox6.ResumeLayout(false);
       this.groupBox5.ResumeLayout(false);
       this.groupBox5.PerformLayout();
       this.groupBox4.ResumeLayout(false);
@@ -648,6 +686,9 @@
     private System.Windows.Forms.TextBox tBox_PicHeight;
     private System.Windows.Forms.TextBox tBox_PicWidth;
     private System.Windows.Forms.Button button3;
+    private System.Windows.Forms.GroupBox groupBox6;
+    private System.Windows.Forms.Button btn_LoadSettings;
+    private System.Windows.Forms.Button btn_SaveSettings;
   }
 }
 

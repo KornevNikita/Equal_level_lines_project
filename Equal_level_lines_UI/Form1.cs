@@ -269,6 +269,67 @@ namespace Equal_level_lines_UI
       pictureBox1.Invalidate();
     }
 
+    private void btn_SaveSettings_Click(object sender, EventArgs e)
+    {
+      Properties.Settings.Default.FuncIdx = int.Parse(tBox_funcIdx.Text);
+      Properties.Settings.Default.LimitIdx = int.Parse(tBox_LimitIdx.Text);
+      Properties.Settings.Default.LimitFactor =
+        int.Parse(tBox_LimitFactor.Text);
+
+      Properties.Settings.Default.CalcLimitOn = cBox_CalcLimit.Checked;
+      Properties.Settings.Default.xmin = int.Parse(tBox_Xmin.Text);
+      Properties.Settings.Default.xmax = int.Parse(tBox_Xmax.Text);
+      Properties.Settings.Default.ymin = int.Parse(tBox_Ymin.Text);
+      Properties.Settings.Default.ymin = int.Parse(tBox_Ymax.Text);
+
+      Properties.Settings.Default.N = int.Parse(tBox_N.Text);
+      Properties.Settings.Default.M1 = int.Parse(tBox_M1.Text);
+      Properties.Settings.Default.M2 = int.Parse(tBox_M2.Text);
+      Properties.Settings.Default.M3 = int.Parse(tBox_M3.Text);
+
+      Properties.Settings.Default.AddGrid = cBox_AddGrid.Checked;
+      Properties.Settings.Default.AddXaxis = cBox_AddXaxis.Checked;
+      Properties.Settings.Default.AddYaxis = cBox_AddYaxis.Checked;
+      Properties.Settings.Default.NumOfGridLines =
+        int.Parse(tBox_NumOfGridLines.Text);
+      Properties.Settings.Default.GridLinesThickness =
+        int.Parse(tBox_GridLinesThickness.Text);
+
+      Properties.Settings.Default.PicWidth = int.Parse(tBox_PicWidth.Text);
+      Properties.Settings.Default.PicHeight = int.Parse(tBox_PicHeight.Text);
+      Properties.Settings.Default.Save();
+    }
+
+    private void btn_LoadSettings_Click(object sender, EventArgs e)
+    {
+      tBox_funcIdx.Text = Properties.Settings.Default.FuncIdx.ToString();
+      tBox_LimitIdx.Text = Properties.Settings.Default.LimitIdx.ToString();
+      tBox_LimitFactor.Text =
+        Properties.Settings.Default.LimitFactor.ToString();
+
+      cBox_CalcLimit.Checked = Properties.Settings.Default.CalcLimitOn;
+      tBox_Xmin.Text = Properties.Settings.Default.xmin.ToString();
+      tBox_Xmax.Text = Properties.Settings.Default.xmax.ToString();
+      tBox_Ymin.Text = Properties.Settings.Default.ymin.ToString();
+      tBox_Ymax.Text = Properties.Settings.Default.ymin.ToString();
+
+      tBox_N.Text = Properties.Settings.Default.N.ToString();
+      tBox_M1.Text = Properties.Settings.Default.M1.ToString();
+      tBox_M2.Text = Properties.Settings.Default.M2.ToString();
+      tBox_M3.Text = Properties.Settings.Default.M3.ToString();
+
+      cBox_AddGrid.Checked = Properties.Settings.Default.AddGrid;
+      cBox_AddXaxis.Checked = Properties.Settings.Default.AddXaxis;
+      cBox_AddYaxis.Checked = Properties.Settings.Default.AddYaxis;
+      tBox_NumOfGridLines.Text =
+        Properties.Settings.Default.NumOfGridLines.ToString();
+      tBox_GridLinesThickness.Text =
+        Properties.Settings.Default.GridLinesThickness.ToString();
+
+      tBox_PicWidth.Text = Properties.Settings.Default.PicWidth.ToString();
+      tBox_PicHeight.Text = Properties.Settings.Default.PicHeight.ToString();
+    }
+
     private void Button2_Click(object sender, EventArgs e)
     {
       colorDialog2.ShowDialog();
