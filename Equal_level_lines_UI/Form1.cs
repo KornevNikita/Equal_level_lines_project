@@ -362,9 +362,12 @@ namespace Equal_level_lines_UI
         LimitFactor = int.Parse(tBox_LimitFactor.Text);
         PicWidth = pictureBox1.Width;
         PicHeight = pictureBox1.Height;
-        CalculateLimit(int.Parse(tBox_LimitIdx.Text), LimitFactor,
+        if (rBtn_CalcLimExpensive.Checked)
+        {
+          CalculateLimit(int.Parse(tBox_LimitIdx.Text), LimitFactor,
                        PicWidth, PicHeight);
-        GetLimitData();
+          GetLimitData();
+        }
       }
 
 

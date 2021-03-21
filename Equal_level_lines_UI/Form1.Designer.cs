@@ -79,6 +79,8 @@
       this.tBox_funcIdx = new System.Windows.Forms.TextBox();
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
       this.colorDialog2 = new System.Windows.Forms.ColorDialog();
+      this.rBtn_CalcLimCheap = new System.Windows.Forms.RadioButton();
+      this.rBtn_CalcLimExpensive = new System.Windows.Forms.RadioButton();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       this.groupBox6.SuspendLayout();
@@ -102,6 +104,8 @@
       // groupBox1
       // 
       this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLight;
+      this.groupBox1.Controls.Add(this.rBtn_CalcLimExpensive);
+      this.groupBox1.Controls.Add(this.rBtn_CalcLimCheap);
       this.groupBox1.Controls.Add(this.groupBox6);
       this.groupBox1.Controls.Add(this.groupBox5);
       this.groupBox1.Controls.Add(this.button2);
@@ -611,6 +615,29 @@
       this.colorDialog2.Color = System.Drawing.Color.DeepSkyBlue;
       this.colorDialog2.FullOpen = true;
       // 
+      // rBtn_CalcLimCheap
+      // 
+      this.rBtn_CalcLimCheap.AutoSize = true;
+      this.rBtn_CalcLimCheap.Location = new System.Drawing.Point(115, 89);
+      this.rBtn_CalcLimCheap.Name = "rBtn_CalcLimCheap";
+      this.rBtn_CalcLimCheap.Size = new System.Drawing.Size(74, 24);
+      this.rBtn_CalcLimCheap.TabIndex = 26;
+      this.rBtn_CalcLimCheap.TabStop = true;
+      this.rBtn_CalcLimCheap.Text = "Cheap";
+      this.rBtn_CalcLimCheap.UseVisualStyleBackColor = true;
+      // 
+      // rBtn_CalcLimExpensive
+      // 
+      this.rBtn_CalcLimExpensive.AutoSize = true;
+      this.rBtn_CalcLimExpensive.Checked = true;
+      this.rBtn_CalcLimExpensive.Location = new System.Drawing.Point(10, 89);
+      this.rBtn_CalcLimExpensive.Name = "rBtn_CalcLimExpensive";
+      this.rBtn_CalcLimExpensive.Size = new System.Drawing.Size(99, 24);
+      this.rBtn_CalcLimExpensive.TabIndex = 27;
+      this.rBtn_CalcLimExpensive.TabStop = true;
+      this.rBtn_CalcLimExpensive.Text = "Expensive";
+      this.rBtn_CalcLimExpensive.UseVisualStyleBackColor = true;
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -689,6 +716,8 @@
     private System.Windows.Forms.GroupBox groupBox6;
     private System.Windows.Forms.Button btn_LoadSettings;
     private System.Windows.Forms.Button btn_SaveSettings;
+    private System.Windows.Forms.RadioButton rBtn_CalcLimExpensive;
+    private System.Windows.Forms.RadioButton rBtn_CalcLimCheap;
   }
 }
 
