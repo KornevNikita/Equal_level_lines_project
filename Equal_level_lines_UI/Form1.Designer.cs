@@ -618,12 +618,11 @@
       // rBtn_CalcLimCheap
       // 
       this.rBtn_CalcLimCheap.AutoSize = true;
-      this.rBtn_CalcLimCheap.Location = new System.Drawing.Point(115, 89);
+      this.rBtn_CalcLimCheap.Location = new System.Drawing.Point(78, 89);
       this.rBtn_CalcLimCheap.Name = "rBtn_CalcLimCheap";
-      this.rBtn_CalcLimCheap.Size = new System.Drawing.Size(74, 24);
+      this.rBtn_CalcLimCheap.Size = new System.Drawing.Size(128, 24);
       this.rBtn_CalcLimCheap.TabIndex = 26;
-      this.rBtn_CalcLimCheap.TabStop = true;
-      this.rBtn_CalcLimCheap.Text = "Cheap";
+      this.rBtn_CalcLimCheap.Text = "Draw zero-line";
       this.rBtn_CalcLimCheap.UseVisualStyleBackColor = true;
       // 
       // rBtn_CalcLimExpensive
@@ -632,10 +631,10 @@
       this.rBtn_CalcLimExpensive.Checked = true;
       this.rBtn_CalcLimExpensive.Location = new System.Drawing.Point(10, 89);
       this.rBtn_CalcLimExpensive.Name = "rBtn_CalcLimExpensive";
-      this.rBtn_CalcLimExpensive.Size = new System.Drawing.Size(99, 24);
+      this.rBtn_CalcLimExpensive.Size = new System.Drawing.Size(67, 24);
       this.rBtn_CalcLimExpensive.TabIndex = 27;
       this.rBtn_CalcLimExpensive.TabStop = true;
-      this.rBtn_CalcLimExpensive.Text = "Expensive";
+      this.rBtn_CalcLimExpensive.Text = "Filling";
       this.rBtn_CalcLimExpensive.UseVisualStyleBackColor = true;
       // 
       // Form1
