@@ -25,7 +25,9 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
   area.Height = _YMax - _YMin;
 }
 
-void Calculate(int funcIdx) {
+void Calculate(int funcIdx, bool funcOrLimit) {
+  // funcOrLimit == true -> calculate function
+  // if false -> calculate limit
   double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ;
   double hx = lines->area.Width / lines->N; // вычисление шага по x
   double hy = lines->area.Height / lines->N; // вычисление шага по y
@@ -35,12 +37,13 @@ void Calculate(int funcIdx) {
     for (int j = 0; j <= lines->N; j++)
     {
        // заполнение структуры сетки
-       double x = lines->Data[(lines->N + 1) * i + j].x = lines->area.XMin +
-         hx * i;
-       double y = lines->Data[(lines->N + 1) * i + j].y = lines->area.YMin +
-         hy * j;
-       // значение функции в узле
-       QQ = lines->Data[(lines->N + 1) * i + j].Q = F(x, y, funcIdx);
+      size_t Idx = (lines->N + 1) * i + j;
+      double x = lines->Data[Idx].x = lines->area.XMin +
+        hx * i;
+      double y = lines->Data[Idx].y = lines->area.YMin +
+        hy * j;
+      // значение функции в узле
+      QQ = lines->Data[Idx].Q = F(x, y, funcIdx, funcOrLimit);
 
       // поиск минимального и максимального значения на сетке
       if ((i == 0) && (j == 0) || (QQ < Qmin))
@@ -86,30 +89,40 @@ void CalculateLimit(int LimitIdx, int LimitFactor, int Width, int Height) {
   }
 }
 
-double F(double x, double y, int funcIdx) {
-  switch (funcIdx) {
-  case 1: 
-    return (-1.5 * x * x * exp(1 - x * x - 20.25 * pow((x - y), 2))) -
-      pow(0.5 * (x - 1) * (y - 1), 4) * exp(2 - pow(0.5 * (x - 1), 4) -
-      pow(y - 1, 4));
-  case 2:
-    return ((4 - 2.1 * x * x + pow(x, 4) / 3) * x * x +
-      x * y + (4 * y * y - 4) * y * y);
-  case 3: 
-    return 0.01 * (x * y + pow(x - M_PI, 2) +
-      3 * pow(y * y - M_PI, 2)) - pow(sin(x) * sin(2 * y), 2);
-  case 4:
-    return (x * x - cos(18 * x * x)) + (y * y - cos(18 * y * y));
-  case 5: 
-    return M_PI / 2 * (pow(10 * (sin(M_PI * (1 + (x - 1) / 4))), 2) +
-      pow((x - 1) / 4, 2) * (1 + 10 * pow(sin(M_PI * (1 + (y - 1) / 4)), 2)) +
-      pow((y - 1) / 4, 2));
-  default:
-    return 0.0;
+double F(double x, double y, int funcIdx, bool funcOrLimit) {
+  if (funcOrLimit) {
+    switch (funcIdx) {
+    case 1:
+      return (-1.5 * x * x * exp(1 - x * x - 20.25 * pow((x - y), 2))) -
+        pow(0.5 * (x - 1) * (y - 1), 4) * exp(2 - pow(0.5 * (x - 1), 4) -
+          pow(y - 1, 4));
+    case 2:
+      return ((4 - 2.1 * x * x + pow(x, 4) / 3) * x * x +
+        x * y + (4 * y * y - 4) * y * y);
+    case 3:
+      return 0.01 * (x * y + pow(x - M_PI, 2) +
+        3 * pow(y * y - M_PI, 2)) - pow(sin(x) * sin(2 * y), 2);
+    case 4:
+      return (x * x - cos(18 * x * x)) + (y * y - cos(18 * y * y));
+    case 5:
+      return M_PI / 2 * (pow(10 * (sin(M_PI * (1 + (x - 1) / 4))), 2) +
+        pow((x - 1) / 4, 2) * (1 + 10 * pow(sin(M_PI * (1 + (y - 1) / 4)), 2)) +
+        pow((y - 1) / 4, 2));
+    default:
+      return 0.0;
+    }
+  } else {
+    LimitFunctor lf;
+    return lf(x, y, funcIdx);
   }
 }
 
 bool Limit(double x, double y, int LimitIdx) {
+  LimitFunctor lf;
+  return lf(x, y, LimitIdx);
+}
+
+double LimitFunctor::operator()(double x, double y, int LimitIdx) {
   switch (LimitIdx) {
   case 0:
     return x < 0 && y < 0;  // h(x,y) = (x < 0) U (y < 0)
@@ -122,7 +135,7 @@ void GetData(DrawPoints<Lines::Point>* Points, double* SubLevelValues) {
   Points->Data = lines->Data.data();
 
   copy(lines->SubLevelValues.begin(), lines->SubLevelValues.end(),
-       SubLevelValues);
+    SubLevelValues);
 }
 
 void GetLimitValues(int* LimitValues) {

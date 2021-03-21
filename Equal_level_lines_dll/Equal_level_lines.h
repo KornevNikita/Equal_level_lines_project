@@ -48,9 +48,14 @@ public:
   Area area;
 };
 
+class LimitFunctor {
+public:
+  double operator()(double x, double y, int LimitIdx);
+};
+
 Lines* lines;
 
-double F(double x, double y, int funcIdx);
+double F(double x, double y, int funcIdx, bool funcOrLimit);
 
 bool Limit(double x, double y, int LimitIdx);
 
@@ -61,7 +66,7 @@ extern "C" __declspec(dllexport)
 void SetArea(double _XMin, double _XMax, double _YMin, double _YMax);
 
 extern "C" __declspec(dllexport)
-void Calculate(int funcIdx);
+void Calculate(int funcIdx, bool funcOrLimit);
 
 extern "C" __declspec(dllexport)
 void CalculateLimit(int LimitIdx, int LimitFactor, int Width, int Height);
