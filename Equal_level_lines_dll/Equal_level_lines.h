@@ -43,7 +43,7 @@ public:
 
   int N, M1, M2, M3, M;
   vector<Point> Data;
-  vector<double> SubLevelValues;
+  vector<double> SubLevelValues, LimitZeroLine;
   vector<int> LimitValues;
   Area area;
 };
@@ -66,16 +66,25 @@ extern "C" __declspec(dllexport)
 void SetArea(double _XMin, double _XMax, double _YMin, double _YMax);
 
 extern "C" __declspec(dllexport)
-void Calculate(int funcIdx, bool funcOrLimit);
+void Calculate(int funcIdx);
 
 extern "C" __declspec(dllexport)
 void CalculateLimit(int LimitIdx, int LimitFactor, int Width, int Height);
+
+extern "C" __declspec(dllexport)
+void CalculateLimitZeroLine(int LimitIdx, int LimitFactor);
+
+extern "C" __declspec(dllexport)
+int GetLimitZeroLineSize();
 
 extern "C" __declspec(dllexport)
 void GetData(DrawPoints<Lines::Point> *Points, double *SubLevelValues);
 
 extern "C" __declspec(dllexport)
 void GetLimitValues(int* LimitValues);
+
+extern "C" __declspec(dllexport)
+void GetLimitZeroLine(double* LimitValues);
 
 extern "C" __declspec(dllexport)
 void InitData(DrawPoints<Lines::Point> *Data);

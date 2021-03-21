@@ -25,9 +25,7 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
   area.Height = _YMax - _YMin;
 }
 
-void Calculate(int funcIdx, bool funcOrLimit) {
-  // funcOrLimit == true -> calculate function
-  // if false -> calculate limit
+void Calculate(int funcIdx) {
   double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ;
   double hx = lines->area.Width / lines->N; // вычисление шага по x
   double hy = lines->area.Height / lines->N; // вычисление шага по y
@@ -43,7 +41,8 @@ void Calculate(int funcIdx, bool funcOrLimit) {
       double y = lines->Data[Idx].y = lines->area.YMin +
         hy * j;
       // значение функции в узле
-      QQ = lines->Data[Idx].Q = F(x, y, funcIdx, funcOrLimit);
+      
+      QQ = lines->Data[Idx].Q = F(x, y, funcIdx, true);
 
       // поиск минимального и максимального значения на сетке
       if ((i == 0) && (j == 0) || (QQ < Qmin))
@@ -89,6 +88,28 @@ void CalculateLimit(int LimitIdx, int LimitFactor, int Width, int Height) {
   }
 }
 
+void CalculateLimitZeroLine(int LimitIdx, int LimitFactor) {
+  ofstream fout("cppstudio.txt");
+  double hx = lines->area.Width / lines->N; // вычисление шага по x
+  double hy = lines->area.Height / lines->N; // вычисление шага по y
+
+  for (int i = 0; i <= lines->N / LimitFactor; i++)
+    for (int j = 0; j <= lines->N / LimitFactor; j++)
+    {
+      // заполнение структуры сетки
+      size_t Idx = (lines->N + 1) * i + j;
+      double x = lines->area.XMin + hx * i * LimitFactor;
+      double y = lines->area.YMin + hy * j * LimitFactor;
+      // значение функции в узле
+
+      if (fabs(F(x, y, LimitIdx, false)) - 0.1 < 0) {
+        lines->LimitZeroLine.push_back(x);
+        lines->LimitZeroLine.push_back(y);
+        fout << "x: " << x << ", y: " << y << endl;
+      }
+    }
+}
+
 double F(double x, double y, int funcIdx, bool funcOrLimit) {
   if (funcOrLimit) {
     switch (funcIdx) {
@@ -119,15 +140,18 @@ double F(double x, double y, int funcIdx, bool funcOrLimit) {
 
 bool Limit(double x, double y, int LimitIdx) {
   LimitFunctor lf;
-  return lf(x, y, LimitIdx);
+  double Value = lf(x, y, LimitIdx);
+  if (Value > 0)
+    return false;
+  return true;
 }
 
 double LimitFunctor::operator()(double x, double y, int LimitIdx) {
   switch (LimitIdx) {
   case 0:
-    return x < 0 && y < 0;  // h(x,y) = (x < 0) U (y < 0)
+    return x < 0 && y;  // h(x,y) = (x < 0) U (y < 0)
   case 1:
-    return x * x + y * y - 1 < 0; // h(x, y) = x^2 + y^2 - 1 = 0
+    return x * x + y * y - 1; // h(x, y) = x^2 + y^2 - 1 = 0
   }
 }
 
@@ -135,7 +159,7 @@ void GetData(DrawPoints<Lines::Point>* Points, double* SubLevelValues) {
   Points->Data = lines->Data.data();
 
   copy(lines->SubLevelValues.begin(), lines->SubLevelValues.end(),
-    SubLevelValues);
+       SubLevelValues);
 }
 
 void GetLimitValues(int* LimitValues) {
@@ -150,4 +174,13 @@ void InitData(DrawPoints<Lines::Point>* array) {
 void DeleteData(DrawPoints<Lines::Point> *Data) {
   Data->FreeMem();
   delete lines;
+}
+
+int GetLimitZeroLineSize() {
+  return lines->LimitZeroLine.size();
+}
+
+void GetLimitZeroLine(double* LimitValues) {
+  copy(lines->LimitZeroLine.begin(), lines->LimitZeroLine.end(),
+    LimitValues);
 }
