@@ -228,17 +228,14 @@ namespace Equal_level_lines_UI
           }
           else
           {
-            for (i = 0; i < LimitZeroLine.Length - 2; i += 4)
+            float width = (float)(XMax - XMin),
+              height = (float)(YMax - YMin);
+            for (i = 0; i < LimitZeroLine.Length - 2; i += 2)
             {
-              Pen p = new Pen(LimitColor, 1);
-              float width = (float)(XMax - XMin),
-                height = (float)(YMax - YMin);
-              p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+              Pen p = new Pen(LimitColor, 2);
               float x1 = PicWidth / 2 + (float)(LimitZeroLine[i] / width) * PicWidth,
-                y1 = PicHeight / 2 + (float)LimitZeroLine[i + 1] / height * PicHeight,
-                x2 = PicWidth / 2 + (float)(LimitZeroLine[i + 2] / width) * PicWidth,
-                y2 = PicHeight / 2 + (float)LimitZeroLine[i + 3] / height * PicHeight;
-              g.DrawLine(p, x1, y1, x2, y2);
+                y1 = PicHeight / 2 + (float)LimitZeroLine[i + 1] / height * PicHeight;
+              g.DrawRectangle(p, x1, y1, 2, 2);
             }
           }
         }

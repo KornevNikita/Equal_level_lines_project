@@ -75,7 +75,7 @@ extern "C" __declspec(dllexport)
 void CalculateLimitZeroLine(int LimitIdx, int LimitFactor);
 
 extern "C" __declspec(dllexport)
-int GetLimitZeroLineSize();
+size_t GetLimitZeroLineSize();
 
 extern "C" __declspec(dllexport)
 void GetData(DrawPoints<Lines::Point> *Points, double *SubLevelValues);

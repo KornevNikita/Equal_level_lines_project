@@ -152,6 +152,8 @@ double LimitFunctor::operator()(double x, double y, int LimitIdx) {
     return x < 0 && y;  // h(x,y) = (x < 0) U (y < 0)
   case 1:
     return x * x + y * y - 1; // h(x, y) = x^2 + y^2 - 1 = 0
+  default:
+    return 1.0;
   }
 }
 
@@ -176,7 +178,7 @@ void DeleteData(DrawPoints<Lines::Point> *Data) {
   delete lines;
 }
 
-int GetLimitZeroLineSize() {
+size_t GetLimitZeroLineSize() {
   return lines->LimitZeroLine.size();
 }
 
