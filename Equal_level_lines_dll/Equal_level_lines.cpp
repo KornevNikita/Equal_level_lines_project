@@ -25,7 +25,9 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
   area.Height = _YMax - _YMin;
 }
 
-void Calculate(int funcIdx) {
+void Calculate(int Idx, bool funcOrLimit) {
+  // funcOrLimit == true -> calculate funcition
+  // else calculate limit
   double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ;
   double hx = lines->area.Width / lines->N; // вычисление шага по x
   double hy = lines->area.Height / lines->N; // вычисление шага по y
@@ -35,14 +37,16 @@ void Calculate(int funcIdx) {
     for (int j = 0; j <= lines->N; j++)
     {
        // заполнение структуры сетки
-      size_t Idx = (lines->N + 1) * i + j;
-      double x = lines->Data[Idx].x = lines->area.XMin +
+      size_t k = (lines->N + 1) * i + j;
+      if (!funcOrLimit)
+        Idx += NumOfFunctions;
+      double x = lines->Data[Idx][k].x = lines->area.XMin +
         hx * i;
-      double y = lines->Data[Idx].y = lines->area.YMin +
+      double y = lines->Data[Idx][k].y = lines->area.YMin +
         hy * j;
       // значение функции в узле
       
-      QQ = lines->Data[Idx].Q = F(x, y, funcIdx, true);
+      QQ = lines->Data[Idx][k].Q = F(x, y, Idx, funcOrLimit);
 
       // поиск минимального и максимального значения на сетке
       if ((i == 0) && (j == 0) || (QQ < Qmin))
@@ -111,6 +115,7 @@ void CalculateLimitZeroLine(int LimitIdx, int LimitFactor) {
 }
 
 double F(double x, double y, int funcIdx, bool funcOrLimit) {
+  // Update Equal_level_lines.h:NumOfFunctions if you add a new function
   if (funcOrLimit) {
     switch (funcIdx) {
     case 1:
@@ -129,6 +134,8 @@ double F(double x, double y, int funcIdx, bool funcOrLimit) {
       return M_PI / 2 * (pow(10 * (sin(M_PI * (1 + (x - 1) / 4))), 2) +
         pow((x - 1) / 4, 2) * (1 + 10 * pow(sin(M_PI * (1 + (y - 1) / 4)), 2)) +
         pow((y - 1) / 4, 2));
+    case 6:
+      return x * x + y * y - 1;
     default:
       return 0.0;
     }
@@ -157,8 +164,11 @@ double LimitFunctor::operator()(double x, double y, int LimitIdx) {
   }
 }
 
-void GetData(DrawPoints<Lines::Point>* Points, double* SubLevelValues) {
-  Points->Data = lines->Data.data();
+void GetData(int funcIdx, bool funcOrLimit, DrawPoints<Lines::Point>* Points,
+             double* SubLevelValues) {
+  if (!funcOrLimit)
+    funcIdx += NumOfFunctions;
+  Points->Data = lines->Data[funcIdx].data();
 
   copy(lines->SubLevelValues.begin(), lines->SubLevelValues.end(),
        SubLevelValues);
