@@ -122,10 +122,11 @@ namespace Equal_level_lines_UI
       for (int I = 0; I < Indexes.Length; I++)
       {
         int EqueLinesIdx;
-        if (Indexes[I].Item2)
-          EqueLinesIdx = funcIdx;
-        else
-          EqueLinesIdx = NumOfFuncs + limitIdx;
+        //if (Indexes[I].Item2)
+        //  EqueLinesIdx = funcIdx;
+        //else
+        //  EqueLinesIdx = NumOfFuncs + limitIdx;
+        EqueLinesIdx = Indexes[I].Item2 ? funcIdx : NumOfFuncs + limitIdx;
         for (i = 0; i < N; i++)
           for (j = 0; j < N; j++)
           {
@@ -191,7 +192,8 @@ namespace Equal_level_lines_UI
                 {
                   for (s = 0; s < kt - 1; s++)
                   {
-                    Pen p = new Pen(Color.DimGray, 2);
+                    Color color = Indexes[I].Item2 ? Color.DimGray : colorDialog2.Color;
+                    Pen p = new Pen(color, 2);
                     g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
                       (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
                       (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
@@ -202,7 +204,8 @@ namespace Equal_level_lines_UI
                 {
                   for (s = 0; s < kt - 1; s++)
                   {
-                    Pen p = new Pen(Color.DimGray, 1);
+                    Color color = Indexes[I].Item2 ? Color.DimGray : colorDialog2.Color;
+                    Pen p = new Pen(color, 1);
                     g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
                       (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
                       (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
@@ -213,7 +216,8 @@ namespace Equal_level_lines_UI
                 {
                   for (s = 0; s < kt - 1; s++)
                   {
-                    Pen p = new Pen(Color.DimGray, 1);
+                    Color color = Indexes[I].Item2 ? Color.DimGray : colorDialog2.Color;
+                    Pen p = new Pen(color, 1);
                     p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
                     g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
                       (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
@@ -225,56 +229,54 @@ namespace Equal_level_lines_UI
               //Конец прорисовки линии уровня Qu
             }//Конец перебора всех Qu
           }
+      }
+        //if (CalcLimit)
+        //{
+        //  if (ExpensiveLimit)
+        //  {
+        //    for (i = 0; i < pic.Width / LimitFactor; ++i)
+        //      for (j = 0; j < pic.Height / LimitFactor; ++j)
+        //      {
+        //        if (Limit[i * pic.Width / LimitFactor + j] == 0)
+        //        {
+        //          Pen pen = new Pen(LimitColor, 0);
+        //          g.DrawRectangle(pen, i * LimitFactor, j * LimitFactor, 1, 1);
+        //        }
+        //      }
+        //  }
+        //  else
+        //  {
+        //    float width = (float)(XMax - XMin),
+        //      height = (float)(YMax - YMin);
+        //    for (i = 0; i < LimitZeroLine.Length - 2; i += 2)
+        //    {
+        //      Pen p = new Pen(LimitColor, 2);
+        //      float x1 = PicWidth / 2 + (float)(LimitZeroLine[i] / width) * PicWidth,
+        //        y1 = PicHeight / 2 + (float)LimitZeroLine[i + 1] / height * PicHeight;
+        //      g.DrawRectangle(p, x1, y1, 2, 2);
+        //    }
+        //  }
+        //}
+      if (AddXAxis)
+      {
+        Pen p = new Pen(Color.Black, 1);
+        g.DrawLine(p, 0, pic.Height / 2, pic.Width, pic.Height / 2);
+      }
 
-        if (CalcLimit)
-        {
-          if (ExpensiveLimit)
-          {
-            for (i = 0; i < pic.Width / LimitFactor; ++i)
-              for (j = 0; j < pic.Height / LimitFactor; ++j)
-              {
-                if (Limit[i * pic.Width / LimitFactor + j] == 0)
-                {
-                  Pen pen = new Pen(LimitColor, 0);
-                  g.DrawRectangle(pen, i * LimitFactor, j * LimitFactor, 1, 1);
-                }
-              }
-          }
-          else
-          {
-            float width = (float)(XMax - XMin),
-              height = (float)(YMax - YMin);
-            for (i = 0; i < LimitZeroLine.Length - 2; i += 2)
-            {
-              Pen p = new Pen(LimitColor, 2);
-              float x1 = PicWidth / 2 + (float)(LimitZeroLine[i] / width) * PicWidth,
-                y1 = PicHeight / 2 + (float)LimitZeroLine[i + 1] / height * PicHeight;
-              g.DrawRectangle(p, x1, y1, 2, 2);
-            }
-          }
-        }
+      if (AddYAxis)
+      {
+        Pen p = new Pen(Color.Black, 1);
+        g.DrawLine(p, pic.Width / 2, 0, pic.Width / 2, pic.Height);
+      }
 
-        if (AddXAxis)
+      if (AddGrid)
+      {
+        Pen p = new Pen(GridColor, GridLinesThickness);
+        float h = pic.Width / (NumOfGridLnes + 1);
+        for (i = 1; i <= NumOfGridLnes; i++)
         {
-          Pen p = new Pen(Color.Black, 1);
-          g.DrawLine(p, 0, pic.Height / 2, pic.Width, pic.Height / 2);
-        }
-
-        if (AddYAxis)
-        {
-          Pen p = new Pen(Color.Black, 1);
-          g.DrawLine(p, pic.Width / 2, 0, pic.Width / 2, pic.Height);
-        }
-
-        if (AddGrid)
-        {
-          Pen p = new Pen(GridColor, GridLinesThickness);
-          float h = pic.Width / (NumOfGridLnes + 1);
-          for (i = 1; i <= NumOfGridLnes; i++)
-          {
-            g.DrawLine(p, i * h, 0, i * h, pic.Height);
-            g.DrawLine(p, 0, i * h, pic.Width, i * h);
-          }
+          g.DrawLine(p, i * h, 0, i * h, pic.Height);
+          g.DrawLine(p, 0, i * h, pic.Width, i * h);
         }
       }
     }
@@ -409,8 +411,10 @@ namespace Equal_level_lines_UI
         {
           CalculateLimit(LimitIdx, LimitFactor, PicWidth, PicHeight);
           GetLimitData();
-        } else {
-          Eque_lines[LimitIdx].CreateData(N, M1, M2, M3);
+        }
+        else
+        {
+          Eque_lines[NumOfFuncs + LimitIdx].CreateData(N, M1, M2, M3);
           Calculate(LimitIdx, false);
           GetDataFromDll(LimitIdx, false, N, M1 + M2 + M3);
           //CalculateLimitZeroLine(LimitIdx, LimitFactor);
@@ -470,6 +474,9 @@ namespace Equal_level_lines_UI
       // создаем управляемое хранилище
       drawpoints = new double[Data.Count * 3];
 
+      if (!funcOrLimit)
+        funcIdx += NumOfFuncs;
+
       int sizeStruct = Marshal.SizeOf(typeof(DrawPoints)); // определяем размер управляемой структуры
       IntPtr ptrData = Marshal.AllocHGlobal(sizeStruct); // выделяем память под неуправляемую структуру
       IntPtr ptrSubLevelValues = Marshal.AllocCoTaskMem(M * sizeof(double));
@@ -513,7 +520,8 @@ namespace Equal_level_lines_UI
     public static void ParseReceivedData(int funcIdx, bool funcOrLimit,
                                          double[] drawpoints,
                                          double[] SubLevelValues, int size) {
-      int EqueLinesIdx = funcOrLimit ? funcIdx : NumOfFuncs + funcIdx;
+      //int EqueLinesIdx = funcOrLimit ? funcIdx : NumOfFuncs + funcIdx;
+      int EqueLinesIdx = funcIdx;
       for (int i = 0; i < size; ++i)
       {
         Eque_lines[EqueLinesIdx].pDat[i].x = drawpoints[i * 3];

@@ -28,9 +28,13 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
 void Calculate(int Idx, bool funcOrLimit) {
   // funcOrLimit == true -> calculate funcition
   // else calculate limit
+  ofstream fout("new_debug.txt", ios::app);
   double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ;
   double hx = lines->area.Width / lines->N; // вычисление шага по x
   double hy = lines->area.Height / lines->N; // вычисление шага по y
+  fout << "idx = " << Idx << endl;
+
+  int DataIdx = funcOrLimit ? Idx : NumOfFunctions + Idx;
 
   // обход сетки
   for (int i = 0; i <= lines->N; i++)
@@ -38,15 +42,14 @@ void Calculate(int Idx, bool funcOrLimit) {
     {
        // заполнение структуры сетки
       size_t k = (lines->N + 1) * i + j;
-      if (!funcOrLimit)
-        Idx += NumOfFunctions;
-      double x = lines->Data[Idx][k].x = lines->area.XMin +
+      double x = lines->Data[DataIdx][k].x = lines->area.XMin +
         hx * i;
-      double y = lines->Data[Idx][k].y = lines->area.YMin +
+      double y = lines->Data[DataIdx][k].y = lines->area.YMin +
         hy * j;
       // значение функции в узле
       
-      QQ = lines->Data[Idx][k].Q = F(x, y, Idx, funcOrLimit);
+      QQ = lines->Data[DataIdx][k].Q = F(x, y, Idx, funcOrLimit);
+      fout << i << " " << j << " " << QQ << endl;
 
       // поиск минимального и максимального значения на сетке
       if ((i == 0) && (j == 0) || (QQ < Qmin))
@@ -154,20 +157,25 @@ bool Limit(double x, double y, int LimitIdx) {
 }
 
 double LimitFunctor::operator()(double x, double y, int LimitIdx) {
-  switch (LimitIdx) {
+  /*ofstream fout("debuglimit.txt");
+  fout << "LimitIdx = " << LimitIdx << endl;*/
+  switch (LimitIdx) {  
   case 0:
     return x < 0 && y;  // h(x,y) = (x < 0) U (y < 0)
   case 1:
     return x * x + y * y - 1; // h(x, y) = x^2 + y^2 - 1 = 0
   default:
-    return 1.0;
+    return 55;
   }
 }
 
 void GetData(int funcIdx, bool funcOrLimit, DrawPoints<Lines::Point>* Points,
              double* SubLevelValues) {
-  if (!funcOrLimit)
-    funcIdx += NumOfFunctions;
+  //if (!funcOrLimit)
+  //  funcIdx += NumOfFunctions;
+  ofstream fout("debugdebug.txt");
+  fout << "funcidx: " << funcIdx << endl;
+  fout << &lines->Data[funcIdx] << endl;
   Points->Data = lines->Data[funcIdx].data();
 
   copy(lines->SubLevelValues.begin(), lines->SubLevelValues.end(),
