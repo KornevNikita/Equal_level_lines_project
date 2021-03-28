@@ -28,8 +28,25 @@
     /// </summary>
     private void InitializeComponent()
     {
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.ClearFunc = new System.Windows.Forms.Button();
+      this.btn_DeleteFunc = new System.Windows.Forms.Button();
+      this.btn_AddFunc = new System.Windows.Forms.Button();
+      this.dataGridView1 = new System.Windows.Forms.DataGridView();
+      this.groupBox7 = new System.Windows.Forms.GroupBox();
+      this.rBtn_OnlyZeroLine = new System.Windows.Forms.RadioButton();
+      this.rBtn_Filling = new System.Windows.Forms.RadioButton();
+      this.rBtn_EqLvlLns = new System.Windows.Forms.RadioButton();
+      this.button2 = new System.Windows.Forms.Button();
+      this.tBox_Density = new System.Windows.Forms.TextBox();
+      this.label12 = new System.Windows.Forms.Label();
+      this.label1 = new System.Windows.Forms.Label();
+      this.tBox_funcIdx = new System.Windows.Forms.TextBox();
       this.groupBox6 = new System.Windows.Forms.GroupBox();
       this.btn_LoadSettings = new System.Windows.Forms.Button();
       this.btn_SaveSettings = new System.Windows.Forms.Button();
@@ -39,7 +56,6 @@
       this.label15 = new System.Windows.Forms.Label();
       this.tBox_PicHeight = new System.Windows.Forms.TextBox();
       this.tBox_PicWidth = new System.Windows.Forms.TextBox();
-      this.button2 = new System.Windows.Forms.Button();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
       this.label14 = new System.Windows.Forms.Label();
       this.tBox_GridLinesThickness = new System.Windows.Forms.TextBox();
@@ -49,8 +65,6 @@
       this.cBox_AddGrid = new System.Windows.Forms.CheckBox();
       this.cBox_AddYaxis = new System.Windows.Forms.CheckBox();
       this.cBox_AddXaxis = new System.Windows.Forms.CheckBox();
-      this.tBox_LimitFactor = new System.Windows.Forms.TextBox();
-      this.label12 = new System.Windows.Forms.Label();
       this.label_Time = new System.Windows.Forms.Label();
       this.btn_Run = new System.Windows.Forms.Button();
       this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -67,24 +81,18 @@
       this.tBox_Ymax = new System.Windows.Forms.TextBox();
       this.tBox_Xmax = new System.Windows.Forms.TextBox();
       this.tBox_Ymin = new System.Windows.Forms.TextBox();
-      this.label1 = new System.Windows.Forms.Label();
-      this.tBox_funcIdx = new System.Windows.Forms.TextBox();
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
       this.colorDialog2 = new System.Windows.Forms.ColorDialog();
-      this.groupBox7 = new System.Windows.Forms.GroupBox();
-      this.radioButton1 = new System.Windows.Forms.RadioButton();
-      this.radioButton2 = new System.Windows.Forms.RadioButton();
-      this.radioButton3 = new System.Windows.Forms.RadioButton();
-      this.dataGridView1 = new System.Windows.Forms.DataGridView();
+      this.tBox_DeletePos = new System.Windows.Forms.TextBox();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+      this.groupBox7.SuspendLayout();
       this.groupBox6.SuspendLayout();
       this.groupBox5.SuspendLayout();
       this.groupBox4.SuspendLayout();
       this.groupBox3.SuspendLayout();
       this.groupBox2.SuspendLayout();
-      this.groupBox7.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
       this.SuspendLayout();
       // 
       // pictureBox1
@@ -101,6 +109,10 @@
       // groupBox1
       // 
       this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
+      this.groupBox1.Controls.Add(this.tBox_DeletePos);
+      this.groupBox1.Controls.Add(this.ClearFunc);
+      this.groupBox1.Controls.Add(this.btn_DeleteFunc);
+      this.groupBox1.Controls.Add(this.btn_AddFunc);
       this.groupBox1.Controls.Add(this.dataGridView1);
       this.groupBox1.Controls.Add(this.groupBox7);
       this.groupBox1.Controls.Add(this.groupBox6);
@@ -118,12 +130,176 @@
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Parameters";
       // 
+      // ClearFunc
+      // 
+      this.ClearFunc.Location = new System.Drawing.Point(87, 238);
+      this.ClearFunc.Name = "ClearFunc";
+      this.ClearFunc.Size = new System.Drawing.Size(75, 23);
+      this.ClearFunc.TabIndex = 33;
+      this.ClearFunc.Text = "Clear";
+      this.ClearFunc.UseVisualStyleBackColor = true;
+      this.ClearFunc.Click += new System.EventHandler(this.ClearFunc_Click);
+      // 
+      // btn_DeleteFunc
+      // 
+      this.btn_DeleteFunc.Location = new System.Drawing.Point(168, 238);
+      this.btn_DeleteFunc.Name = "btn_DeleteFunc";
+      this.btn_DeleteFunc.Size = new System.Drawing.Size(75, 23);
+      this.btn_DeleteFunc.TabIndex = 32;
+      this.btn_DeleteFunc.Text = "Delete";
+      this.btn_DeleteFunc.UseVisualStyleBackColor = true;
+      this.btn_DeleteFunc.Click += new System.EventHandler(this.Btn_DeleteFunc_Click);
+      // 
+      // btn_AddFunc
+      // 
+      this.btn_AddFunc.Location = new System.Drawing.Point(6, 238);
+      this.btn_AddFunc.Name = "btn_AddFunc";
+      this.btn_AddFunc.Size = new System.Drawing.Size(75, 23);
+      this.btn_AddFunc.TabIndex = 31;
+      this.btn_AddFunc.Text = "Add";
+      this.btn_AddFunc.UseVisualStyleBackColor = true;
+      this.btn_AddFunc.Click += new System.EventHandler(this.Btn_AddFunc_Click);
+      // 
+      // dataGridView1
+      // 
+      this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
+      dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+      dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+      dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+      dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+      dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+      dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+      this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+      this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+      dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+      dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+      dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+      dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+      dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+      this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+      this.dataGridView1.Location = new System.Drawing.Point(6, 267);
+      this.dataGridView1.Name = "dataGridView1";
+      this.dataGridView1.ReadOnly = true;
+      dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+      dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+      dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+      dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+      dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+      this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+      this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+      dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+      this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle4;
+      this.dataGridView1.Size = new System.Drawing.Size(310, 100);
+      this.dataGridView1.TabIndex = 30;
+      // 
+      // groupBox7
+      // 
+      this.groupBox7.BackColor = System.Drawing.SystemColors.InactiveCaption;
+      this.groupBox7.Controls.Add(this.rBtn_OnlyZeroLine);
+      this.groupBox7.Controls.Add(this.rBtn_Filling);
+      this.groupBox7.Controls.Add(this.rBtn_EqLvlLns);
+      this.groupBox7.Controls.Add(this.button2);
+      this.groupBox7.Controls.Add(this.tBox_Density);
+      this.groupBox7.Controls.Add(this.label12);
+      this.groupBox7.Controls.Add(this.label1);
+      this.groupBox7.Controls.Add(this.tBox_funcIdx);
+      this.groupBox7.Location = new System.Drawing.Point(6, 23);
+      this.groupBox7.Name = "groupBox7";
+      this.groupBox7.Size = new System.Drawing.Size(310, 111);
+      this.groupBox7.TabIndex = 29;
+      this.groupBox7.TabStop = false;
+      this.groupBox7.Text = "Drawing mode";
+      // 
+      // rBtn_OnlyZeroLine
+      // 
+      this.rBtn_OnlyZeroLine.AutoSize = true;
+      this.rBtn_OnlyZeroLine.Location = new System.Drawing.Point(5, 79);
+      this.rBtn_OnlyZeroLine.Name = "rBtn_OnlyZeroLine";
+      this.rBtn_OnlyZeroLine.Size = new System.Drawing.Size(172, 22);
+      this.rBtn_OnlyZeroLine.TabIndex = 31;
+      this.rBtn_OnlyZeroLine.Text = "Only zero-level line (3)";
+      this.rBtn_OnlyZeroLine.UseVisualStyleBackColor = true;
+      // 
+      // rBtn_Filling
+      // 
+      this.rBtn_Filling.AutoSize = true;
+      this.rBtn_Filling.Location = new System.Drawing.Point(5, 51);
+      this.rBtn_Filling.Name = "rBtn_Filling";
+      this.rBtn_Filling.Size = new System.Drawing.Size(85, 22);
+      this.rBtn_Filling.TabIndex = 30;
+      this.rBtn_Filling.Text = "Filling (2)";
+      this.rBtn_Filling.UseVisualStyleBackColor = true;
+      // 
+      // rBtn_EqLvlLns
+      // 
+      this.rBtn_EqLvlLns.AutoSize = true;
+      this.rBtn_EqLvlLns.Checked = true;
+      this.rBtn_EqLvlLns.Location = new System.Drawing.Point(5, 23);
+      this.rBtn_EqLvlLns.Name = "rBtn_EqLvlLns";
+      this.rBtn_EqLvlLns.Size = new System.Drawing.Size(152, 22);
+      this.rBtn_EqLvlLns.TabIndex = 30;
+      this.rBtn_EqLvlLns.TabStop = true;
+      this.rBtn_EqLvlLns.Text = "Equal level lines (1)";
+      this.rBtn_EqLvlLns.UseVisualStyleBackColor = true;
+      // 
+      // button2
+      // 
+      this.button2.Location = new System.Drawing.Point(194, 77);
+      this.button2.Name = "button2";
+      this.button2.Size = new System.Drawing.Size(110, 26);
+      this.button2.TabIndex = 14;
+      this.button2.Text = "Pick color";
+      this.button2.UseVisualStyleBackColor = true;
+      this.button2.Click += new System.EventHandler(this.Button2_Click);
+      // 
+      // tBox_Density
+      // 
+      this.tBox_Density.Location = new System.Drawing.Point(254, 50);
+      this.tBox_Density.Name = "tBox_Density";
+      this.tBox_Density.Size = new System.Drawing.Size(50, 24);
+      this.tBox_Density.TabIndex = 23;
+      this.tBox_Density.Text = "4";
+      this.tBox_Density.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // label12
+      // 
+      this.label12.AutoSize = true;
+      this.label12.Location = new System.Drawing.Point(191, 53);
+      this.label12.Name = "label12";
+      this.label12.Size = new System.Drawing.Size(57, 18);
+      this.label12.TabIndex = 22;
+      this.label12.Text = "Density";
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(171, 23);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(77, 18);
+      this.label1.TabIndex = 1;
+      this.label1.Text = "Function #";
+      // 
+      // tBox_funcIdx
+      // 
+      this.tBox_funcIdx.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.tBox_funcIdx.Location = new System.Drawing.Point(254, 20);
+      this.tBox_funcIdx.Name = "tBox_funcIdx";
+      this.tBox_funcIdx.Size = new System.Drawing.Size(50, 24);
+      this.tBox_funcIdx.TabIndex = 0;
+      this.tBox_funcIdx.Text = "2";
+      this.tBox_funcIdx.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
       // groupBox6
       // 
       this.groupBox6.BackColor = System.Drawing.SystemColors.InactiveCaption;
       this.groupBox6.Controls.Add(this.btn_LoadSettings);
       this.groupBox6.Controls.Add(this.btn_SaveSettings);
-      this.groupBox6.Location = new System.Drawing.Point(6, 468);
+      this.groupBox6.Location = new System.Drawing.Point(6, 497);
       this.groupBox6.Name = "groupBox6";
       this.groupBox6.Size = new System.Drawing.Size(150, 87);
       this.groupBox6.TabIndex = 25;
@@ -158,7 +334,7 @@
       this.groupBox5.Controls.Add(this.label15);
       this.groupBox5.Controls.Add(this.tBox_PicHeight);
       this.groupBox5.Controls.Add(this.tBox_PicWidth);
-      this.groupBox5.Location = new System.Drawing.Point(162, 468);
+      this.groupBox5.Location = new System.Drawing.Point(162, 497);
       this.groupBox5.Name = "groupBox5";
       this.groupBox5.Size = new System.Drawing.Size(154, 87);
       this.groupBox5.TabIndex = 24;
@@ -211,16 +387,6 @@
       this.tBox_PicWidth.Text = "660";
       this.tBox_PicWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
-      // button2
-      // 
-      this.button2.Location = new System.Drawing.Point(194, 77);
-      this.button2.Name = "button2";
-      this.button2.Size = new System.Drawing.Size(110, 26);
-      this.button2.TabIndex = 14;
-      this.button2.Text = "Pick color";
-      this.button2.UseVisualStyleBackColor = true;
-      this.button2.Click += new System.EventHandler(this.Button2_Click);
-      // 
       // groupBox4
       // 
       this.groupBox4.BackColor = System.Drawing.SystemColors.InactiveCaption;
@@ -232,7 +398,7 @@
       this.groupBox4.Controls.Add(this.cBox_AddGrid);
       this.groupBox4.Controls.Add(this.cBox_AddYaxis);
       this.groupBox4.Controls.Add(this.cBox_AddXaxis);
-      this.groupBox4.Location = new System.Drawing.Point(6, 344);
+      this.groupBox4.Location = new System.Drawing.Point(6, 373);
       this.groupBox4.Name = "groupBox4";
       this.groupBox4.Size = new System.Drawing.Size(310, 118);
       this.groupBox4.TabIndex = 2;
@@ -318,28 +484,10 @@
       this.cBox_AddXaxis.UseVisualStyleBackColor = true;
       this.cBox_AddXaxis.CheckedChanged += new System.EventHandler(this.CBox_AddXaxis_CheckedChanged);
       // 
-      // tBox_LimitFactor
-      // 
-      this.tBox_LimitFactor.Location = new System.Drawing.Point(254, 50);
-      this.tBox_LimitFactor.Name = "tBox_LimitFactor";
-      this.tBox_LimitFactor.Size = new System.Drawing.Size(50, 24);
-      this.tBox_LimitFactor.TabIndex = 23;
-      this.tBox_LimitFactor.Text = "4";
-      this.tBox_LimitFactor.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
-      // label12
-      // 
-      this.label12.AutoSize = true;
-      this.label12.Location = new System.Drawing.Point(191, 53);
-      this.label12.Name = "label12";
-      this.label12.Size = new System.Drawing.Size(57, 18);
-      this.label12.TabIndex = 22;
-      this.label12.Text = "Density";
-      // 
       // label_Time
       // 
       this.label_Time.AutoSize = true;
-      this.label_Time.Location = new System.Drawing.Point(112, 564);
+      this.label_Time.Location = new System.Drawing.Point(112, 593);
       this.label_Time.Name = "label_Time";
       this.label_Time.Size = new System.Drawing.Size(45, 18);
       this.label_Time.TabIndex = 20;
@@ -347,7 +495,7 @@
       // 
       // btn_Run
       // 
-      this.btn_Run.Location = new System.Drawing.Point(6, 561);
+      this.btn_Run.Location = new System.Drawing.Point(6, 590);
       this.btn_Run.Name = "btn_Run";
       this.btn_Run.Size = new System.Drawing.Size(100, 26);
       this.btn_Run.TabIndex = 2;
@@ -495,25 +643,6 @@
       this.tBox_Ymin.Text = "-1";
       this.tBox_Ymin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
-      // label1
-      // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(171, 23);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(77, 18);
-      this.label1.TabIndex = 1;
-      this.label1.Text = "Function #";
-      // 
-      // tBox_funcIdx
-      // 
-      this.tBox_funcIdx.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      this.tBox_funcIdx.Location = new System.Drawing.Point(254, 20);
-      this.tBox_funcIdx.Name = "tBox_funcIdx";
-      this.tBox_funcIdx.Size = new System.Drawing.Size(50, 24);
-      this.tBox_funcIdx.TabIndex = 0;
-      this.tBox_funcIdx.Text = "2";
-      this.tBox_funcIdx.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
       // colorDialog1
       // 
       this.colorDialog1.AnyColor = true;
@@ -525,64 +654,12 @@
       this.colorDialog2.Color = System.Drawing.Color.DeepSkyBlue;
       this.colorDialog2.FullOpen = true;
       // 
-      // groupBox7
+      // tBox_DeletePos
       // 
-      this.groupBox7.BackColor = System.Drawing.SystemColors.InactiveCaption;
-      this.groupBox7.Controls.Add(this.radioButton3);
-      this.groupBox7.Controls.Add(this.radioButton2);
-      this.groupBox7.Controls.Add(this.radioButton1);
-      this.groupBox7.Controls.Add(this.button2);
-      this.groupBox7.Controls.Add(this.tBox_LimitFactor);
-      this.groupBox7.Controls.Add(this.label12);
-      this.groupBox7.Controls.Add(this.label1);
-      this.groupBox7.Controls.Add(this.tBox_funcIdx);
-      this.groupBox7.Location = new System.Drawing.Point(6, 23);
-      this.groupBox7.Name = "groupBox7";
-      this.groupBox7.Size = new System.Drawing.Size(310, 111);
-      this.groupBox7.TabIndex = 29;
-      this.groupBox7.TabStop = false;
-      this.groupBox7.Text = "Drawing mode";
-      // 
-      // radioButton1
-      // 
-      this.radioButton1.AutoSize = true;
-      this.radioButton1.Location = new System.Drawing.Point(5, 23);
-      this.radioButton1.Name = "radioButton1";
-      this.radioButton1.Size = new System.Drawing.Size(130, 22);
-      this.radioButton1.TabIndex = 30;
-      this.radioButton1.TabStop = true;
-      this.radioButton1.Text = "Equal level lines";
-      this.radioButton1.UseVisualStyleBackColor = true;
-      // 
-      // radioButton2
-      // 
-      this.radioButton2.AutoSize = true;
-      this.radioButton2.Location = new System.Drawing.Point(5, 51);
-      this.radioButton2.Name = "radioButton2";
-      this.radioButton2.Size = new System.Drawing.Size(63, 22);
-      this.radioButton2.TabIndex = 30;
-      this.radioButton2.TabStop = true;
-      this.radioButton2.Text = "Filling";
-      this.radioButton2.UseVisualStyleBackColor = true;
-      // 
-      // radioButton3
-      // 
-      this.radioButton3.AutoSize = true;
-      this.radioButton3.Location = new System.Drawing.Point(5, 79);
-      this.radioButton3.Name = "radioButton3";
-      this.radioButton3.Size = new System.Drawing.Size(150, 22);
-      this.radioButton3.TabIndex = 31;
-      this.radioButton3.TabStop = true;
-      this.radioButton3.Text = "Only zero-level line";
-      this.radioButton3.UseVisualStyleBackColor = true;
-      // 
-      // dataGridView1
-      // 
-      this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.dataGridView1.Location = new System.Drawing.Point(6, 238);
-      this.dataGridView1.Name = "dataGridView1";
-      this.dataGridView1.Size = new System.Drawing.Size(310, 100);
-      this.dataGridView1.TabIndex = 30;
+      this.tBox_DeletePos.Location = new System.Drawing.Point(249, 237);
+      this.tBox_DeletePos.Name = "tBox_DeletePos";
+      this.tBox_DeletePos.Size = new System.Drawing.Size(67, 24);
+      this.tBox_DeletePos.TabIndex = 34;
       // 
       // Form1
       // 
@@ -596,6 +673,9 @@
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
       this.groupBox1.ResumeLayout(false);
       this.groupBox1.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+      this.groupBox7.ResumeLayout(false);
+      this.groupBox7.PerformLayout();
       this.groupBox6.ResumeLayout(false);
       this.groupBox5.ResumeLayout(false);
       this.groupBox5.PerformLayout();
@@ -605,9 +685,6 @@
       this.groupBox3.PerformLayout();
       this.groupBox2.ResumeLayout(false);
       this.groupBox2.PerformLayout();
-      this.groupBox7.ResumeLayout(false);
-      this.groupBox7.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -635,7 +712,7 @@
     private System.Windows.Forms.Button btn_Run;
     private System.Windows.Forms.Label label_Time;
     private System.Windows.Forms.Label label12;
-    public System.Windows.Forms.TextBox tBox_LimitFactor;
+    public System.Windows.Forms.TextBox tBox_Density;
     private System.Windows.Forms.GroupBox groupBox4;
     private System.Windows.Forms.Label label13;
     private System.Windows.Forms.TextBox tBox_NumOfGridLines;
@@ -659,9 +736,13 @@
     private System.Windows.Forms.Button btn_SaveSettings;
     private System.Windows.Forms.DataGridView dataGridView1;
     private System.Windows.Forms.GroupBox groupBox7;
-    private System.Windows.Forms.RadioButton radioButton3;
-    private System.Windows.Forms.RadioButton radioButton2;
-    private System.Windows.Forms.RadioButton radioButton1;
+    private System.Windows.Forms.RadioButton rBtn_OnlyZeroLine;
+    private System.Windows.Forms.RadioButton rBtn_Filling;
+    private System.Windows.Forms.RadioButton rBtn_EqLvlLns;
+    private System.Windows.Forms.Button ClearFunc;
+    private System.Windows.Forms.Button btn_DeleteFunc;
+    private System.Windows.Forms.Button btn_AddFunc;
+    private System.Windows.Forms.TextBox tBox_DeletePos;
   }
 }
 

@@ -25,31 +25,33 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
   area.Height = _YMax - _YMin;
 }
 
-void Calculate(int Idx, bool funcOrLimit) {
-  // funcOrLimit == true -> calculate funcition
-  // else calculate limit
-  ofstream fout("new_debug.txt", ios::app);
+void Calculate(int FuncIdx, bool funcOrLimit) {
   double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ;
   double hx = lines->area.Width / lines->N; // вычисление шага по x
   double hy = lines->area.Height / lines->N; // вычисление шага по y
-  fout << "idx = " << Idx << endl;
 
-  int DataIdx = funcOrLimit ? Idx : NumOfFunctions + Idx;
+  Function f;
+  /*ofstream fout("debug.txt", ios::app);
+  fout << FuncIdx << endl;
+  fout << lines->area.XMin << endl;
+  fout << lines->area.XMax << endl;
+  fout << lines->area.YMin << endl;
+  fout << lines->area.YMax << endl;*/
 
   // обход сетки
   for (int i = 0; i <= lines->N; i++)
     for (int j = 0; j <= lines->N; j++)
     {
        // заполнение структуры сетки
-      size_t k = (lines->N + 1) * i + j;
-      double x = lines->Data[DataIdx][k].x = lines->area.XMin +
+      size_t Idx = (lines->N + 1) * i + j;
+      double x = lines->Data[Idx].x = lines->area.XMin +
         hx * i;
-      double y = lines->Data[DataIdx][k].y = lines->area.YMin +
+      double y = lines->Data[Idx].y = lines->area.YMin +
         hy * j;
       // значение функции в узле
       
-      QQ = lines->Data[DataIdx][k].Q = F(x, y, Idx, funcOrLimit);
-      fout << i << " " << j << " " << QQ << endl;
+      QQ = lines->Data[Idx].Q = f(x, y, FuncIdx);
+      //fout << "x " << x << " " << "y " << y << " " << QQ << endl;
 
       // поиск минимального и максимального значения на сетке
       if ((i == 0) && (j == 0) || (QQ < Qmin))
@@ -95,88 +97,63 @@ void CalculateLimit(int LimitIdx, int LimitFactor, int Width, int Height) {
   }
 }
 
-void CalculateLimitZeroLine(int LimitIdx, int LimitFactor) {
-  ofstream fout("cppstudio.txt");
-  double hx = lines->area.Width / lines->N; // вычисление шага по x
-  double hy = lines->area.Height / lines->N; // вычисление шага по y
+//void CalculateLimitZeroLine(int LimitIdx, int LimitFactor) {
+//  ofstream fout("cppstudio.txt");
+//  double hx = lines->area.Width / lines->N; // вычисление шага по x
+//  double hy = lines->area.Height / lines->N; // вычисление шага по y
+//
+//  for (int i = 0; i <= lines->N / LimitFactor; i++)
+//    for (int j = 0; j <= lines->N / LimitFactor; j++)
+//    {
+//      // заполнение структуры сетки
+//      size_t Idx = (lines->N + 1) * i + j;
+//      double x = lines->area.XMin + hx * i * LimitFactor;
+//      double y = lines->area.YMin + hy * j * LimitFactor;
+//      // значение функции в узле
+//
+//      if (fabs(F(x, y, LimitIdx, false)) - 0.1 < 0) {
+//        lines->LimitZeroLine.push_back(x);
+//        lines->LimitZeroLine.push_back(y);
+//        fout << "x: " << x << ", y: " << y << endl;
+//      }
+//    }
+//}
 
-  for (int i = 0; i <= lines->N / LimitFactor; i++)
-    for (int j = 0; j <= lines->N / LimitFactor; j++)
-    {
-      // заполнение структуры сетки
-      size_t Idx = (lines->N + 1) * i + j;
-      double x = lines->area.XMin + hx * i * LimitFactor;
-      double y = lines->area.YMin + hy * j * LimitFactor;
-      // значение функции в узле
-
-      if (fabs(F(x, y, LimitIdx, false)) - 0.1 < 0) {
-        lines->LimitZeroLine.push_back(x);
-        lines->LimitZeroLine.push_back(y);
-        fout << "x: " << x << ", y: " << y << endl;
-      }
-    }
-}
-
-double F(double x, double y, int funcIdx, bool funcOrLimit) {
-  // Update Equal_level_lines.h:NumOfFunctions if you add a new function
-  if (funcOrLimit) {
-    switch (funcIdx) {
-    case 1:
-      return (-1.5 * x * x * exp(1 - x * x - 20.25 * pow((x - y), 2))) -
-        pow(0.5 * (x - 1) * (y - 1), 4) * exp(2 - pow(0.5 * (x - 1), 4) -
-          pow(y - 1, 4));
-    case 2:
-      return ((4 - 2.1 * x * x + pow(x, 4) / 3) * x * x +
-        x * y + (4 * y * y - 4) * y * y);
-    case 3:
-      return 0.01 * (x * y + pow(x - M_PI, 2) +
-        3 * pow(y * y - M_PI, 2)) - pow(sin(x) * sin(2 * y), 2);
-    case 4:
-      return (x * x - cos(18 * x * x)) + (y * y - cos(18 * y * y));
-    case 5:
-      return M_PI / 2 * (pow(10 * (sin(M_PI * (1 + (x - 1) / 4))), 2) +
-        pow((x - 1) / 4, 2) * (1 + 10 * pow(sin(M_PI * (1 + (y - 1) / 4)), 2)) +
-        pow((y - 1) / 4, 2));
-    case 6:
-      return x * x + y * y - 1;
-    default:
-      return 0.0;
-    }
-  } else {
-    LimitFunctor lf;
-    return lf(x, y, funcIdx);
-  }
-}
-
-bool Limit(double x, double y, int LimitIdx) {
-  LimitFunctor lf;
-  double Value = lf(x, y, LimitIdx);
+bool Limit(double x, double y, int funcidx) {
+  Function f;
+  double Value = f(x, y, funcidx);
   if (Value > 0)
     return false;
   return true;
 }
 
-double LimitFunctor::operator()(double x, double y, int LimitIdx) {
-  /*ofstream fout("debuglimit.txt");
-  fout << "LimitIdx = " << LimitIdx << endl;*/
-  switch (LimitIdx) {  
-  case 0:
-    return x < 0 && y;  // h(x,y) = (x < 0) U (y < 0)
+double Function::operator()(double x, double y, int funcidx) {
+  switch (funcidx) {
   case 1:
-    return x * x + y * y - 1; // h(x, y) = x^2 + y^2 - 1 = 0
+    return (-1.5 * x * x * exp(1 - x * x - 20.25 * pow((x - y), 2))) -
+      pow(0.5 * (x - 1) * (y - 1), 4) * exp(2 - pow(0.5 * (x - 1), 4) -
+        pow(y - 1, 4));
+  case 2:
+    return ((4 - 2.1 * x * x + pow(x, 4) / 3) * x * x +
+      x * y + (4 * y * y - 4) * y * y);
+  case 3:
+    return 0.01 * (x * y + pow(x - M_PI, 2) +
+      3 * pow(y * y - M_PI, 2)) - pow(sin(x) * sin(2 * y), 2);
+  case 4:
+    return (x * x - cos(18 * x * x)) + (y * y - cos(18 * y * y));
+  case 5:
+    return M_PI / 2 * (pow(10 * (sin(M_PI * (1 + (x - 1) / 4))), 2) +
+      pow((x - 1) / 4, 2) * (1 + 10 * pow(sin(M_PI * (1 + (y - 1) / 4)), 2)) +
+      pow((y - 1) / 4, 2));
+  case 6:
+    return x * x + y * y - 1;
   default:
-    return 55;
+    return 0.0;
   }
 }
 
-void GetData(int funcIdx, bool funcOrLimit, DrawPoints<Lines::Point>* Points,
-             double* SubLevelValues) {
-  //if (!funcOrLimit)
-  //  funcIdx += NumOfFunctions;
-  ofstream fout("debugdebug.txt");
-  fout << "funcidx: " << funcIdx << endl;
-  fout << &lines->Data[funcIdx] << endl;
-  Points->Data = lines->Data[funcIdx].data();
+void GetData(DrawPoints<Lines::Point>* Points, double* SubLevelValues) {
+  Points->Data = lines->Data.data();
 
   copy(lines->SubLevelValues.begin(), lines->SubLevelValues.end(),
        SubLevelValues);

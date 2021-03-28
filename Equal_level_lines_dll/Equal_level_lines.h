@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const size_t NumOfFunctions = 6, NumOfLimits = 2;
+//const size_t NumOfFunctions = 8;
 
 template <typename T>
 struct DrawPoints {
@@ -37,9 +37,11 @@ public:
   Lines(int _N, int _M1, int _M2, int _M3) : N(_N),
     M1(_M1), M2(_M2), M3(_M3) {
     M = M1 + M2 + M3;
-    Data.resize(NumOfFunctions + NumOfLimits);
+    /*Data.resize(NumOfFunctions + NumOfLimits);
     for (auto& I : Data)
       I.resize((N + 1) * (N + 1));
+    SubLevelValues.resize(M + 1);*/
+    Data.resize((N + 1) * (N + 1));
     SubLevelValues.resize(M + 1);
   }
 
@@ -48,20 +50,19 @@ public:
   int N, M1, M2, M3, M;
   // We need a 2D vectors Data and SubLevelValues to save the values
   // of several functions and constraints
-  vector<vector<Point>> Data;
+  //vector<vector<Point>> Data
+  vector<Point> Data;
   vector<double> SubLevelValues, LimitZeroLine;
   vector<int> LimitValues;
   Area area;
 };
 
-class LimitFunctor {
+class Function {
 public:
-  double operator()(double x, double y, int LimitIdx);
+  double operator()(double x, double y, int funcidx);
 };
 
 Lines* lines;
-
-double F(double x, double y, int funcIdx, bool funcOrLimit);
 
 bool Limit(double x, double y, int LimitIdx);
 
@@ -72,20 +73,19 @@ extern "C" __declspec(dllexport)
 void SetArea(double _XMin, double _XMax, double _YMin, double _YMax);
 
 extern "C" __declspec(dllexport)
-void Calculate(int Idx, bool funcOrLimit);
+void Calculate(int FuncIdx, bool funcOrLimit);
 
 extern "C" __declspec(dllexport)
 void CalculateLimit(int LimitIdx, int LimitFactor, int Width, int Height);
 
-extern "C" __declspec(dllexport)
-void CalculateLimitZeroLine(int LimitIdx, int LimitFactor);
+//extern "C" __declspec(dllexport)
+//void CalculateLimitZeroLine(int LimitIdx, int LimitFactor);
 
 extern "C" __declspec(dllexport)
 size_t GetLimitZeroLineSize();
 
 extern "C" __declspec(dllexport)
-void GetData(int funcidx, bool funcOrLimit, DrawPoints<Lines::Point> *Points,
-             double *SubLevelValues);
+void GetData(DrawPoints<Lines::Point> *Points, double *SubLevelValues);
 
 extern "C" __declspec(dllexport)
 void GetLimitValues(int* LimitValues);
