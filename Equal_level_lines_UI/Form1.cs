@@ -31,7 +31,7 @@ namespace Equal_level_lines_UI
     public static extern void Calculate(int funcIdx);
 
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void CalculateLimit(int LimitIdx, int LimitFactor,
+    public static extern void CalculateFilling(int LimitIdx, int LimitFactor,
                                              int Width, int Height);
 
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
@@ -56,10 +56,12 @@ namespace Equal_level_lines_UI
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
     public static extern void DeleteData(IntPtr _ptrData);
 
+    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void CreateEmptyClass();
+
     // ============ End of Equal_level_lines.dll import functions ===========
 
-    public static int GridLinesThickness = 1, LimitFactor, PicWidth, PicHeight,
-      NumOfFuncs = 6, NumOfLimits = 2;
+    public static int GridLinesThickness = 1, PicWidth, PicHeight, NumOfFuncs = 8;
     public static bool AddGrid, AddXAxis, AddYAxis, CalcLimit, ExpensiveLimit;
 
     public static int NumOfGridRows = 0;
@@ -102,6 +104,7 @@ namespace Equal_level_lines_UI
     {
       public Point[] pDat;
       public double[] pQ;
+      public int[] FillingArea;
       public int FuncIdx, Mode, Density;
       public Color color;
       public double XMin, XMax, YMin, YMax;
@@ -146,140 +149,131 @@ namespace Equal_level_lines_UI
       {
         if (Eque_lines[I] != null)
         {
-          int N = Eque_lines[I].N;
-          double XMin = Eque_lines[I].XMin;
-          double XMax = Eque_lines[I].XMax;
-          double YMin = Eque_lines[I].YMin;
-          double YMax = Eque_lines[I].YMax;
+          if (Eque_lines[I].Mode == 1 || Eque_lines[I].Mode == 3)
+          {
+            int N = Eque_lines[I].N;
+            double XMin = Eque_lines[I].XMin;
+            double XMax = Eque_lines[I].XMax;
+            double YMin = Eque_lines[I].YMin;
+            double YMax = Eque_lines[I].YMax;
 
-          for (i = 0; i < N; i++)
-            for (j = 0; j < N; j++)
-            {
-              for (u = 0; u <= Eque_lines[I].M; u++)
+            for (i = 0; i < N; i++)
+              for (j = 0; j < N; j++)
               {
-                double Qu = Eque_lines[I].pQ[u];// Уровень
-                double[] x = new double[5];
-                double[] y = new double[5];//Соединяемые точки
-                int kt = 0;// Количество соединяемых точек
-                double x0, x1, y0, y1, Q0, Q1;
-
-                //Нижняя сторона
-                x0 = Eque_lines[I].pDat[(N + 1) * i + j].x;
-                x1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].x;
-                y0 = Eque_lines[I].pDat[(N + 1) * i + j].y;
-                Q0 = Eque_lines[I].pDat[(N + 1) * i + j].Q;
-                Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].Q;
-                if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
+                for (u = 0; u <= Eque_lines[I].M; u++)
                 {
-                  y[kt] = y0;
-                  x[kt++] = x0 + (x1 - x0) * (Qu - Q0) / (Q1 - Q0);
-                }
+                  double Qu = Eque_lines[I].pQ[u];// Уровень
+                  double[] x = new double[5];
+                  double[] y = new double[5];//Соединяемые точки
+                  int kt = 0;// Количество соединяемых точек
+                  double x0, x1, y0, y1, Q0, Q1;
 
-                //Левая сторона
-                x0 = Eque_lines[I].pDat[(N + 1) * i + j].x;
-                y0 = Eque_lines[I].pDat[(N + 1) * i + j].y;
-                y1 = Eque_lines[I].pDat[(N + 1) * i + j + 1].y;
-                Q0 = Eque_lines[I].pDat[(N + 1) * i + j].Q;
-                Q1 = Eque_lines[I].pDat[(N + 1) * i + j + 1].Q;
-                if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
-                {
-                  x[kt] = x0;
-                  y[kt++] = y0 + (y1 - y0) * (Qu - Q0) / (Q1 - Q0);
-                }
-
-                //Верхняя сторона
-                x0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].x;
-                x1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].x;
-                y0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].y;
-                Q0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].Q;
-                Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].Q;
-                if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
-                {
-                  y[kt] = y0;
-                  x[kt++] = x0 + (x1 - x0) * (Qu - Q0) / (Q1 - Q0);
-                }
-
-                //Правая сторона
-                x0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].x;
-                y0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].y;
-                y1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].y;
-                Q0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].Q;
-                Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].Q;
-                if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
-                {
-                  x[kt] = x0;
-                  y[kt++] = y0 + (y1 - y0) * (Qu - Q0) / (Q1 - Q0);
-                }
-
-                if (kt > 0) //Прорисовка линии
-                {
-                  if (u < Eque_lines[I].M1)
+                  //Нижняя сторона
+                  x0 = Eque_lines[I].pDat[(N + 1) * i + j].x;
+                  x1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].x;
+                  y0 = Eque_lines[I].pDat[(N + 1) * i + j].y;
+                  Q0 = Eque_lines[I].pDat[(N + 1) * i + j].Q;
+                  Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].Q;
+                  if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
                   {
-                    for (s = 0; s < kt - 1; s++)
+                    y[kt] = y0;
+                    x[kt++] = x0 + (x1 - x0) * (Qu - Q0) / (Q1 - Q0);
+                  }
+
+                  //Левая сторона
+                  x0 = Eque_lines[I].pDat[(N + 1) * i + j].x;
+                  y0 = Eque_lines[I].pDat[(N + 1) * i + j].y;
+                  y1 = Eque_lines[I].pDat[(N + 1) * i + j + 1].y;
+                  Q0 = Eque_lines[I].pDat[(N + 1) * i + j].Q;
+                  Q1 = Eque_lines[I].pDat[(N + 1) * i + j + 1].Q;
+                  if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
+                  {
+                    x[kt] = x0;
+                    y[kt++] = y0 + (y1 - y0) * (Qu - Q0) / (Q1 - Q0);
+                  }
+
+                  //Верхняя сторона
+                  x0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].x;
+                  x1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].x;
+                  y0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].y;
+                  Q0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].Q;
+                  Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].Q;
+                  if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
+                  {
+                    y[kt] = y0;
+                    x[kt++] = x0 + (x1 - x0) * (Qu - Q0) / (Q1 - Q0);
+                  }
+
+                  //Правая сторона
+                  x0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].x;
+                  y0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].y;
+                  y1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].y;
+                  Q0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].Q;
+                  Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].Q;
+                  if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
+                  {
+                    x[kt] = x0;
+                    y[kt++] = y0 + (y1 - y0) * (Qu - Q0) / (Q1 - Q0);
+                  }
+
+                  if (kt > 0) //Прорисовка линии
+                  {
+                    if (u < Eque_lines[I].M1)
                     {
-                      Pen p = new Pen(Eque_lines[I].color, 2);
-                      g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                        (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
-                        (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                        (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1)));
+                      for (s = 0; s < kt - 1; s++)
+                      {
+                        Pen p = new Pen(Eque_lines[I].color, 2);
+                        g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                          (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
+                          (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                          (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1)));
+                      }
+                    }
+                    else if (u < Eque_lines[I].M1 + Eque_lines[I].M2)
+                    {
+                      for (s = 0; s < kt - 1; s++)
+                      {
+                        Pen p = new Pen(Eque_lines[I].color, 1);
+                        g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                          (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
+                          (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                          (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1)));
+                      }
+                    }
+                    else
+                    {
+                      for (s = 0; s < kt - 1; s++)
+                      {
+                        Pen p = new Pen(Eque_lines[I].color, 1);
+                        p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                        g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                          (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
+                          (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                          (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1)));
+                      }
                     }
                   }
-                  else if (u < Eque_lines[I].M1 + Eque_lines[I].M2)
-                  {
-                    for (s = 0; s < kt - 1; s++)
-                    {
-                      Pen p = new Pen(Eque_lines[I].color, 1);
-                      g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                        (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
-                        (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                        (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1)));
-                    }
-                  }
-                  else
-                  {
-                    for (s = 0; s < kt - 1; s++)
-                    {
-                      Pen p = new Pen(Eque_lines[I].color, 1);
-                      p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                      g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                        (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
-                        (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                        (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1)));
-                    }
-                  }
+                  //Конец прорисовки линии уровня Qu
+                }//Конец перебора всех Qu
+              }
+          }
+
+          if (Eque_lines[I].Mode == 2)
+          {
+            for (i = 0; i < pic.Width / LimitFactor; ++i)
+              for (j = 0; j < pic.Height / LimitFactor; ++j)
+              {
+                if (Eque_lines[I].FillingArea[i * pic.Width / LimitFactor + j] == 0)
+                {
+                  Pen pen = new Pen(LimitColor, 0);
+                  g.DrawRectangle(pen, i * LimitFactor, j * LimitFactor, 1, 1);
                 }
-                //Конец прорисовки линии уровня Qu
-              }//Конец перебора всех Qu
-            }
+              }
+          }
         }
+        
       }
-        //if (CalcLimit)
-        //{
-        //  if (ExpensiveLimit)
-        //  {
-        //    for (i = 0; i < pic.Width / LimitFactor; ++i)
-        //      for (j = 0; j < pic.Height / LimitFactor; ++j)
-        //      {
-        //        if (Limit[i * pic.Width / LimitFactor + j] == 0)
-        //        {
-        //          Pen pen = new Pen(LimitColor, 0);
-        //          g.DrawRectangle(pen, i * LimitFactor, j * LimitFactor, 1, 1);
-        //        }
-        //      }
-        //  }
-        //  else
-        //  {
-        //    float width = (float)(XMax - XMin),
-        //      height = (float)(YMax - YMin);
-        //    for (i = 0; i < LimitZeroLine.Length - 2; i += 2)
-        //    {
-        //      Pen p = new Pen(LimitColor, 2);
-        //      float x1 = PicWidth / 2 + (float)(LimitZeroLine[i] / width) * PicWidth,
-        //        y1 = PicHeight / 2 + (float)LimitZeroLine[i + 1] / height * PicHeight;
-        //      g.DrawRectangle(p, x1, y1, 2, 2);
-        //    }
-        //  }
-        //}
+
       if (AddXAxis)
       {
         Pen p = new Pen(Color.Black, 1);
@@ -304,25 +298,7 @@ namespace Equal_level_lines_UI
       }
     }
 
-    //public void ParseArea()
-    //{
-    //  XMin = Double.Parse(tBox_Xmin.Text);
-    //  XMax = Double.Parse(tBox_Xmax.Text);
-    //  YMin = Double.Parse(tBox_Ymin.Text);
-    //  YMax = Double.Parse(tBox_Ymax.Text);
-    //}
-
-    //public void ParseParameters()
-    //{
-    //  N = int.Parse(tBox_N.Text);
-    //  M1 = int.Parse(tBox_M1.Text);
-    //  M2 = int.Parse(tBox_M2.Text);
-    //  M3 = int.Parse(tBox_M3.Text);
-    //}
-
-    //static double XMin, XMax, YMin, YMax;
-    //static int N, M1, M2, M3;
-    static eque_lines[] Eque_lines = new eque_lines[NumOfFuncs + NumOfLimits];
+    static eque_lines[] Eque_lines = new eque_lines[NumOfFuncs];
     public static Color LimitColor, GridColor;
 
     private void Button3_Click(object sender, EventArgs e)
@@ -439,20 +415,12 @@ namespace Equal_level_lines_UI
       LimitColor = colorDialog2.Color;
     }
 
-    public static double[] pQ, LimitZeroLine;
-    public static int[] Limit;
-
     private void btn_Run_click(object sender, EventArgs e)
     {
-      GridLinesThickness = int.Parse(tBox_GridLinesThickness.Text);
-      //CalcLimit = cBox_CalcLimit.Checked;
-
-      //ParseParameters();
-
       Stopwatch stopwatch = new Stopwatch();
       stopwatch.Start();
 
-      for (int i = 0; i < dataGridView1.Rows.Count- 1; i++)
+      for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
       {
         Eque_lines[i] = new eque_lines(dataGridView1.Rows[i]);
         if (Eque_lines[i].Mode != 2)
@@ -465,43 +433,21 @@ namespace Equal_level_lines_UI
           GetDataFromDll(Eque_lines[i].FuncIdx, i, Eque_lines[i].N,
             Eque_lines[i].M + 1);
         }
+        else
+        {
+          CreateEmptyClass();
+          SetArea(Eque_lines[i].XMin, Eque_lines[i].XMax,
+            Eque_lines[i].YMin, Eque_lines[i].YMax);
+
+          PicWidth = pictureBox1.Width;
+          PicHeight = pictureBox1.Height;
+          PicHeight = pictureBox1.Height;
+
+          CalculateFilling(Eque_lines[i].FuncIdx, Eque_lines[i].Density,
+            pictureBox1.Width, pictureBox1.Height);
+          GetLimitData(i);
+        }
       }
-
-      //AllocMem(N, M1, M2, M3);
-
-      //int funcIdx = int.Parse(tBox_funcIdx.Text);
-      //Eque_lines[funcIdx].CreateData(N, M1, M2, M3);
-
-      //ParseArea();
-      //SetArea(XMin, XMax, YMin, YMax);
-
-      
-
-      //Calculate(funcIdx, true);
-      //GetDataFromDll(funcIdx, true, N, M1 + M2 + M3);
-
-      //if (CalcLimit)
-      //{
-      //  LimitFactor = int.Parse(tBox_Density.Text);
-      //  //int LimitIdx = int.Parse(tBox_LimitIdx.Text);
-      //  PicWidth = pictureBox1.Width;
-      //  PicHeight = pictureBox1.Height;
-      //  //ExpensiveLimit = rBtn_CalcLimExpensive.Checked;
-      //  if (ExpensiveLimit)
-      //  {
-      //    //CalculateLimit(LimitIdx, LimitFactor, PicWidth, PicHeight);
-      //    GetLimitData();
-      //  }
-      //  else
-      //  {
-      //    //Eque_lines[NumOfFuncs + LimitIdx].CreateData(N, M1, M2, M3);
-      //    //Calculate(LimitIdx, false);
-      //    //GetDataFromDll(LimitIdx, false, N, M1 + M2 + M3);
-      //    //CalculateLimitZeroLine(LimitIdx, LimitFactor);
-      //    //GetLimitZeroLineFromDll();
-      //  }
-      //}
-
 
       pictureBox1.Invalidate();
 
@@ -574,24 +520,15 @@ namespace Equal_level_lines_UI
       Marshal.FreeCoTaskMem(ptrSubLevelValues);
     }
 
-    public static void GetLimitZeroLineFromDll()
+    public static void GetLimitData(int rowIdx)
     {
-      int length = GetLimitZeroLineSize();
-      LimitZeroLine = new double[length];
-      IntPtr ptrLimitValues = Marshal.AllocCoTaskMem(length * sizeof(double));
-      GetLimitZeroLine(ptrLimitValues);
-      Marshal.Copy(ptrLimitValues, LimitZeroLine, 0, length);
-      Marshal.FreeCoTaskMem(ptrLimitValues);
-    }
-
-    public static void GetLimitData()
-    {
-      int length = PicWidth / LimitFactor * PicHeight / LimitFactor;
-      Limit = new int[length];
-      IntPtr ptrLimitValues = Marshal.AllocCoTaskMem(length * sizeof(int));
-      GetLimitValues(ptrLimitValues);
-      Marshal.Copy(ptrLimitValues, Limit, 0, length);
-      Marshal.FreeCoTaskMem(ptrLimitValues);
+      int Density = Eque_lines[rowIdx].Density;
+      int length = PicWidth / Density * PicHeight / Density;
+      Eque_lines[rowIdx].FillingArea = new int[length];
+      IntPtr ptrFillingArea = Marshal.AllocCoTaskMem(length * sizeof(int));
+      GetLimitValues(ptrFillingArea);
+      Marshal.Copy(ptrFillingArea, Eque_lines[rowIdx].FillingArea, 0, length);
+      Marshal.FreeCoTaskMem(ptrFillingArea);
     }
     public static void ParseReceivedData(int rowIdx, double[] drawpoints,
                                          /*double[] SubLevelValues,*/ int size) {
@@ -601,11 +538,6 @@ namespace Equal_level_lines_UI
         Eque_lines[rowIdx].pDat[i].y = drawpoints[i * 3 + 1];
         Eque_lines[rowIdx].pDat[i].Q = drawpoints[i * 3 + 2];
       }
-
-      //for (int i = 0; i < Eque_lines[funcIdx].M; ++i)
-      //{
-      //  Eque_lines[funcIdx].pQ[i] = SubLevelValues[i];
-      //}
     }
 
     private void pBox_Paint(object sender, PaintEventArgs e)

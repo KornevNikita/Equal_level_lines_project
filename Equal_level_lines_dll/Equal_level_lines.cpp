@@ -81,8 +81,8 @@ void Calculate(int FuncIdx, bool funcOrLimit) {
   }
 }
 
-void CalculateLimit(int LimitIdx, int LimitFactor, int Width, int Height) {
-  lines->LimitValues.resize(Width / LimitFactor * Height / LimitFactor, true);
+void CalculateFilling(int LimitIdx, int LimitFactor, int Width, int Height) {
+  LimitValues.resize(Width / LimitFactor * Height / LimitFactor, true);
   int Count = 0;
   for (int i = 0; i < Width / LimitFactor; ++i)
   {
@@ -92,32 +92,10 @@ void CalculateLimit(int LimitIdx, int LimitFactor, int Width, int Height) {
         (double)(i) / (double)Width * (lines->area.Width) * LimitFactor;
       double y = lines->area.YMax -
         (double)j / (double)Height * lines->area.Height * LimitFactor;
-      lines->LimitValues[Count++] = Limit(x, y, LimitIdx);
+      LimitValues[Count++] = Limit(x, y, LimitIdx);
     }
   }
 }
-
-//void CalculateLimitZeroLine(int LimitIdx, int LimitFactor) {
-//  ofstream fout("cppstudio.txt");
-//  double hx = lines->area.Width / lines->N; // вычисление шага по x
-//  double hy = lines->area.Height / lines->N; // вычисление шага по y
-//
-//  for (int i = 0; i <= lines->N / LimitFactor; i++)
-//    for (int j = 0; j <= lines->N / LimitFactor; j++)
-//    {
-//      // заполнение структуры сетки
-//      size_t Idx = (lines->N + 1) * i + j;
-//      double x = lines->area.XMin + hx * i * LimitFactor;
-//      double y = lines->area.YMin + hy * j * LimitFactor;
-//      // значение функции в узле
-//
-//      if (fabs(F(x, y, LimitIdx, false)) - 0.1 < 0) {
-//        lines->LimitZeroLine.push_back(x);
-//        lines->LimitZeroLine.push_back(y);
-//        fout << "x: " << x << ", y: " << y << endl;
-//      }
-//    }
-//}
 
 bool Limit(double x, double y, int funcidx) {
   Function f;
@@ -159,9 +137,9 @@ void GetData(DrawPoints<Lines::Point>* Points, double* SubLevelValues) {
        SubLevelValues);
 }
 
-void GetLimitValues(int* LimitValues) {
-  copy(lines->LimitValues.begin(), lines->LimitValues.end(),
-    LimitValues);
+void GetLimitValues(int* Array) {
+  copy(LimitValues.begin(), LimitValues.end(),
+    Array);
 }
 
 void InitData(DrawPoints<Lines::Point>* array) {
@@ -173,11 +151,6 @@ void DeleteData(DrawPoints<Lines::Point> *Data) {
   delete lines;
 }
 
-size_t GetLimitZeroLineSize() {
-  return lines->LimitZeroLine.size();
-}
-
-void GetLimitZeroLine(double* LimitValues) {
-  copy(lines->LimitZeroLine.begin(), lines->LimitZeroLine.end(),
-    LimitValues);
+void CreateEmptyClass() {
+  lines = new Lines();
 }
