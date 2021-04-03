@@ -63,7 +63,7 @@ namespace Equal_level_lines_UI
 
     public static int GridLinesThickness = 1, PicWidth, PicHeight, NumOfFuncs = 8;
     public static bool AddGrid, AddXAxis, AddYAxis, CalcLimit, ExpensiveLimit;
-
+    HashSet<int> GridFuncIdxSet = new HashSet<int>();
     public static int NumOfGridRows = 0;
 
     public struct Point
@@ -82,8 +82,6 @@ namespace Equal_level_lines_UI
       InitializeComponent();
       LimitColor = colorDialog2.Color;
       GridColor = colorDialog1.Color;
-      //for (int i = 0; i < NumOfFuncs + NumOfLimits; ++i)
-      //  Eque_lines[i] = new eque_lines();
 
       dataGridView1.ColumnCount = 12;
       dataGridView1.Columns[0].HeaderCell.Value = "Func #";
@@ -128,17 +126,6 @@ namespace Equal_level_lines_UI
         pDat = new Point[(N + 1) * (N + 1)];
         pQ = new double[M + 1];
       }
-
-      //public void CreateData(int _N, int _M1, int _M2, int _M3)
-      //{
-      //  N = _N;
-      //  M1 = _M1;
-      //  M2 = _M2;
-      //  M3 = _M3;
-      //  M = M1 + M2 + M3 - 1;
-      //  pDat = new Point[(N + 1) * (N + 1)];
-      //  pQ = new double[M + 1];
-      //}
     }
 
     public void SendLines(Graphics g, PictureBox pic, int NumOfGridLnes,
@@ -363,19 +350,25 @@ namespace Equal_level_lines_UI
       dataGridView1.Rows.Add(FuncIdx, DrawingMode, Density, color,
         XMin, XMax, YMin, YMax, N, M1, M2, M3);
       NumOfGridRows++;
+      int GridFuncIdx = GridFuncIdxSet.Contains(NumOfGridRows - 1) ?
+        NumOfGridRows : NumOfGridRows - 1;
+      GridFuncIdxSet.Add(GridFuncIdx);
       dataGridView1.Rows[NumOfGridRows - 1].HeaderCell.Value =
-        (NumOfGridRows - 1).ToString();
+        GridFuncIdx.ToString();
     }
 
     private void Btn_DeleteFunc_Click(object sender, EventArgs e)
     {
-      dataGridView1.Rows.RemoveAt(int.Parse(tBox_DeletePos.Text));
+      int Idx = int.Parse(tBox_DeletePos.Text);
+      dataGridView1.Rows.RemoveAt(Idx);
+      GridFuncIdxSet.Remove(Idx);
       NumOfGridRows--;
     }
 
     private void ClearFunc_Click(object sender, EventArgs e)
     {
       dataGridView1.Rows.Clear();
+      GridFuncIdxSet.Clear();
       NumOfGridRows = 0;
     }
 
