@@ -63,7 +63,8 @@ namespace Equal_level_lines_UI
     // ============ End of Equal_level_lines.dll import functions ===========
 
     public static int GridLinesThickness = 1, PicWidth, PicHeight, NumOfFuncs = 8;
-    public static bool AddGrid, AddXAxis, AddYAxis, CalcLimit, ExpensiveLimit;
+    public static bool AddGrid, AddXAxis, AddYAxis, CalcLimit, ExpensiveLimit,
+      EnableSignatures;
     HashSet<int> GridFuncIdxSet = new HashSet<int>();
     public static int NumOfGridRows = 0;
 
@@ -226,7 +227,7 @@ namespace Equal_level_lines_UI
                             Y2 = (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1));
                           g.DrawLine(p, X1, Y1, X2, Y2);
 
-                          if (!LineSignatures.ContainsKey(u))
+                          if (!LineSignatures.ContainsKey(u) && EnableSignatures)
                           {
                             Font drawFont = new Font("Arial", 9);
                             SolidBrush drawBrush = new SolidBrush(Color.Black);
@@ -441,6 +442,8 @@ namespace Equal_level_lines_UI
     {
       Stopwatch stopwatch = new Stopwatch();
       stopwatch.Start();
+
+      EnableSignatures = cBox_EnableSignatures.Checked;
 
       for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
       {

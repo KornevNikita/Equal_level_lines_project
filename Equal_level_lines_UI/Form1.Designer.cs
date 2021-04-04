@@ -28,12 +28,13 @@
     /// </summary>
     private void InitializeComponent()
     {
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.tBox_DeletePos = new System.Windows.Forms.TextBox();
       this.ClearFunc = new System.Windows.Forms.Button();
       this.btn_DeleteFunc = new System.Windows.Forms.Button();
       this.btn_AddFunc = new System.Windows.Forms.Button();
@@ -83,7 +84,7 @@
       this.tBox_Ymin = new System.Windows.Forms.TextBox();
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
       this.colorDialog2 = new System.Windows.Forms.ColorDialog();
-      this.tBox_DeletePos = new System.Windows.Forms.TextBox();
+      this.cBox_EnableSignatures = new System.Windows.Forms.CheckBox();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -130,6 +131,13 @@
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Parameters";
       // 
+      // tBox_DeletePos
+      // 
+      this.tBox_DeletePos.Location = new System.Drawing.Point(249, 237);
+      this.tBox_DeletePos.Name = "tBox_DeletePos";
+      this.tBox_DeletePos.Size = new System.Drawing.Size(67, 24);
+      this.tBox_DeletePos.TabIndex = 34;
+      // 
       // ClearFunc
       // 
       this.ClearFunc.Location = new System.Drawing.Point(87, 238);
@@ -163,37 +171,37 @@
       // dataGridView1
       // 
       this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
-      dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-      dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-      dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-      dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-      dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-      dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-      this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+      dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+      dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+      dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+      dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+      dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+      dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+      this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
       this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-      dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-      dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-      dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-      dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-      dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-      this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+      dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+      dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+      dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+      dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+      dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+      dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+      this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle6;
       this.dataGridView1.Location = new System.Drawing.Point(6, 267);
       this.dataGridView1.Name = "dataGridView1";
       this.dataGridView1.ReadOnly = true;
-      dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-      dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-      dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-      dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-      dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-      this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+      dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+      dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+      dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+      dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+      dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+      this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
       this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-      dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
-      this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle4;
+      dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+      this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle8;
       this.dataGridView1.Size = new System.Drawing.Size(310, 100);
       this.dataGridView1.TabIndex = 30;
       // 
@@ -390,6 +398,7 @@
       // groupBox4
       // 
       this.groupBox4.BackColor = System.Drawing.SystemColors.InactiveCaption;
+      this.groupBox4.Controls.Add(this.cBox_EnableSignatures);
       this.groupBox4.Controls.Add(this.label14);
       this.groupBox4.Controls.Add(this.tBox_GridLinesThickness);
       this.groupBox4.Controls.Add(this.button1);
@@ -425,11 +434,11 @@
       // 
       // button1
       // 
-      this.button1.Location = new System.Drawing.Point(206, 85);
+      this.button1.Location = new System.Drawing.Point(228, 85);
       this.button1.Name = "button1";
-      this.button1.Size = new System.Drawing.Size(100, 26);
+      this.button1.Size = new System.Drawing.Size(78, 26);
       this.button1.TabIndex = 2;
-      this.button1.Text = "Pick color";
+      this.button1.Text = "Color";
       this.button1.UseVisualStyleBackColor = true;
       this.button1.Click += new System.EventHandler(this.Button1_Click);
       // 
@@ -654,12 +663,15 @@
       this.colorDialog2.Color = System.Drawing.Color.DeepSkyBlue;
       this.colorDialog2.FullOpen = true;
       // 
-      // tBox_DeletePos
+      // cBox_EnableSignatures
       // 
-      this.tBox_DeletePos.Location = new System.Drawing.Point(249, 237);
-      this.tBox_DeletePos.Name = "tBox_DeletePos";
-      this.tBox_DeletePos.Size = new System.Drawing.Size(67, 24);
-      this.tBox_DeletePos.TabIndex = 34;
+      this.cBox_EnableSignatures.AutoSize = true;
+      this.cBox_EnableSignatures.Location = new System.Drawing.Point(113, 88);
+      this.cBox_EnableSignatures.Name = "cBox_EnableSignatures";
+      this.cBox_EnableSignatures.Size = new System.Drawing.Size(97, 22);
+      this.cBox_EnableSignatures.TabIndex = 35;
+      this.cBox_EnableSignatures.Text = "Signatures";
+      this.cBox_EnableSignatures.UseVisualStyleBackColor = true;
       // 
       // Form1
       // 
@@ -743,6 +755,7 @@
     private System.Windows.Forms.Button btn_DeleteFunc;
     private System.Windows.Forms.Button btn_AddFunc;
     private System.Windows.Forms.TextBox tBox_DeletePos;
+    private System.Windows.Forms.CheckBox cBox_EnableSignatures;
   }
 }
 
