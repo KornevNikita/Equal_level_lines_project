@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 
 using System.IO;
 
@@ -144,105 +145,133 @@ namespace Equal_level_lines_UI
             double YMin = Eque_lines[I].YMin;
             double YMax = Eque_lines[I].YMax;
 
+            Dictionary<int, bool> LineSignatures = new Dictionary<int, bool>();
+            int NumberOfFirstLine = 999; // number of first line that <= 0
+
             for (i = 0; i < N; i++)
+            {
               for (j = 0; j < N; j++)
               {
                 for (u = 0; u <= Eque_lines[I].M; u++)
                 {
                   double Qu = Eque_lines[I].pQ[u];// Уровень
-                  double[] x = new double[5];
-                  double[] y = new double[5];//Соединяемые точки
-                  int kt = 0;// Количество соединяемых точек
-                  double x0, x1, y0, y1, Q0, Q1;
-
-                  //Нижняя сторона
-                  x0 = Eque_lines[I].pDat[(N + 1) * i + j].x;
-                  x1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].x;
-                  y0 = Eque_lines[I].pDat[(N + 1) * i + j].y;
-                  Q0 = Eque_lines[I].pDat[(N + 1) * i + j].Q;
-                  Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].Q;
-                  if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
+                  if (Eque_lines[I].Mode == 1 ||
+                    Eque_lines[I].Mode == 3 && Qu <= 0)
                   {
-                    y[kt] = y0;
-                    x[kt++] = x0 + (x1 - x0) * (Qu - Q0) / (Q1 - Q0);
-                  }
+                    double[] x = new double[5];
+                    double[] y = new double[5];//Соединяемые точки
+                    int kt = 0;// Количество соединяемых точек
+                    double x0, x1, y0, y1, Q0, Q1;
 
-                  //Левая сторона
-                  x0 = Eque_lines[I].pDat[(N + 1) * i + j].x;
-                  y0 = Eque_lines[I].pDat[(N + 1) * i + j].y;
-                  y1 = Eque_lines[I].pDat[(N + 1) * i + j + 1].y;
-                  Q0 = Eque_lines[I].pDat[(N + 1) * i + j].Q;
-                  Q1 = Eque_lines[I].pDat[(N + 1) * i + j + 1].Q;
-                  if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
-                  {
-                    x[kt] = x0;
-                    y[kt++] = y0 + (y1 - y0) * (Qu - Q0) / (Q1 - Q0);
-                  }
-
-                  //Верхняя сторона
-                  x0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].x;
-                  x1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].x;
-                  y0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].y;
-                  Q0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].Q;
-                  Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].Q;
-                  if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
-                  {
-                    y[kt] = y0;
-                    x[kt++] = x0 + (x1 - x0) * (Qu - Q0) / (Q1 - Q0);
-                  }
-
-                  //Правая сторона
-                  x0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].x;
-                  y0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].y;
-                  y1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].y;
-                  Q0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].Q;
-                  Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].Q;
-                  if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
-                  {
-                    x[kt] = x0;
-                    y[kt++] = y0 + (y1 - y0) * (Qu - Q0) / (Q1 - Q0);
-                  }
-
-                  if (kt > 0) //Прорисовка линии
-                  {
-                    if (u < Eque_lines[I].M1)
+                    //Нижняя сторона
+                    x0 = Eque_lines[I].pDat[(N + 1) * i + j].x;
+                    x1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].x;
+                    y0 = Eque_lines[I].pDat[(N + 1) * i + j].y;
+                    Q0 = Eque_lines[I].pDat[(N + 1) * i + j].Q;
+                    Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].Q;
+                    if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
                     {
-                      for (s = 0; s < kt - 1; s++)
+                      y[kt] = y0;
+                      x[kt++] = x0 + (x1 - x0) * (Qu - Q0) / (Q1 - Q0);
+                    }
+
+                    //Левая сторона
+                    x0 = Eque_lines[I].pDat[(N + 1) * i + j].x;
+                    y0 = Eque_lines[I].pDat[(N + 1) * i + j].y;
+                    y1 = Eque_lines[I].pDat[(N + 1) * i + j + 1].y;
+                    Q0 = Eque_lines[I].pDat[(N + 1) * i + j].Q;
+                    Q1 = Eque_lines[I].pDat[(N + 1) * i + j + 1].Q;
+                    if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
+                    {
+                      x[kt] = x0;
+                      y[kt++] = y0 + (y1 - y0) * (Qu - Q0) / (Q1 - Q0);
+                    }
+
+                    //Верхняя сторона
+                    x0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].x;
+                    x1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].x;
+                    y0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].y;
+                    Q0 = Eque_lines[I].pDat[(N + 1) * i + j + 1].Q;
+                    Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].Q;
+                    if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
+                    {
+                      y[kt] = y0;
+                      x[kt++] = x0 + (x1 - x0) * (Qu - Q0) / (Q1 - Q0);
+                    }
+
+                    //Правая сторона
+                    x0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].x;
+                    y0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].y;
+                    y1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].y;
+                    Q0 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j].Q;
+                    Q1 = Eque_lines[I].pDat[(N + 1) * (i + 1) + j + 1].Q;
+                    if ((Q0 - Qu) * (Qu - Q1) >= 0 && (Q1 != Q0))
+                    {
+                      x[kt] = x0;
+                      y[kt++] = y0 + (y1 - y0) * (Qu - Q0) / (Q1 - Q0);
+                    }
+
+                    if (kt > 0) //Прорисовка линии
+                    {
+                      if (u < Eque_lines[I].M1 && (Eque_lines[I].Mode == 1 ||
+                        Eque_lines[I].Mode == 3 &&
+                        (NumberOfFirstLine == 999 || u == NumberOfFirstLine)))
                       {
-                        Pen p = new Pen(Eque_lines[I].color, 2);
-                        g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                          (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
-                          (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                          (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1)));
+                        for (s = 0; s < kt - 1; s++)
+                        {
+                          Pen p = new Pen(Eque_lines[I].color, 2);
+                          float X1 = (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                            Y1 = (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
+                            X2 = (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                            Y2 = (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1));
+                          g.DrawLine(p, X1, Y1, X2, Y2);
+
+                          if (!LineSignatures.ContainsKey(u))
+                          {
+                            Font drawFont = new Font("Arial", 9);
+                            SolidBrush drawBrush = new SolidBrush(Color.Black);
+                            String text = Math.Round(
+                              Qu, 3,MidpointRounding.AwayFromZero).ToString();
+                            g.DrawString(text, drawFont, drawBrush, X2, Y2);
+                              
+                            LineSignatures.Add(u, true);
+                          }
+                        }
+                        NumberOfFirstLine = u;
+                      }
+
+                      if (Eque_lines[I].Mode == 1)
+                      {
+                        if (u < Eque_lines[I].M1 + Eque_lines[I].M2)
+                        {
+                          for (s = 0; s < kt - 1; s++)
+                          {
+                            Pen p = new Pen(Eque_lines[I].color, 1);
+                            g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                              (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
+                              (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                              (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1)));
+                          }
+                        }
+                        else
+                        {
+                          for (s = 0; s < kt - 1; s++)
+                          {
+                            Pen p = new Pen(Eque_lines[I].color, 1);
+                            p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+                            g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                              (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
+                              (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
+                              (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1)));
+                          }
+                        }
                       }
                     }
-                    else if (u < Eque_lines[I].M1 + Eque_lines[I].M2)
-                    {
-                      for (s = 0; s < kt - 1; s++)
-                      {
-                        Pen p = new Pen(Eque_lines[I].color, 1);
-                        g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                          (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
-                          (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                          (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1)));
-                      }
-                    }
-                    else
-                    {
-                      for (s = 0; s < kt - 1; s++)
-                      {
-                        Pen p = new Pen(Eque_lines[I].color, 1);
-                        p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
-                        g.DrawLine(p, (float)((x[s] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                          (float)((YMax - y[s]) / (YMax - YMin) * (pic.Height - 1)),
-                          (float)((x[s + 1] - XMin) / (XMax - XMin) * (pic.Width - 1)),
-                          (float)((YMax - y[s + 1]) / (YMax - YMin) * (pic.Height - 1)));
-                      }
-                    }
-                  }
-                  //Конец прорисовки линии уровня Qu
-                }//Конец перебора всех Qu
+                    //Конец прорисовки линии уровня Qu
+                  }//Конец перебора всех Qu
+                }
               }
+            }
           }
 
           if (Eque_lines[I].Mode == 2)
