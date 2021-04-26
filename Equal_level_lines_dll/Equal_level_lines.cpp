@@ -25,18 +25,12 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
   area.Height = _YMax - _YMin;
 }
 
-void Calculate(int FuncIdx, bool funcOrLimit) {
+void Calculate(int FuncIdx, int Mode) {
   double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ;
   double hx = lines->area.Width / lines->N; // вычисление шага по x
   double hy = lines->area.Height / lines->N; // вычисление шага по y
 
   Function f;
-  /*ofstream fout("debug.txt", ios::app);
-  fout << FuncIdx << endl;
-  fout << lines->area.XMin << endl;
-  fout << lines->area.XMax << endl;
-  fout << lines->area.YMin << endl;
-  fout << lines->area.YMax << endl;*/
 
   // обход сетки
   for (int i = 0; i <= lines->N; i++)
@@ -44,14 +38,11 @@ void Calculate(int FuncIdx, bool funcOrLimit) {
     {
        // заполнение структуры сетки
       size_t Idx = (lines->N + 1) * i + j;
-      double x = lines->Data[Idx].x = lines->area.XMin +
-        hx * i;
-      double y = lines->Data[Idx].y = lines->area.YMin +
-        hy * j;
+      double x = lines->Data[Idx].x = lines->area.XMin + hx * i;
+      double y = lines->Data[Idx].y = lines->area.YMin + hy * j;
       // значение функции в узле
       
       QQ = lines->Data[Idx].Q = f(x, y, FuncIdx);
-      //fout << "x " << x << " " << "y " << y << " " << QQ << endl;
 
       // поиск минимального и максимального значения на сетке
       if ((i == 0) && (j == 0) || (QQ < Qmin))
@@ -64,20 +55,23 @@ void Calculate(int FuncIdx, bool funcOrLimit) {
   int ku = 0; // позиция в сетке уровней   
   for (int i = 0; i < lines->M1; i++) // вычисление значений функции на основных уровнях 
   {
-    lines->SubLevelValues[ku++] = Qmax - hQ1 * i;
+    lines->SubLevelValues[ku++] = Mode == 1 ? Qmax - hQ1 * i : 0;
+    //lines->SubLevelValues[ku++] = Qmax - hQ1 * i;
+    /*lines->SubLevelValues[ku++] = 0;*/
   }
     
+  if (Mode == 1) {
+    double hQ2 = hQ1 / (lines->M2 + 1); // шаг функции по подуровням
+    for (int i = 1; i <= lines->M2; i++) // вычисление значений функции на подуровнях
+    {
+      lines->SubLevelValues[ku++] = lines->SubLevelValues[lines->M1 - 1] - hQ2 * i;
+    }
 
-  double hQ2 = hQ1 / (lines->M2 + 1); // шаг функции по подуровням
-  for (int i = 1; i <= lines->M2; i++) // вычисление значений функции на подуровнях
-  {
-    lines->SubLevelValues[ku++] = lines->SubLevelValues[lines->M1 - 1] - hQ2 * i;
-  }
-
-  for (int i = 1; i <= lines->M3; i++) // вычисление значений функции на "под-подуровнях"
-  {
-    lines->SubLevelValues[ku++] = lines->SubLevelValues[lines->M1 + lines->M2 - 1] -
-      (hQ2 / (lines->M3 + 1)) * i;
+    for (int i = 1; i <= lines->M3; i++) // вычисление значений функции на "под-подуровнях"
+    {
+      lines->SubLevelValues[ku++] = lines->SubLevelValues[lines->M1 + lines->M2 - 1] -
+        (hQ2 / (lines->M3 + 1)) * i;
+    }
   }
 }
 
@@ -125,6 +119,8 @@ double Function::operator()(double x, double y, int funcidx) {
       pow((y - 1) / 4, 2));
   case 6:
     return x * x + y * y - 1;
+  case 7:
+    return (x - 2) * (x - 2) + (y - 2) * (y - 2) - 1;
   default:
     return 0.0;
   }

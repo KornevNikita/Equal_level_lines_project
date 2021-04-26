@@ -29,7 +29,7 @@ namespace Equal_level_lines_UI
                                       double _YMax);
 
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void Calculate(int funcIdx);
+    public static extern void Calculate(int funcIdx, int Mode);
 
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
     public static extern void CalculateFilling(int LimitIdx, int LimitFactor,
@@ -448,13 +448,20 @@ namespace Equal_level_lines_UI
       for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
       {
         Eque_lines[i] = new eque_lines(dataGridView1.Rows[i]);
-        if (Eque_lines[i].Mode != 2)
+        if (Eque_lines[i].Mode == 1 || Eque_lines[i].Mode == 3)
         {
+          if (Eque_lines[i].Mode == 2)
+          {
+            Eque_lines[i].M1 = 1;
+            Eque_lines[i].M2 = 0;
+            Eque_lines[i].M3 = 0;
+          }
+
           AllocMem(Eque_lines[i].N, Eque_lines[i].M1, Eque_lines[i].M2,
             Eque_lines[i].M3);
           SetArea(Eque_lines[i].XMin, Eque_lines[i].XMax,
             Eque_lines[i].YMin, Eque_lines[i].YMax);
-          Calculate(Eque_lines[i].FuncIdx);
+          Calculate(Eque_lines[i].FuncIdx, Eque_lines[i].Mode);
           GetDataFromDll(Eque_lines[i].FuncIdx, i, Eque_lines[i].N,
             Eque_lines[i].M + 1);
         }
@@ -484,6 +491,38 @@ namespace Equal_level_lines_UI
     {
       AddXAxis = cBox_AddXaxis.Checked;
       pictureBox1.Invalidate();
+    }
+
+    private void RBtn_OnlyZeroLine_CheckedChanged(object sender, EventArgs e)
+    {
+      if (rBtn_OnlyZeroLine.Checked == true)
+      {
+        tBox_M1.Text = "1";
+        tBox_M1.ReadOnly = true;
+        tBox_M1.BackColor = Color.LightGray;
+
+        tBox_M2.Text = "0";
+        tBox_M2.ReadOnly = true;
+        tBox_M2.BackColor = Color.LightGray;
+
+        tBox_M3.Text = "0";
+        tBox_M3.ReadOnly = true;
+        tBox_M3.BackColor = Color.LightGray;
+      }
+      else
+      {
+        tBox_M1.Text = "10";
+        tBox_M1.ReadOnly = false;
+        tBox_M1.BackColor = Color.White;
+
+        tBox_M2.Text = "5";
+        tBox_M2.ReadOnly = false;
+        tBox_M2.BackColor = Color.White;
+
+        tBox_M3.Text = "3";
+        tBox_M3.ReadOnly = false;
+        tBox_M3.BackColor = Color.White;
+      }
     }
 
     private void CBox_LimitOn_CheckedChanged(object sender, EventArgs e)

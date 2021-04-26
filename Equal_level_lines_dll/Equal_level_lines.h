@@ -64,7 +64,7 @@ extern "C" __declspec(dllexport)
 void SetArea(double _XMin, double _XMax, double _YMin, double _YMax);
 
 extern "C" __declspec(dllexport)
-void Calculate(int FuncIdx, bool funcOrLimit);
+void Calculate(int FuncIdx, int Mode);
 
 extern "C" __declspec(dllexport)
 void CalculateFilling(int LimitIdx, int LimitFactor, int Width, int Height);
