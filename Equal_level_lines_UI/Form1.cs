@@ -389,10 +389,13 @@ namespace Equal_level_lines_UI
 
     private void Btn_DeleteFunc_Click(object sender, EventArgs e)
     {
-      int Idx = int.Parse(tBox_DeletePos.Text);
-      dataGridView1.Rows.RemoveAt(Idx);
-      GridFuncIdxSet.Remove(Idx);
-      NumOfGridRows--;
+      if (tBox_DeletePos.Text != "")
+      {
+        int Idx = int.Parse(tBox_DeletePos.Text);
+        dataGridView1.Rows.RemoveAt(Idx);
+        GridFuncIdxSet.Remove(Idx);
+        NumOfGridRows--;
+      }
     }
 
     private void ClearFunc_Click(object sender, EventArgs e)
