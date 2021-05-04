@@ -11,11 +11,12 @@ class Optimization_task {
     Zero_level_line = 3
   };
 
-  virtual double target_func(double x1, double x2);
-  virtual double limit_func(double x1, double x2);
-  void setAreaParameters(double xmin, double ymin, double xmax, double ymax);
-  void setCalcParameters(unsigned _N, unsigned _M1, unsigned _M2, unsigned _M3);
+  virtual double target_func(double x1, double x2) = 0;
+  virtual double limit_func(double x1, double x2) = 0;
+  virtual void setAreaParameters() = 0;
+  virtual void setCalcParameters() = 0;
 
+protected:
   double Xmin, Xmax, Ymin, Ymax;
   unsigned N, M1, M2, M3;
 };
