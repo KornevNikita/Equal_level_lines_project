@@ -85,6 +85,9 @@
       this.tBox_Ymin = new System.Windows.Forms.TextBox();
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
       this.colorDialog2 = new System.Windows.Forms.ColorDialog();
+      this.textBox1 = new System.Windows.Forms.TextBox();
+      this.label3 = new System.Windows.Forms.Label();
+      this.btn_load_path = new System.Windows.Forms.Button();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -674,11 +677,42 @@
       this.colorDialog2.Color = System.Drawing.Color.DeepSkyBlue;
       this.colorDialog2.FullOpen = true;
       // 
+      // textBox1
+      // 
+      this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.textBox1.Location = new System.Drawing.Point(1012, 33);
+      this.textBox1.Name = "textBox1";
+      this.textBox1.Size = new System.Drawing.Size(310, 24);
+      this.textBox1.TabIndex = 2;
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.label3.Location = new System.Drawing.Point(1009, 12);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(122, 18);
+      this.label3.TabIndex = 3;
+      this.label3.Text = "Path to task DLL:";
+      // 
+      // btn_load_path
+      // 
+      this.btn_load_path.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.btn_load_path.Location = new System.Drawing.Point(1012, 63);
+      this.btn_load_path.Name = "btn_load_path";
+      this.btn_load_path.Size = new System.Drawing.Size(75, 26);
+      this.btn_load_path.TabIndex = 4;
+      this.btn_load_path.Text = "Load";
+      this.btn_load_path.UseVisualStyleBackColor = true;
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1015, 681);
+      this.ClientSize = new System.Drawing.Size(1334, 681);
+      this.Controls.Add(this.btn_load_path);
+      this.Controls.Add(this.label3);
+      this.Controls.Add(this.textBox1);
       this.Controls.Add(this.groupBox1);
       this.Controls.Add(this.pictureBox1);
       this.Name = "Form1";
@@ -699,6 +733,7 @@
       this.groupBox2.ResumeLayout(false);
       this.groupBox2.PerformLayout();
       this.ResumeLayout(false);
+      this.PerformLayout();
 
     }
 
@@ -757,6 +792,9 @@
     private System.Windows.Forms.Button btn_AddFunc;
     private System.Windows.Forms.TextBox tBox_DeletePos;
     private System.Windows.Forms.CheckBox cBox_EnableSignatures;
+    private System.Windows.Forms.TextBox textBox1;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.Button btn_load_path;
   }
 }
 

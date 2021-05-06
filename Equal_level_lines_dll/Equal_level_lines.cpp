@@ -4,9 +4,16 @@
 
 #include <limits>
 #include <fstream>
-#define _USE_MATH_DEFINES
 #include <math.h>
 #include <iomanip>
+#include <Windows.h>
+#include <string>
+
+#define _USE_MATH_DEFINES
+
+using namespace std;
+
+typedef double (*target_func)(double, double);
 
 void AllocMem(int _N, int _M1, int _M2, int _M3) {
   lines = new Lines(_N, _M1, _M2, _M3);
@@ -26,11 +33,22 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
 }
 
 void Calculate(int FuncIdx, int Mode) {
+  ofstream fout("IncludingDll.txt");
+
   double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ;
   double hx = lines->area.Width / lines->N; // вычисление шага по x
   double hy = lines->area.Height / lines->N; // вычисление шага по y
 
   Function f;
+
+  string DllPath = { "Dll1" };
+  std::wstring stemp = std::wstring(DllPath.begin(), DllPath.end());
+  LPCWSTR sw = stemp.c_str();
+  HINSTANCE hDll = LoadLibrary(sw);
+  if (hDll != NULL) {
+    fout << "Library loaded" << endl;
+  }
+  target_func tf = (target_func)GetProcAddress(hDll, "TestFunction");
 
   // обход сетки
   for (int i = 0; i <= lines->N; i++)
@@ -42,7 +60,8 @@ void Calculate(int FuncIdx, int Mode) {
       double y = lines->Data[Idx].y = lines->area.YMin + hy * j;
       // значение функции в узле
       
-      QQ = lines->Data[Idx].Q = f(x, y, FuncIdx);
+      //QQ = lines->Data[Idx].Q = f(x, y, FuncIdx);
+      QQ = lines->Data[Idx].Q = (*tf)(x, y);
 
       // поиск минимального и максимального значения на сетке
       if ((i == 0) && (j == 0) || (QQ < Qmin))
@@ -73,6 +92,7 @@ void Calculate(int FuncIdx, int Mode) {
         (hQ2 / (lines->M3 + 1)) * i;
     }
   }
+  FreeLibrary(hDll);
 }
 
 void CalculateFilling(int LimitIdx, int LimitFactor, int Width, int Height) {
