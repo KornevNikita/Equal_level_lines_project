@@ -528,6 +528,64 @@ namespace Equal_level_lines_UI
       }
     }
 
+    static class NativeMethods
+    {
+      [DllImport("kernel32.dll")]
+      public static extern IntPtr LoadLibrary(string dllToLoad);
+
+      [DllImport("kernel32.dll")]
+      public static extern IntPtr GetProcAddress(IntPtr hModule, string procedureName);
+
+      [DllImport("kernel32.dll")]
+      public static extern bool FreeLibrary(IntPtr hModule);
+    }
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate double GetTaskArea(int TaskAreaParam);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate double GetTaskLinesCalcParams(int TaskLinesCalcParam);
+
+    private void Btn_load_path_Click(object sender, EventArgs e)
+    {
+      String DllPath = tBox_DllPath.Text.ToString();
+
+      IntPtr pDll = NativeMethods.LoadLibrary(@DllPath);
+
+      if (pDll != IntPtr.Zero)
+      {
+        label5.Text = "Loading status: loaded";
+
+        IntPtr pAddressOfFunctionToCall1 =
+          NativeMethods.GetProcAddress(pDll, "GetTaskArea");
+        IntPtr pAddressOfFunctionToCall2 =
+          NativeMethods.GetProcAddress(pDll, "GetTaskLinesCalcParams");
+
+        GetTaskArea getTaskArea =
+          (GetTaskArea)Marshal.GetDelegateForFunctionPointer(
+            pAddressOfFunctionToCall1,
+            typeof(GetTaskArea));
+
+        GetTaskLinesCalcParams getTaskLinesCalcParams =
+          (GetTaskLinesCalcParams)Marshal.GetDelegateForFunctionPointer(
+            pAddressOfFunctionToCall2,
+            typeof(GetTaskLinesCalcParams));
+
+        tBox_Xmin.Text = getTaskArea(0).ToString();
+        tBox_Xmax.Text = getTaskArea(1).ToString();
+        tBox_Ymin.Text = getTaskArea(2).ToString();
+        tBox_Ymax.Text = getTaskArea(3).ToString();
+
+        tBox_N.Text = getTaskLinesCalcParams(0).ToString();
+        tBox_M1.Text = getTaskArea(1).ToString();
+        tBox_M2.Text = getTaskArea(2).ToString();
+        tBox_M3.Text = getTaskArea(3).ToString();
+
+        bool result = NativeMethods.FreeLibrary(pDll);
+      }
+
+    }
+
     private void CBox_LimitOn_CheckedChanged(object sender, EventArgs e)
     {
       //ParseArea();
