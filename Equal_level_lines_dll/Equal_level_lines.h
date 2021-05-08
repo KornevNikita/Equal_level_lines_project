@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -54,6 +55,7 @@ public:
 
 Lines* lines;
 vector<int> LimitValues;
+string ImportingDllPath;
 
 bool Limit(double x, double y, int LimitIdx);
 
@@ -83,3 +85,6 @@ void DeleteData(DrawPoints<Lines::Point> *Data);
 
 extern "C" __declspec(dllexport)
 void CreateEmptyClass();
+
+extern "C" __declspec(dllexport)
+void SetImportingDllPath(char* _ImportingDllPath, int length);

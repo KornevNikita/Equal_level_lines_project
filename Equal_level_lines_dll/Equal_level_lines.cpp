@@ -39,9 +39,7 @@ void Calculate(int FuncIdx, int Mode) {
   double hx = lines->area.Width / lines->N; // вычисление шага по x
   double hy = lines->area.Height / lines->N; // вычисление шага по y
 
-  //Function f;
-
-  string DllPath = { "Dll1" };
+  string DllPath = ImportingDllPath;
   std::wstring stemp = std::wstring(DllPath.begin(), DllPath.end());
   LPCWSTR sw = stemp.c_str();
   HINSTANCE hDll = LoadLibrary(sw);
@@ -75,11 +73,7 @@ void Calculate(int FuncIdx, int Mode) {
   double hQ1 = (Qmax - Qmin) / lines->M1; // шаг функции по уровням
   int ku = 0; // позиция в сетке уровней   
   for (int i = 0; i < lines->M1; i++) // вычисление значений функции на основных уровнях 
-  {
     lines->SubLevelValues[ku++] = Mode == 1 ? Qmax - hQ1 * i : 0;
-    //lines->SubLevelValues[ku++] = Qmax - hQ1 * i;
-    /*lines->SubLevelValues[ku++] = 0;*/
-  }
     
   if (Mode == 1) {
     double hQ2 = hQ1 / (lines->M2 + 1); // шаг функции по подуровням
@@ -171,4 +165,12 @@ void DeleteData(DrawPoints<Lines::Point> *Data) {
 
 void CreateEmptyClass() {
   lines = new Lines();
+}
+
+void SetImportingDllPath(char* _ImportingDllPath, int length)
+{
+  string temp;
+  for (int i = 0; i < length; ++i)
+    temp.push_back(*(_ImportingDllPath + i));
+  ImportingDllPath = temp;
 }

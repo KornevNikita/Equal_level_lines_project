@@ -60,6 +60,9 @@ namespace Equal_level_lines_UI
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
     public static extern void CreateEmptyClass();
 
+    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SetImportingDllPath(string DllPath, int length);
+
     // ============ End of Equal_level_lines.dll import functions ===========
 
     public static int GridLinesThickness = 1, PicWidth, PicHeight, NumOfFuncs = 8;
@@ -476,7 +479,6 @@ namespace Equal_level_lines_UI
 
           PicWidth = pictureBox1.Width;
           PicHeight = pictureBox1.Height;
-          PicHeight = pictureBox1.Height;
 
           CalculateFilling(Eque_lines[i].FuncIdx, Eque_lines[i].Density,
             pictureBox1.Width, pictureBox1.Height);
@@ -554,6 +556,8 @@ namespace Equal_level_lines_UI
 
       if (pDll != IntPtr.Zero)
       {
+        SetImportingDllPath(DllPath, DllPath.Length);
+
         label5.Text = "Loading status: loaded";
 
         IntPtr pAddressOfFunctionToCall1 =
