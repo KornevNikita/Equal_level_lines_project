@@ -544,7 +544,7 @@ namespace Equal_level_lines_UI
     private delegate double GetTaskArea(int TaskAreaParam);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate double GetTaskLinesCalcParams(int TaskLinesCalcParam);
+    private delegate int GetTaskLinesCalcParams(int TaskLinesCalcParam);
 
     private void Btn_load_path_Click(object sender, EventArgs e)
     {
@@ -577,9 +577,9 @@ namespace Equal_level_lines_UI
         tBox_Ymax.Text = getTaskArea(3).ToString();
 
         tBox_N.Text = getTaskLinesCalcParams(0).ToString();
-        tBox_M1.Text = getTaskArea(1).ToString();
-        tBox_M2.Text = getTaskArea(2).ToString();
-        tBox_M3.Text = getTaskArea(3).ToString();
+        tBox_M1.Text = getTaskLinesCalcParams(1).ToString();
+        tBox_M2.Text = getTaskLinesCalcParams(2).ToString();
+        tBox_M3.Text = getTaskLinesCalcParams(3).ToString();
 
         bool result = NativeMethods.FreeLibrary(pDll);
       }
