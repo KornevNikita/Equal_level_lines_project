@@ -119,6 +119,7 @@ namespace Equal_level_lines_UI
         Mode = (int)row.Cells[1].Value;
         Density = (int)row.Cells[2].Value;
         color = (Color)row.Cells[3].Value;
+        //color = Color.Black;
         XMin = (double)row.Cells[4].Value;
         XMax = (double)row.Cells[5].Value;
         YMin = (double)row.Cells[6].Value;
@@ -559,6 +560,7 @@ namespace Equal_level_lines_UI
         SetImportingDllPath(DllPath, DllPath.Length);
 
         label5.Text = "Loading status: loaded";
+        label5.BackColor = Color.LightGreen;
 
         IntPtr pAddressOfFunctionToCall1 =
           NativeMethods.GetProcAddress(pDll, "GetTaskArea");
@@ -575,15 +577,31 @@ namespace Equal_level_lines_UI
             pAddressOfFunctionToCall2,
             typeof(GetTaskLinesCalcParams));
 
-        tBox_Xmin.Text = getTaskArea(0).ToString();
-        tBox_Xmax.Text = getTaskArea(1).ToString();
-        tBox_Ymin.Text = getTaskArea(2).ToString();
-        tBox_Ymax.Text = getTaskArea(3).ToString();
+        double Xmin = getTaskArea(0);
+        double Xmax = getTaskArea(1);
+        double Ymin = getTaskArea(2);
+        double Ymax = getTaskArea(3);
 
-        tBox_N.Text = getTaskLinesCalcParams(0).ToString();
-        tBox_M1.Text = getTaskLinesCalcParams(1).ToString();
-        tBox_M2.Text = getTaskLinesCalcParams(2).ToString();
-        tBox_M3.Text = getTaskLinesCalcParams(3).ToString();
+        int N = getTaskLinesCalcParams(0);
+        int M1 = getTaskLinesCalcParams(1);
+        int M2 = getTaskLinesCalcParams(2);
+        int M3 = getTaskLinesCalcParams(3);
+
+        tBox_Xmin.Text = Xmin.ToString();
+        tBox_Xmax.Text = Xmax.ToString();
+        tBox_Ymin.Text = Ymin.ToString();
+        tBox_Ymax.Text = Ymax.ToString();
+
+        tBox_N.Text = N.ToString();
+        tBox_M1.Text = M1.ToString();
+        tBox_M2.Text = M2.ToString();
+        tBox_M3.Text = M3.ToString();
+
+        dataGridView1.Rows.Add(0, 1, 0, Color.Black,
+        Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
+
+        dataGridView1.Rows.Add(0, 3, 0, Color.Red,
+        Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
 
         bool result = NativeMethods.FreeLibrary(pDll);
       }
