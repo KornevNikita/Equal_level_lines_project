@@ -14,6 +14,7 @@
 using namespace std;
 
 typedef double (*import_func)(double, double);
+typedef bool (*import_filling_func)(double, double);
 
 void AllocMem(int _N, int _M1, int _M2, int _M3) {
   lines = new Lines(_N, _M1, _M2, _M3);
@@ -46,9 +47,20 @@ void Calculate(int FuncIdx, int Mode) {
   if (hDll != NULL) {
     fout << "Library loaded" << endl;
   }
-  import_func f = Mode == 1 ?
-      (import_func)GetProcAddress(hDll, "target_function") :
-      (import_func)GetProcAddress(hDll, "limit_function");
+  import_func f;
+  switch (Mode) {
+  case 1:
+    f = (import_func)GetProcAddress(hDll, "target_function");
+    break;
+  //case 2:
+  //  f = (import_func)GetProcAddress(hDll, "filling_function");
+  //  break;
+  case 3:
+    f = (import_func)GetProcAddress(hDll, "limit_function");
+    break;
+  default:
+    f = nullptr;
+  }
 
   // обход сетки
   for (int i = 0; i <= lines->N; i++)
@@ -94,6 +106,13 @@ void Calculate(int FuncIdx, int Mode) {
 void CalculateFilling(int LimitIdx, int LimitFactor, int Width, int Height) {
   LimitValues.resize(Width / LimitFactor * Height / LimitFactor, true);
   int Count = 0;
+  string DllPath = ImportingDllPath;
+  std::wstring stemp = std::wstring(DllPath.begin(), DllPath.end());
+  LPCWSTR sw = stemp.c_str();
+  HINSTANCE hDll = LoadLibrary(sw);
+  import_filling_func f =
+    (import_filling_func)GetProcAddress(hDll, "filling_function");
+
   for (int i = 0; i < Width / LimitFactor; ++i)
   {
     for (int j = 0; j < Height / LimitFactor; ++j)
@@ -102,7 +121,8 @@ void CalculateFilling(int LimitIdx, int LimitFactor, int Width, int Height) {
         (double)(i) / (double)Width * (lines->area.Width) * LimitFactor;
       double y = lines->area.YMax -
         (double)j / (double)Height * lines->area.Height * LimitFactor;
-      LimitValues[Count++] = Limit(x, y, LimitIdx);
+      /*LimitValues[Count++] = Limit(x, y, LimitIdx);*/
+      LimitValues[Count++] = (*f)(x, y);
     }
   }
 }

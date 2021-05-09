@@ -549,6 +549,9 @@ namespace Equal_level_lines_UI
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate int GetTaskLinesCalcParams(int TaskLinesCalcParam);
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate int GetDensity();
+
     private void Btn_load_path_Click(object sender, EventArgs e)
     {
       String DllPath = tBox_DllPath.Text.ToString();
@@ -566,6 +569,8 @@ namespace Equal_level_lines_UI
           NativeMethods.GetProcAddress(pDll, "GetTaskArea");
         IntPtr pAddressOfFunctionToCall2 =
           NativeMethods.GetProcAddress(pDll, "GetTaskLinesCalcParams");
+        IntPtr pAddressOfFunctionToCall3 =
+          NativeMethods.GetProcAddress(pDll, "GetDensity");
 
         GetTaskArea getTaskArea =
           (GetTaskArea)Marshal.GetDelegateForFunctionPointer(
@@ -577,6 +582,11 @@ namespace Equal_level_lines_UI
             pAddressOfFunctionToCall2,
             typeof(GetTaskLinesCalcParams));
 
+        GetDensity getDensity =
+          (GetDensity)Marshal.GetDelegateForFunctionPointer(
+            pAddressOfFunctionToCall3,
+            typeof(GetDensity));
+
         double Xmin = getTaskArea(0);
         double Xmax = getTaskArea(1);
         double Ymin = getTaskArea(2);
@@ -586,6 +596,8 @@ namespace Equal_level_lines_UI
         int M1 = getTaskLinesCalcParams(1);
         int M2 = getTaskLinesCalcParams(2);
         int M3 = getTaskLinesCalcParams(3);
+
+        int Density = getDensity();
 
         tBox_Xmin.Text = Xmin.ToString();
         tBox_Xmax.Text = Xmax.ToString();
@@ -598,6 +610,9 @@ namespace Equal_level_lines_UI
         tBox_M3.Text = M3.ToString();
 
         dataGridView1.Rows.Add(0, 1, 0, Color.Black,
+        Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
+
+        dataGridView1.Rows.Add(0, 2, Density, Color.Red,
         Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
 
         dataGridView1.Rows.Add(0, 3, 0, Color.Red,
