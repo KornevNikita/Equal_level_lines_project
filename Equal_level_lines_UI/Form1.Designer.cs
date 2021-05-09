@@ -39,24 +39,6 @@
       this.btn_DeleteFunc = new System.Windows.Forms.Button();
       this.btn_AddFunc = new System.Windows.Forms.Button();
       this.dataGridView1 = new System.Windows.Forms.DataGridView();
-      this.groupBox7 = new System.Windows.Forms.GroupBox();
-      this.rBtn_OnlyZeroLine = new System.Windows.Forms.RadioButton();
-      this.rBtn_Filling = new System.Windows.Forms.RadioButton();
-      this.rBtn_EqLvlLns = new System.Windows.Forms.RadioButton();
-      this.button2 = new System.Windows.Forms.Button();
-      this.tBox_Density = new System.Windows.Forms.TextBox();
-      this.label12 = new System.Windows.Forms.Label();
-      this.label1 = new System.Windows.Forms.Label();
-      this.tBox_funcIdx = new System.Windows.Forms.TextBox();
-      this.groupBox6 = new System.Windows.Forms.GroupBox();
-      this.btn_LoadSettings = new System.Windows.Forms.Button();
-      this.btn_SaveSettings = new System.Windows.Forms.Button();
-      this.groupBox5 = new System.Windows.Forms.GroupBox();
-      this.button3 = new System.Windows.Forms.Button();
-      this.label16 = new System.Windows.Forms.Label();
-      this.label15 = new System.Windows.Forms.Label();
-      this.tBox_PicHeight = new System.Windows.Forms.TextBox();
-      this.tBox_PicWidth = new System.Windows.Forms.TextBox();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
       this.cBox_EnableSignatures = new System.Windows.Forms.CheckBox();
       this.label14 = new System.Windows.Forms.Label();
@@ -92,9 +74,6 @@
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-      this.groupBox7.SuspendLayout();
-      this.groupBox6.SuspendLayout();
-      this.groupBox5.SuspendLayout();
       this.groupBox4.SuspendLayout();
       this.groupBox3.SuspendLayout();
       this.groupBox2.SuspendLayout();
@@ -114,14 +93,15 @@
       // groupBox1
       // 
       this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
+      this.groupBox1.Controls.Add(this.label5);
       this.groupBox1.Controls.Add(this.tBox_DeletePos);
+      this.groupBox1.Controls.Add(this.btn_load_path);
       this.groupBox1.Controls.Add(this.ClearFunc);
+      this.groupBox1.Controls.Add(this.label3);
+      this.groupBox1.Controls.Add(this.tBox_DllPath);
       this.groupBox1.Controls.Add(this.btn_DeleteFunc);
       this.groupBox1.Controls.Add(this.btn_AddFunc);
       this.groupBox1.Controls.Add(this.dataGridView1);
-      this.groupBox1.Controls.Add(this.groupBox7);
-      this.groupBox1.Controls.Add(this.groupBox6);
-      this.groupBox1.Controls.Add(this.groupBox5);
       this.groupBox1.Controls.Add(this.groupBox4);
       this.groupBox1.Controls.Add(this.label_Time);
       this.groupBox1.Controls.Add(this.btn_Run);
@@ -137,14 +117,14 @@
       // 
       // tBox_DeletePos
       // 
-      this.tBox_DeletePos.Location = new System.Drawing.Point(249, 237);
+      this.tBox_DeletePos.Location = new System.Drawing.Point(252, 200);
       this.tBox_DeletePos.Name = "tBox_DeletePos";
       this.tBox_DeletePos.Size = new System.Drawing.Size(67, 24);
       this.tBox_DeletePos.TabIndex = 34;
       // 
       // ClearFunc
       // 
-      this.ClearFunc.Location = new System.Drawing.Point(87, 238);
+      this.ClearFunc.Location = new System.Drawing.Point(90, 201);
       this.ClearFunc.Name = "ClearFunc";
       this.ClearFunc.Size = new System.Drawing.Size(75, 23);
       this.ClearFunc.TabIndex = 33;
@@ -154,7 +134,7 @@
       // 
       // btn_DeleteFunc
       // 
-      this.btn_DeleteFunc.Location = new System.Drawing.Point(168, 238);
+      this.btn_DeleteFunc.Location = new System.Drawing.Point(171, 201);
       this.btn_DeleteFunc.Name = "btn_DeleteFunc";
       this.btn_DeleteFunc.Size = new System.Drawing.Size(75, 23);
       this.btn_DeleteFunc.TabIndex = 32;
@@ -164,7 +144,7 @@
       // 
       // btn_AddFunc
       // 
-      this.btn_AddFunc.Location = new System.Drawing.Point(6, 238);
+      this.btn_AddFunc.Location = new System.Drawing.Point(9, 201);
       this.btn_AddFunc.Name = "btn_AddFunc";
       this.btn_AddFunc.Size = new System.Drawing.Size(75, 23);
       this.btn_AddFunc.TabIndex = 31;
@@ -192,7 +172,7 @@
       dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
       dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
       this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
-      this.dataGridView1.Location = new System.Drawing.Point(6, 267);
+      this.dataGridView1.Location = new System.Drawing.Point(9, 230);
       this.dataGridView1.Name = "dataGridView1";
       this.dataGridView1.ReadOnly = true;
       dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -209,197 +189,6 @@
       this.dataGridView1.Size = new System.Drawing.Size(310, 100);
       this.dataGridView1.TabIndex = 30;
       // 
-      // groupBox7
-      // 
-      this.groupBox7.BackColor = System.Drawing.SystemColors.InactiveCaption;
-      this.groupBox7.Controls.Add(this.rBtn_OnlyZeroLine);
-      this.groupBox7.Controls.Add(this.rBtn_Filling);
-      this.groupBox7.Controls.Add(this.rBtn_EqLvlLns);
-      this.groupBox7.Controls.Add(this.button2);
-      this.groupBox7.Controls.Add(this.tBox_Density);
-      this.groupBox7.Controls.Add(this.label12);
-      this.groupBox7.Controls.Add(this.label1);
-      this.groupBox7.Controls.Add(this.tBox_funcIdx);
-      this.groupBox7.Location = new System.Drawing.Point(6, 23);
-      this.groupBox7.Name = "groupBox7";
-      this.groupBox7.Size = new System.Drawing.Size(310, 111);
-      this.groupBox7.TabIndex = 29;
-      this.groupBox7.TabStop = false;
-      this.groupBox7.Text = "Drawing mode";
-      // 
-      // rBtn_OnlyZeroLine
-      // 
-      this.rBtn_OnlyZeroLine.AutoSize = true;
-      this.rBtn_OnlyZeroLine.Location = new System.Drawing.Point(5, 79);
-      this.rBtn_OnlyZeroLine.Name = "rBtn_OnlyZeroLine";
-      this.rBtn_OnlyZeroLine.Size = new System.Drawing.Size(172, 22);
-      this.rBtn_OnlyZeroLine.TabIndex = 31;
-      this.rBtn_OnlyZeroLine.Text = "Only zero-level line (3)";
-      this.rBtn_OnlyZeroLine.UseVisualStyleBackColor = true;
-      this.rBtn_OnlyZeroLine.CheckedChanged += new System.EventHandler(this.RBtn_OnlyZeroLine_CheckedChanged);
-      // 
-      // rBtn_Filling
-      // 
-      this.rBtn_Filling.AutoSize = true;
-      this.rBtn_Filling.Location = new System.Drawing.Point(5, 51);
-      this.rBtn_Filling.Name = "rBtn_Filling";
-      this.rBtn_Filling.Size = new System.Drawing.Size(85, 22);
-      this.rBtn_Filling.TabIndex = 30;
-      this.rBtn_Filling.Text = "Filling (2)";
-      this.rBtn_Filling.UseVisualStyleBackColor = true;
-      // 
-      // rBtn_EqLvlLns
-      // 
-      this.rBtn_EqLvlLns.AutoSize = true;
-      this.rBtn_EqLvlLns.Checked = true;
-      this.rBtn_EqLvlLns.Location = new System.Drawing.Point(5, 23);
-      this.rBtn_EqLvlLns.Name = "rBtn_EqLvlLns";
-      this.rBtn_EqLvlLns.Size = new System.Drawing.Size(152, 22);
-      this.rBtn_EqLvlLns.TabIndex = 30;
-      this.rBtn_EqLvlLns.TabStop = true;
-      this.rBtn_EqLvlLns.Text = "Equal level lines (1)";
-      this.rBtn_EqLvlLns.UseVisualStyleBackColor = true;
-      // 
-      // button2
-      // 
-      this.button2.Location = new System.Drawing.Point(194, 77);
-      this.button2.Name = "button2";
-      this.button2.Size = new System.Drawing.Size(110, 26);
-      this.button2.TabIndex = 14;
-      this.button2.Text = "Pick color";
-      this.button2.UseVisualStyleBackColor = true;
-      this.button2.Click += new System.EventHandler(this.Button2_Click);
-      // 
-      // tBox_Density
-      // 
-      this.tBox_Density.Location = new System.Drawing.Point(254, 50);
-      this.tBox_Density.Name = "tBox_Density";
-      this.tBox_Density.Size = new System.Drawing.Size(50, 24);
-      this.tBox_Density.TabIndex = 23;
-      this.tBox_Density.Text = "4";
-      this.tBox_Density.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
-      // label12
-      // 
-      this.label12.AutoSize = true;
-      this.label12.Location = new System.Drawing.Point(191, 53);
-      this.label12.Name = "label12";
-      this.label12.Size = new System.Drawing.Size(57, 18);
-      this.label12.TabIndex = 22;
-      this.label12.Text = "Density";
-      // 
-      // label1
-      // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(171, 23);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(77, 18);
-      this.label1.TabIndex = 1;
-      this.label1.Text = "Function #";
-      // 
-      // tBox_funcIdx
-      // 
-      this.tBox_funcIdx.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      this.tBox_funcIdx.Location = new System.Drawing.Point(254, 20);
-      this.tBox_funcIdx.Name = "tBox_funcIdx";
-      this.tBox_funcIdx.Size = new System.Drawing.Size(50, 24);
-      this.tBox_funcIdx.TabIndex = 0;
-      this.tBox_funcIdx.Text = "2";
-      this.tBox_funcIdx.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
-      // groupBox6
-      // 
-      this.groupBox6.BackColor = System.Drawing.SystemColors.InactiveCaption;
-      this.groupBox6.Controls.Add(this.btn_LoadSettings);
-      this.groupBox6.Controls.Add(this.btn_SaveSettings);
-      this.groupBox6.Location = new System.Drawing.Point(6, 497);
-      this.groupBox6.Name = "groupBox6";
-      this.groupBox6.Size = new System.Drawing.Size(150, 87);
-      this.groupBox6.TabIndex = 25;
-      this.groupBox6.TabStop = false;
-      this.groupBox6.Text = "Save/Load settings";
-      // 
-      // btn_LoadSettings
-      // 
-      this.btn_LoadSettings.Location = new System.Drawing.Point(6, 55);
-      this.btn_LoadSettings.Name = "btn_LoadSettings";
-      this.btn_LoadSettings.Size = new System.Drawing.Size(100, 26);
-      this.btn_LoadSettings.TabIndex = 27;
-      this.btn_LoadSettings.Text = "Load last";
-      this.btn_LoadSettings.UseVisualStyleBackColor = true;
-      this.btn_LoadSettings.Click += new System.EventHandler(this.btn_LoadSettings_Click);
-      // 
-      // btn_SaveSettings
-      // 
-      this.btn_SaveSettings.Location = new System.Drawing.Point(6, 23);
-      this.btn_SaveSettings.Name = "btn_SaveSettings";
-      this.btn_SaveSettings.Size = new System.Drawing.Size(100, 26);
-      this.btn_SaveSettings.TabIndex = 26;
-      this.btn_SaveSettings.Text = "Save";
-      this.btn_SaveSettings.UseVisualStyleBackColor = true;
-      this.btn_SaveSettings.Click += new System.EventHandler(this.btn_SaveSettings_Click);
-      // 
-      // groupBox5
-      // 
-      this.groupBox5.BackColor = System.Drawing.SystemColors.InactiveCaption;
-      this.groupBox5.Controls.Add(this.button3);
-      this.groupBox5.Controls.Add(this.label16);
-      this.groupBox5.Controls.Add(this.label15);
-      this.groupBox5.Controls.Add(this.tBox_PicHeight);
-      this.groupBox5.Controls.Add(this.tBox_PicWidth);
-      this.groupBox5.Location = new System.Drawing.Point(162, 497);
-      this.groupBox5.Name = "groupBox5";
-      this.groupBox5.Size = new System.Drawing.Size(154, 87);
-      this.groupBox5.TabIndex = 24;
-      this.groupBox5.TabStop = false;
-      this.groupBox5.Text = "Picture size";
-      // 
-      // button3
-      // 
-      this.button3.Location = new System.Drawing.Point(232, 23);
-      this.button3.Name = "button3";
-      this.button3.Size = new System.Drawing.Size(50, 26);
-      this.button3.TabIndex = 4;
-      this.button3.Text = "Ok";
-      this.button3.UseVisualStyleBackColor = true;
-      this.button3.Click += new System.EventHandler(this.Button3_Click);
-      // 
-      // label16
-      // 
-      this.label16.AutoSize = true;
-      this.label16.Location = new System.Drawing.Point(6, 56);
-      this.label16.Name = "label16";
-      this.label16.Size = new System.Drawing.Size(21, 18);
-      this.label16.TabIndex = 3;
-      this.label16.Text = "Y:";
-      // 
-      // label15
-      // 
-      this.label15.AutoSize = true;
-      this.label15.Location = new System.Drawing.Point(6, 26);
-      this.label15.Name = "label15";
-      this.label15.Size = new System.Drawing.Size(22, 18);
-      this.label15.TabIndex = 2;
-      this.label15.Text = "X:";
-      // 
-      // tBox_PicHeight
-      // 
-      this.tBox_PicHeight.Location = new System.Drawing.Point(35, 53);
-      this.tBox_PicHeight.Name = "tBox_PicHeight";
-      this.tBox_PicHeight.Size = new System.Drawing.Size(50, 24);
-      this.tBox_PicHeight.TabIndex = 1;
-      this.tBox_PicHeight.Text = "660";
-      this.tBox_PicHeight.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
-      // tBox_PicWidth
-      // 
-      this.tBox_PicWidth.Location = new System.Drawing.Point(34, 23);
-      this.tBox_PicWidth.Name = "tBox_PicWidth";
-      this.tBox_PicWidth.Size = new System.Drawing.Size(50, 24);
-      this.tBox_PicWidth.TabIndex = 0;
-      this.tBox_PicWidth.Text = "660";
-      this.tBox_PicWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
       // groupBox4
       // 
       this.groupBox4.BackColor = System.Drawing.SystemColors.InactiveCaption;
@@ -412,7 +201,7 @@
       this.groupBox4.Controls.Add(this.cBox_AddGrid);
       this.groupBox4.Controls.Add(this.cBox_AddYaxis);
       this.groupBox4.Controls.Add(this.cBox_AddXaxis);
-      this.groupBox4.Location = new System.Drawing.Point(6, 373);
+      this.groupBox4.Location = new System.Drawing.Point(9, 336);
       this.groupBox4.Name = "groupBox4";
       this.groupBox4.Size = new System.Drawing.Size(310, 118);
       this.groupBox4.TabIndex = 2;
@@ -511,7 +300,7 @@
       // label_Time
       // 
       this.label_Time.AutoSize = true;
-      this.label_Time.Location = new System.Drawing.Point(112, 593);
+      this.label_Time.Location = new System.Drawing.Point(115, 463);
       this.label_Time.Name = "label_Time";
       this.label_Time.Size = new System.Drawing.Size(45, 18);
       this.label_Time.TabIndex = 20;
@@ -519,7 +308,7 @@
       // 
       // btn_Run
       // 
-      this.btn_Run.Location = new System.Drawing.Point(6, 590);
+      this.btn_Run.Location = new System.Drawing.Point(9, 460);
       this.btn_Run.Name = "btn_Run";
       this.btn_Run.Size = new System.Drawing.Size(100, 26);
       this.btn_Run.TabIndex = 2;
@@ -536,7 +325,7 @@
       this.groupBox3.Controls.Add(this.tBox_M2);
       this.groupBox3.Controls.Add(this.label7);
       this.groupBox3.Controls.Add(this.label6);
-      this.groupBox3.Location = new System.Drawing.Point(162, 140);
+      this.groupBox3.Location = new System.Drawing.Point(165, 103);
       this.groupBox3.Name = "groupBox3";
       this.groupBox3.Size = new System.Drawing.Size(154, 92);
       this.groupBox3.TabIndex = 19;
@@ -550,7 +339,7 @@
       this.tBox_N.ReadOnly = true;
       this.tBox_N.Size = new System.Drawing.Size(50, 24);
       this.tBox_N.TabIndex = 14;
-      this.tBox_N.Text = "100";
+      this.tBox_N.Text = "0";
       this.tBox_N.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // tBox_M1
@@ -560,7 +349,7 @@
       this.tBox_M1.ReadOnly = true;
       this.tBox_M1.Size = new System.Drawing.Size(50, 24);
       this.tBox_M1.TabIndex = 15;
-      this.tBox_M1.Text = "10";
+      this.tBox_M1.Text = "0";
       this.tBox_M1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // tBox_M3
@@ -570,7 +359,7 @@
       this.tBox_M3.ReadOnly = true;
       this.tBox_M3.Size = new System.Drawing.Size(50, 24);
       this.tBox_M3.TabIndex = 17;
-      this.tBox_M3.Text = "3";
+      this.tBox_M3.Text = "0";
       this.tBox_M3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // tBox_M2
@@ -580,7 +369,7 @@
       this.tBox_M2.ReadOnly = true;
       this.tBox_M2.Size = new System.Drawing.Size(50, 24);
       this.tBox_M2.TabIndex = 16;
-      this.tBox_M2.Text = "5";
+      this.tBox_M2.Text = "0";
       this.tBox_M2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // label7
@@ -610,7 +399,7 @@
       this.groupBox2.Controls.Add(this.tBox_Ymax);
       this.groupBox2.Controls.Add(this.tBox_Xmax);
       this.groupBox2.Controls.Add(this.tBox_Ymin);
-      this.groupBox2.Location = new System.Drawing.Point(6, 140);
+      this.groupBox2.Location = new System.Drawing.Point(9, 103);
       this.groupBox2.Name = "groupBox2";
       this.groupBox2.Size = new System.Drawing.Size(150, 92);
       this.groupBox2.TabIndex = 18;
@@ -642,7 +431,7 @@
       this.tBox_Xmin.ReadOnly = true;
       this.tBox_Xmin.Size = new System.Drawing.Size(50, 24);
       this.tBox_Xmin.TabIndex = 10;
-      this.tBox_Xmin.Text = "-1";
+      this.tBox_Xmin.Text = "0";
       this.tBox_Xmin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // tBox_Ymax
@@ -652,7 +441,7 @@
       this.tBox_Ymax.ReadOnly = true;
       this.tBox_Ymax.Size = new System.Drawing.Size(50, 24);
       this.tBox_Ymax.TabIndex = 13;
-      this.tBox_Ymax.Text = "1";
+      this.tBox_Ymax.Text = "0";
       this.tBox_Ymax.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // tBox_Xmax
@@ -662,7 +451,7 @@
       this.tBox_Xmax.ReadOnly = true;
       this.tBox_Xmax.Size = new System.Drawing.Size(50, 24);
       this.tBox_Xmax.TabIndex = 11;
-      this.tBox_Xmax.Text = "1";
+      this.tBox_Xmax.Text = "0";
       this.tBox_Xmax.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // tBox_Ymin
@@ -672,7 +461,7 @@
       this.tBox_Ymin.ReadOnly = true;
       this.tBox_Ymin.Size = new System.Drawing.Size(50, 24);
       this.tBox_Ymin.TabIndex = 12;
-      this.tBox_Ymin.Text = "-1";
+      this.tBox_Ymin.Text = "0";
       this.tBox_Ymin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // colorDialog1
@@ -689,7 +478,7 @@
       // tBox_DllPath
       // 
       this.tBox_DllPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      this.tBox_DllPath.Location = new System.Drawing.Point(1012, 33);
+      this.tBox_DllPath.Location = new System.Drawing.Point(9, 41);
       this.tBox_DllPath.Name = "tBox_DllPath";
       this.tBox_DllPath.Size = new System.Drawing.Size(310, 24);
       this.tBox_DllPath.TabIndex = 2;
@@ -698,7 +487,7 @@
       // 
       this.label3.AutoSize = true;
       this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      this.label3.Location = new System.Drawing.Point(1009, 12);
+      this.label3.Location = new System.Drawing.Point(6, 20);
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(122, 18);
       this.label3.TabIndex = 3;
@@ -707,7 +496,7 @@
       // btn_load_path
       // 
       this.btn_load_path.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      this.btn_load_path.Location = new System.Drawing.Point(1012, 63);
+      this.btn_load_path.Location = new System.Drawing.Point(9, 71);
       this.btn_load_path.Name = "btn_load_path";
       this.btn_load_path.Size = new System.Drawing.Size(75, 26);
       this.btn_load_path.TabIndex = 4;
@@ -719,7 +508,7 @@
       // 
       this.label5.AutoSize = true;
       this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      this.label5.Location = new System.Drawing.Point(1093, 67);
+      this.label5.Location = new System.Drawing.Point(90, 75);
       this.label5.Name = "label5";
       this.label5.Size = new System.Drawing.Size(145, 18);
       this.label5.TabIndex = 18;
@@ -730,10 +519,6 @@
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(1334, 681);
-      this.Controls.Add(this.label5);
-      this.Controls.Add(this.btn_load_path);
-      this.Controls.Add(this.label3);
-      this.Controls.Add(this.tBox_DllPath);
       this.Controls.Add(this.groupBox1);
       this.Controls.Add(this.pictureBox1);
       this.Name = "Form1";
@@ -742,11 +527,6 @@
       this.groupBox1.ResumeLayout(false);
       this.groupBox1.PerformLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-      this.groupBox7.ResumeLayout(false);
-      this.groupBox7.PerformLayout();
-      this.groupBox6.ResumeLayout(false);
-      this.groupBox5.ResumeLayout(false);
-      this.groupBox5.PerformLayout();
       this.groupBox4.ResumeLayout(false);
       this.groupBox4.PerformLayout();
       this.groupBox3.ResumeLayout(false);
@@ -754,7 +534,6 @@
       this.groupBox2.ResumeLayout(false);
       this.groupBox2.PerformLayout();
       this.ResumeLayout(false);
-      this.PerformLayout();
 
     }
 
@@ -776,12 +555,8 @@
     private System.Windows.Forms.TextBox tBox_Ymax;
     private System.Windows.Forms.TextBox tBox_Xmax;
     private System.Windows.Forms.TextBox tBox_Ymin;
-    private System.Windows.Forms.Label label1;
-    private System.Windows.Forms.TextBox tBox_funcIdx;
     private System.Windows.Forms.Button btn_Run;
     private System.Windows.Forms.Label label_Time;
-    private System.Windows.Forms.Label label12;
-    public System.Windows.Forms.TextBox tBox_Density;
     private System.Windows.Forms.GroupBox groupBox4;
     private System.Windows.Forms.Label label13;
     private System.Windows.Forms.TextBox tBox_NumOfGridLines;
@@ -792,22 +567,8 @@
     public System.Windows.Forms.CheckBox cBox_AddGrid;
     public System.Windows.Forms.CheckBox cBox_AddYaxis;
     public System.Windows.Forms.CheckBox cBox_AddXaxis;
-    private System.Windows.Forms.Button button2;
     public System.Windows.Forms.ColorDialog colorDialog2;
-    private System.Windows.Forms.GroupBox groupBox5;
-    private System.Windows.Forms.Label label16;
-    private System.Windows.Forms.Label label15;
-    private System.Windows.Forms.TextBox tBox_PicHeight;
-    private System.Windows.Forms.TextBox tBox_PicWidth;
-    private System.Windows.Forms.Button button3;
-    private System.Windows.Forms.GroupBox groupBox6;
-    private System.Windows.Forms.Button btn_LoadSettings;
-    private System.Windows.Forms.Button btn_SaveSettings;
     private System.Windows.Forms.DataGridView dataGridView1;
-    private System.Windows.Forms.GroupBox groupBox7;
-    private System.Windows.Forms.RadioButton rBtn_OnlyZeroLine;
-    private System.Windows.Forms.RadioButton rBtn_Filling;
-    private System.Windows.Forms.RadioButton rBtn_EqLvlLns;
     private System.Windows.Forms.Button ClearFunc;
     private System.Windows.Forms.Button btn_DeleteFunc;
     private System.Windows.Forms.Button btn_AddFunc;

@@ -324,17 +324,17 @@ namespace Equal_level_lines_UI
 
     private void Button3_Click(object sender, EventArgs e)
     {
-      pictureBox1.Width = int.Parse(tBox_PicWidth.Text);
-      pictureBox1.Height = int.Parse(tBox_PicHeight.Text);
+      //pictureBox1.Width = int.Parse(tBox_PicWidth.Text);
+      //pictureBox1.Height = int.Parse(tBox_PicHeight.Text);
       pictureBox1.Invalidate();
     }
 
     private void btn_SaveSettings_Click(object sender, EventArgs e)
     {
-      Properties.Settings.Default.FuncIdx = int.Parse(tBox_funcIdx.Text);
+      //Properties.Settings.Default.FuncIdx = int.Parse(tBox_funcIdx.Text);
       //Properties.Settings.Default.LimitIdx = int.Parse(tBox_LimitIdx.Text);
-      Properties.Settings.Default.LimitFactor =
-        int.Parse(tBox_Density.Text);
+      //Properties.Settings.Default.LimitFactor =
+        //int.Parse(tBox_Density.Text);
 
       //Properties.Settings.Default.CalcLimitOn = cBox_CalcLimit.Checked;
       Properties.Settings.Default.xmin = int.Parse(tBox_Xmin.Text);
@@ -355,19 +355,19 @@ namespace Equal_level_lines_UI
       Properties.Settings.Default.GridLinesThickness =
         int.Parse(tBox_GridLinesThickness.Text);
 
-      Properties.Settings.Default.PicWidth = int.Parse(tBox_PicWidth.Text);
-      Properties.Settings.Default.PicHeight = int.Parse(tBox_PicHeight.Text);
+      //Properties.Settings.Default.PicWidth = int.Parse(tBox_PicWidth.Text);
+      //Properties.Settings.Default.PicHeight = int.Parse(tBox_PicHeight.Text);
       Properties.Settings.Default.Save();
     }
 
     private void Btn_AddFunc_Click(object sender, EventArgs e)
     {
-      int DrawingMode = rBtn_EqLvlLns.Checked ? 1 :
-        (rBtn_Filling.Checked ? 2 : 3);
+      //int DrawingMode = rBtn_EqLvlLns.Checked ? 1 :
+      //  (rBtn_Filling.Checked ? 2 : 3);
 
-      int FuncIdx = int.Parse(tBox_funcIdx.Text);
-      Color color = colorDialog2.Color;
-      int Density = int.Parse(tBox_Density.Text);
+      //int FuncIdx = int.Parse(tBox_funcIdx.Text);
+      //Color color = colorDialog2.Color;
+      //int Density = int.Parse(tBox_Density.Text);
 
       double XMin, XMax, YMin, YMax;
       XMin = Double.Parse(tBox_Xmin.Text);
@@ -381,8 +381,8 @@ namespace Equal_level_lines_UI
       M2 = int.Parse(tBox_M2.Text);
       M3 = int.Parse(tBox_M3.Text);
 
-      dataGridView1.Rows.Add(FuncIdx, DrawingMode, Density, color,
-        XMin, XMax, YMin, YMax, N, M1, M2, M3);
+      //dataGridView1.Rows.Add(FuncIdx, DrawingMode, Density, color,
+      //  XMin, XMax, YMin, YMax, N, M1, M2, M3);
       NumOfGridRows++;
       int GridFuncIdx = GridFuncIdxSet.Contains(NumOfGridRows - 1) ?
         NumOfGridRows : NumOfGridRows - 1;
@@ -411,10 +411,10 @@ namespace Equal_level_lines_UI
 
     private void btn_LoadSettings_Click(object sender, EventArgs e)
     {
-      tBox_funcIdx.Text = Properties.Settings.Default.FuncIdx.ToString();
+      //tBox_funcIdx.Text = Properties.Settings.Default.FuncIdx.ToString();
       //tBox_LimitIdx.Text = Properties.Settings.Default.LimitIdx.ToString();
-      tBox_Density.Text =
-        Properties.Settings.Default.LimitFactor.ToString();
+      //tBox_Density.Text =
+        //Properties.Settings.Default.LimitFactor.ToString();
 
       //cBox_CalcLimit.Checked = Properties.Settings.Default.CalcLimitOn;
       tBox_Xmin.Text = Properties.Settings.Default.xmin.ToString();
@@ -435,8 +435,8 @@ namespace Equal_level_lines_UI
       tBox_GridLinesThickness.Text =
         Properties.Settings.Default.GridLinesThickness.ToString();
 
-      tBox_PicWidth.Text = Properties.Settings.Default.PicWidth.ToString();
-      tBox_PicHeight.Text = Properties.Settings.Default.PicHeight.ToString();
+      //tBox_PicWidth.Text = Properties.Settings.Default.PicWidth.ToString();
+      //tBox_PicHeight.Text = Properties.Settings.Default.PicHeight.ToString();
     }
 
     private void Button2_Click(object sender, EventArgs e)
@@ -501,34 +501,34 @@ namespace Equal_level_lines_UI
 
     private void RBtn_OnlyZeroLine_CheckedChanged(object sender, EventArgs e)
     {
-      if (rBtn_OnlyZeroLine.Checked == true)
-      {
-        tBox_M1.Text = "1";
-        tBox_M1.ReadOnly = true;
-        tBox_M1.BackColor = Color.LightGray;
+      //if (rBtn_OnlyZeroLine.Checked == true)
+      //{
+      //  tBox_M1.Text = "1";
+      //  tBox_M1.ReadOnly = true;
+      //  tBox_M1.BackColor = Color.LightGray;
 
-        tBox_M2.Text = "0";
-        tBox_M2.ReadOnly = true;
-        tBox_M2.BackColor = Color.LightGray;
+      //  tBox_M2.Text = "0";
+      //  tBox_M2.ReadOnly = true;
+      //  tBox_M2.BackColor = Color.LightGray;
 
-        tBox_M3.Text = "0";
-        tBox_M3.ReadOnly = true;
-        tBox_M3.BackColor = Color.LightGray;
-      }
-      else
-      {
-        tBox_M1.Text = "10";
-        tBox_M1.ReadOnly = false;
-        tBox_M1.BackColor = Color.White;
+      //  tBox_M3.Text = "0";
+      //  tBox_M3.ReadOnly = true;
+      //  tBox_M3.BackColor = Color.LightGray;
+      //}
+      //else
+      //{
+      //  tBox_M1.Text = "10";
+      //  tBox_M1.ReadOnly = false;
+      //  tBox_M1.BackColor = Color.White;
 
-        tBox_M2.Text = "5";
-        tBox_M2.ReadOnly = false;
-        tBox_M2.BackColor = Color.White;
+      //  tBox_M2.Text = "5";
+      //  tBox_M2.ReadOnly = false;
+      //  tBox_M2.BackColor = Color.White;
 
-        tBox_M3.Text = "3";
-        tBox_M3.ReadOnly = false;
-        tBox_M3.BackColor = Color.White;
-      }
+      //  tBox_M3.Text = "3";
+      //  tBox_M3.ReadOnly = false;
+      //  tBox_M3.BackColor = Color.White;
+      //}
     }
 
     static class NativeMethods
@@ -706,8 +706,9 @@ namespace Equal_level_lines_UI
     {
       e.Graphics.SmoothingMode =
         System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-      SendLines(e.Graphics, pictureBox1, int.Parse(tBox_NumOfGridLines.Text),
-                int.Parse(tBox_Density.Text));
+      //SendLines(e.Graphics, pictureBox1, int.Parse(tBox_NumOfGridLines.Text),
+      //          int.Parse(tBox_Density.Text));
+      SendLines(e.Graphics, pictureBox1, int.Parse(tBox_NumOfGridLines.Text), 4);
     }
   }
 }
