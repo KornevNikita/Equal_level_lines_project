@@ -28,14 +28,21 @@
     /// </summary>
     private void InitializeComponent()
     {
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+      System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+      System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.label5 = new System.Windows.Forms.Label();
       this.tBox_DeletePos = new System.Windows.Forms.TextBox();
+      this.btn_load_path = new System.Windows.Forms.Button();
       this.ClearFunc = new System.Windows.Forms.Button();
+      this.label3 = new System.Windows.Forms.Label();
+      this.tBox_DllPath = new System.Windows.Forms.TextBox();
       this.btn_DeleteFunc = new System.Windows.Forms.Button();
       this.btn_AddFunc = new System.Windows.Forms.Button();
       this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -67,16 +74,20 @@
       this.tBox_Ymin = new System.Windows.Forms.TextBox();
       this.colorDialog1 = new System.Windows.Forms.ColorDialog();
       this.colorDialog2 = new System.Windows.Forms.ColorDialog();
-      this.tBox_DllPath = new System.Windows.Forms.TextBox();
-      this.label3 = new System.Windows.Forms.Label();
-      this.btn_load_path = new System.Windows.Forms.Button();
-      this.label5 = new System.Windows.Forms.Label();
+      this.section_btn = new System.Windows.Forms.Button();
+      this.section_clear = new System.Windows.Forms.Button();
+      this.section_off = new System.Windows.Forms.Button();
+      this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+      this.tBox_PointCount = new System.Windows.Forms.TextBox();
+      this.dataGridView2 = new System.Windows.Forms.DataGridView();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
       this.groupBox4.SuspendLayout();
       this.groupBox3.SuspendLayout();
       this.groupBox2.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
       this.SuspendLayout();
       // 
       // pictureBox1
@@ -89,6 +100,7 @@
       this.pictureBox1.TabIndex = 0;
       this.pictureBox1.TabStop = false;
       this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pBox_Paint);
+      this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Chart1_MouseClick);
       // 
       // groupBox1
       // 
@@ -115,12 +127,33 @@
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Parameters";
       // 
+      // label5
+      // 
+      this.label5.AutoSize = true;
+      this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.label5.Location = new System.Drawing.Point(90, 75);
+      this.label5.Name = "label5";
+      this.label5.Size = new System.Drawing.Size(145, 18);
+      this.label5.TabIndex = 18;
+      this.label5.Text = "Loading status: none";
+      // 
       // tBox_DeletePos
       // 
       this.tBox_DeletePos.Location = new System.Drawing.Point(252, 200);
       this.tBox_DeletePos.Name = "tBox_DeletePos";
       this.tBox_DeletePos.Size = new System.Drawing.Size(67, 24);
       this.tBox_DeletePos.TabIndex = 34;
+      // 
+      // btn_load_path
+      // 
+      this.btn_load_path.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.btn_load_path.Location = new System.Drawing.Point(9, 71);
+      this.btn_load_path.Name = "btn_load_path";
+      this.btn_load_path.Size = new System.Drawing.Size(75, 26);
+      this.btn_load_path.TabIndex = 4;
+      this.btn_load_path.Text = "Load";
+      this.btn_load_path.UseVisualStyleBackColor = true;
+      this.btn_load_path.Click += new System.EventHandler(this.Btn_load_path_Click);
       // 
       // ClearFunc
       // 
@@ -131,6 +164,24 @@
       this.ClearFunc.Text = "Clear";
       this.ClearFunc.UseVisualStyleBackColor = true;
       this.ClearFunc.Click += new System.EventHandler(this.ClearFunc_Click);
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.label3.Location = new System.Drawing.Point(6, 20);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(122, 18);
+      this.label3.TabIndex = 3;
+      this.label3.Text = "Path to task DLL:";
+      // 
+      // tBox_DllPath
+      // 
+      this.tBox_DllPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      this.tBox_DllPath.Location = new System.Drawing.Point(9, 41);
+      this.tBox_DllPath.Name = "tBox_DllPath";
+      this.tBox_DllPath.Size = new System.Drawing.Size(310, 24);
+      this.tBox_DllPath.TabIndex = 2;
       // 
       // btn_DeleteFunc
       // 
@@ -155,37 +206,37 @@
       // dataGridView1
       // 
       this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
-      dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-      dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-      dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-      dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-      dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-      dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-      this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+      dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+      dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+      dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+      dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+      dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+      dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+      this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
       this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-      dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-      dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-      dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-      dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-      dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-      this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+      dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+      dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
+      dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
+      dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+      dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+      dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+      this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle14;
       this.dataGridView1.Location = new System.Drawing.Point(9, 230);
       this.dataGridView1.Name = "dataGridView1";
       this.dataGridView1.ReadOnly = true;
-      dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-      dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-      dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-      dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-      dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-      dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-      this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+      dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+      dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
+      dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
+      dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+      dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+      dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+      this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
       this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-      dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
-      this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle4;
+      dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+      this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle16;
       this.dataGridView1.Size = new System.Drawing.Size(310, 100);
       this.dataGridView1.TabIndex = 30;
       // 
@@ -475,52 +526,84 @@
       this.colorDialog2.Color = System.Drawing.Color.DeepSkyBlue;
       this.colorDialog2.FullOpen = true;
       // 
-      // tBox_DllPath
+      // section_btn
       // 
-      this.tBox_DllPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      this.tBox_DllPath.Location = new System.Drawing.Point(9, 41);
-      this.tBox_DllPath.Name = "tBox_DllPath";
-      this.tBox_DllPath.Size = new System.Drawing.Size(310, 24);
-      this.tBox_DllPath.TabIndex = 2;
+      this.section_btn.Location = new System.Drawing.Point(1303, 468);
+      this.section_btn.Name = "section_btn";
+      this.section_btn.Size = new System.Drawing.Size(75, 23);
+      this.section_btn.TabIndex = 2;
+      this.section_btn.Text = "Section...";
+      this.section_btn.UseVisualStyleBackColor = true;
+      this.section_btn.Click += new System.EventHandler(this.Section_btn_Click);
       // 
-      // label3
+      // section_clear
       // 
-      this.label3.AutoSize = true;
-      this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      this.label3.Location = new System.Drawing.Point(6, 20);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(122, 18);
-      this.label3.TabIndex = 3;
-      this.label3.Text = "Path to task DLL:";
+      this.section_clear.Location = new System.Drawing.Point(1384, 497);
+      this.section_clear.Name = "section_clear";
+      this.section_clear.Size = new System.Drawing.Size(75, 23);
+      this.section_clear.TabIndex = 4;
+      this.section_clear.Text = "Clear";
+      this.section_clear.UseVisualStyleBackColor = true;
+      this.section_clear.Click += new System.EventHandler(this.Button2_Click_1);
       // 
-      // btn_load_path
+      // section_off
       // 
-      this.btn_load_path.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      this.btn_load_path.Location = new System.Drawing.Point(9, 71);
-      this.btn_load_path.Name = "btn_load_path";
-      this.btn_load_path.Size = new System.Drawing.Size(75, 26);
-      this.btn_load_path.TabIndex = 4;
-      this.btn_load_path.Text = "Load";
-      this.btn_load_path.UseVisualStyleBackColor = true;
-      this.btn_load_path.Click += new System.EventHandler(this.Btn_load_path_Click);
+      this.section_off.Location = new System.Drawing.Point(1303, 497);
+      this.section_off.Name = "section_off";
+      this.section_off.Size = new System.Drawing.Size(75, 23);
+      this.section_off.TabIndex = 5;
+      this.section_off.Text = "Off";
+      this.section_off.UseVisualStyleBackColor = true;
+      this.section_off.Click += new System.EventHandler(this.Section_off_Click);
       // 
-      // label5
+      // chart2
       // 
-      this.label5.AutoSize = true;
-      this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      this.label5.Location = new System.Drawing.Point(90, 75);
-      this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(145, 18);
-      this.label5.TabIndex = 18;
-      this.label5.Text = "Loading status: none";
+      chartArea4.Name = "ChartArea1";
+      this.chart2.ChartAreas.Add(chartArea4);
+      legend4.Enabled = false;
+      legend4.Name = "Legend1";
+      this.chart2.Legends.Add(legend4);
+      this.chart2.Location = new System.Drawing.Point(1009, 12);
+      this.chart2.Name = "chart2";
+      series4.ChartArea = "ChartArea1";
+      series4.Legend = "Legend1";
+      series4.Name = "Series1";
+      this.chart2.Series.Add(series4);
+      this.chart2.Size = new System.Drawing.Size(450, 450);
+      this.chart2.TabIndex = 6;
+      this.chart2.Text = "chart1";
+      // 
+      // tBox_PointCount
+      // 
+      this.tBox_PointCount.Location = new System.Drawing.Point(1384, 471);
+      this.tBox_PointCount.Name = "tBox_PointCount";
+      this.tBox_PointCount.Size = new System.Drawing.Size(75, 20);
+      this.tBox_PointCount.TabIndex = 7;
+      this.tBox_PointCount.Text = "20";
+      this.tBox_PointCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // dataGridView2
+      // 
+      this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.dataGridView2.Location = new System.Drawing.Point(1009, 468);
+      this.dataGridView2.Name = "dataGridView2";
+      this.dataGridView2.RowHeadersVisible = false;
+      this.dataGridView2.Size = new System.Drawing.Size(288, 131);
+      this.dataGridView2.TabIndex = 35;
       // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1334, 681);
+      this.ClientSize = new System.Drawing.Size(1467, 681);
+      this.Controls.Add(this.dataGridView2);
+      this.Controls.Add(this.tBox_PointCount);
+      this.Controls.Add(this.chart2);
       this.Controls.Add(this.groupBox1);
       this.Controls.Add(this.pictureBox1);
+      this.Controls.Add(this.section_off);
+      this.Controls.Add(this.section_btn);
+      this.Controls.Add(this.section_clear);
       this.Name = "Form1";
       this.Text = "Form1";
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -533,7 +616,10 @@
       this.groupBox3.PerformLayout();
       this.groupBox2.ResumeLayout(false);
       this.groupBox2.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
       this.ResumeLayout(false);
+      this.PerformLayout();
 
     }
 
@@ -578,6 +664,13 @@
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Button btn_load_path;
     private System.Windows.Forms.Label label5;
+    private System.Windows.Forms.Button section_btn;
+    private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+    private System.Windows.Forms.Button section_clear;
+    private System.Windows.Forms.Button section_off;
+    private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
+    private System.Windows.Forms.TextBox tBox_PointCount;
+    private System.Windows.Forms.DataGridView dataGridView2;
   }
 }
 

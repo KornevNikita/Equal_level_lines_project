@@ -88,3 +88,6 @@ void CreateEmptyClass();
 
 extern "C" __declspec(dllexport)
 void SetImportingDllPath(char* _ImportingDllPath, int length);
+
+extern "C" __declspec(dllexport)
+double CalculateTargetFunction(double x, double y);

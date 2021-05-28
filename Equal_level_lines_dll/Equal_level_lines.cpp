@@ -36,12 +36,12 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
 void Calculate(int FuncIdx, int Mode) {
   ofstream fout("IncludingDll.txt");
 
-  double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ;
+  double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ = 0;
   double hx = lines->area.Width / lines->N; // вычисление шага по x
   double hy = lines->area.Height / lines->N; // вычисление шага по y
 
-  string DllPath = ImportingDllPath;
-  std::wstring stemp = std::wstring(DllPath.begin(), DllPath.end());
+  std::wstring stemp = std::wstring(ImportingDllPath.begin(),
+                                    ImportingDllPath.end());
   LPCWSTR sw = stemp.c_str();
   HINSTANCE hDll = LoadLibrary(sw);
   if (hDll != NULL) {
@@ -52,15 +52,14 @@ void Calculate(int FuncIdx, int Mode) {
   case 1:
     f = (import_func)GetProcAddress(hDll, "target_function");
     break;
-  //case 2:
-  //  f = (import_func)GetProcAddress(hDll, "filling_function");
-  //  break;
   case 3:
     f = (import_func)GetProcAddress(hDll, "limit_function");
     break;
   default:
     f = nullptr;
   }
+
+  ifstream file("eq-lvl-log.txt");
 
   // обход сетки
   for (int i = 0; i <= lines->N; i++)
@@ -72,7 +71,6 @@ void Calculate(int FuncIdx, int Mode) {
       double y = lines->Data[Idx].y = lines->area.YMin + hy * j;
       // значение функции в узле
       
-      //QQ = lines->Data[Idx].Q = f(x, y, FuncIdx);
       QQ = lines->Data[Idx].Q = (*f)(x, y);
 
       // поиск минимального и максимального значения на сетке
@@ -80,6 +78,7 @@ void Calculate(int FuncIdx, int Mode) {
         Qmin = QQ;
       if ((i == 0) && (j == 0) || (QQ > Qmax))
         Qmax = QQ;
+      QQ = 0;
     }
 
   double hQ1 = (Qmax - Qmin) / lines->M1; // шаг функции по уровням
@@ -193,4 +192,14 @@ void SetImportingDllPath(char* _ImportingDllPath, int length)
   for (int i = 0; i < length; ++i)
     temp.push_back(*(_ImportingDllPath + i));
   ImportingDllPath = temp;
+}
+
+double CalculateTargetFunction(double x, double y)
+{
+  std::wstring stemp = std::wstring(ImportingDllPath.begin(),
+                                    ImportingDllPath.end());
+  LPCWSTR sw = stemp.c_str();
+  HINSTANCE hDll = LoadLibrary(sw);
+  import_func f = (import_func)GetProcAddress(hDll, "target_function");
+  return (*f)(x, y);
 }

@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using System.Drawing.Drawing2D;
-
-using System.IO;
+using System.Web.UI.DataVisualization.Charting;
 
 namespace Equal_level_lines_UI
 {
@@ -63,6 +56,9 @@ namespace Equal_level_lines_UI
     [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SetImportingDllPath(string DllPath, int length);
 
+    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    public static extern double CalculateTargetFunction(double x, double y);
+
     // ============ End of Equal_level_lines.dll import functions ===========
 
     public static int GridLinesThickness = 1, PicWidth, PicHeight, NumOfFuncs = 8;
@@ -70,10 +66,27 @@ namespace Equal_level_lines_UI
       EnableSignatures;
     HashSet<int> GridFuncIdxSet = new HashSet<int>();
     public static int NumOfGridRows = 0;
+    public static bool section_btn_clicked = false;
+    List<PointF> SectionBorders =
+      new List<PointF>();
+    List<Point3D> SectionPoints =
+      new List<Point3D>();
+    public static bool TaskLoaded = false;
 
-    public struct Point
+    public struct MyPoint
     {
       public double x, y, Q;
+    }
+
+    public struct MyPoint2D
+    {
+      public double x, y;
+
+      public MyPoint2D(double _x, double _y)
+      {
+        x = _x;
+        y = _y;
+      }
     }
 
     public struct DrawPoints
@@ -101,11 +114,18 @@ namespace Equal_level_lines_UI
       dataGridView1.Columns[9].HeaderCell.Value = "M1";
       dataGridView1.Columns[10].HeaderCell.Value = "M2";
       dataGridView1.Columns[11].HeaderCell.Value = "M3";
+
+      dataGridView2.ColumnCount = 3;
+      dataGridView2.Columns[0].HeaderCell.Value = "x1";
+      dataGridView2.Columns[1].HeaderCell.Value = "x2";
+      dataGridView2.Columns[2].HeaderCell.Value = "Q";
+
+      chart2.ChartAreas[0].AxisX.LabelStyle.Format = "{ 0.000 }";
     }
 
     public class eque_lines
     {
-      public Point[] pDat;
+      public MyPoint[] pDat;
       public double[] pQ;
       public int[] FillingArea;
       public int FuncIdx, Mode, Density;
@@ -129,7 +149,7 @@ namespace Equal_level_lines_UI
         M2 = (int)row.Cells[10].Value;
         M3 = (int)row.Cells[11].Value;
         M = M1 + M2 + M3 - 1;
-        pDat = new Point[(N + 1) * (N + 1)];
+        pDat = new MyPoint[(N + 1) * (N + 1)];
         pQ = new double[M + 1];
       }
     }
@@ -316,6 +336,61 @@ namespace Equal_level_lines_UI
           g.DrawLine(p, i * h, 0, i * h, pic.Height);
           g.DrawLine(p, 0, i * h, pic.Width, i * h);
         }
+      }
+
+      for (i = 0; i < SectionBorders.Count; i++)
+      {
+        Pen pen = new Pen(Color.Red, 5);
+        float area_width = float.Parse(tBox_Xmax.Text)
+          - float.Parse(tBox_Xmin.Text);
+        float area_height = float.Parse(tBox_Ymax.Text)
+          - float.Parse(tBox_Ymin.Text);
+        g.DrawEllipse(pen,
+                      SectionBorders[i].X / area_width * pictureBox1.Width +
+                      pictureBox1.Width / 2,
+                      //SectionBorders[i].Y / area_height * pictureBox1.Height +
+                      //pictureBox1.Height / 2,
+                      pictureBox1.Height / 2 - SectionBorders[i].Y / area_height * pictureBox1.Height,
+                      3, 3);
+      }
+      if (SectionBorders.Count == 2)
+      {
+        Pen pen = new Pen(Color.Red, 0);
+        float area_width = float.Parse(tBox_Xmax.Text)
+          - float.Parse(tBox_Xmin.Text);
+        float area_height = float.Parse(tBox_Ymax.Text)
+          - float.Parse(tBox_Ymin.Text);
+        g.DrawLine(pen, SectionBorders[0].X / area_width * pictureBox1.Width +
+                   pictureBox1.Width / 2,
+                   //SectionBorders[0].Y / area_height * pictureBox1.Height +
+                   //pictureBox1.Height / 2,
+                   pictureBox1.Height / 2 - SectionBorders[0].Y / area_height * pictureBox1.Height,
+                   SectionBorders[1].X / area_width * pictureBox1.Width +
+                   pictureBox1.Width / 2,
+                   //SectionBorders[1].Y / area_height * pictureBox1.Height +
+                   //pictureBox1.Height / 2);
+                   pictureBox1.Height / 2 - SectionBorders[1].Y / area_height * pictureBox1.Height);
+      }
+    }
+
+    public void DrawSectionChart()
+    {
+      chart2.Series.Clear();
+      if (SectionPoints.Count > 1)
+      {
+        chart2.Series.Add("Trajectory");
+        chart2.Series["Trajectory"].ChartType =
+          System.Windows.Forms.DataVisualization.Charting
+            .SeriesChartType.Spline;
+        double x1 = SectionPoints[0].X;
+        double x2 = SectionPoints[SectionPoints.Count - 1].X;
+        double y1 = SectionPoints[0].Y;
+        double y2 = SectionPoints[SectionPoints.Count - 1].Y;
+        double h = Math.Sqrt(Math.Pow((x2 - x1), 2) + Math.Pow((y2 - y1), 2))
+          / SectionPoints.Count;
+        for (int i = 0; i < SectionPoints.Count; i++)
+          chart2.Series["Trajectory"].Points
+            .AddXY(i * h, SectionPoints[i].Z);
       }
     }
 
@@ -564,6 +639,7 @@ namespace Equal_level_lines_UI
 
         label5.Text = "Loading status: loaded";
         label5.BackColor = Color.LightGreen;
+        TaskLoaded = true;
 
         IntPtr pAddressOfFunctionToCall1 =
           NativeMethods.GetProcAddress(pDll, "GetTaskArea");
@@ -621,6 +697,92 @@ namespace Equal_level_lines_UI
         bool result = NativeMethods.FreeLibrary(pDll);
       }
 
+      //double Xmin = -6;
+      //double Xmax = -0.1;
+      //double Ymin = 0;
+      //double Ymax = 3.05;
+
+      //int N = 100;
+      //int M1 = 80;
+      //int M2 = 40;
+      //int M3 = 20;
+
+      ////int Density = getDensity();
+
+      //tBox_Xmin.Text = Xmin.ToString();
+      //tBox_Xmax.Text = Xmax.ToString();
+      //tBox_Ymin.Text = Ymin.ToString();
+      //tBox_Ymax.Text = Ymax.ToString();
+
+      //tBox_N.Text = N.ToString();
+      //tBox_M1.Text = M1.ToString();
+      //tBox_M2.Text = M2.ToString();
+      //tBox_M3.Text = M3.ToString();
+
+      //dataGridView1.Rows.Add(0, 1, 0, Color.Black,
+      //Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
+
+    }
+
+    private void Section_btn_Click(object sender, EventArgs e)
+    {
+      section_btn_clicked = true;
+    }
+
+    private void Chart1_MouseClick(object sender, MouseEventArgs e)
+    {
+      if (TaskLoaded && section_btn_clicked)
+      {
+        if (SectionBorders.Count == 2)
+        {
+          SectionBorders.Clear();
+          SectionPoints.Clear();
+        }
+        PointF p_e = new PointF(e.X - pictureBox1.Width / 2,
+                                //e.Y + pictureBox1.Height / 2);
+                                pictureBox1.Height / 2 - e.Y);
+        float x_coord = p_e.X * (float.Parse(tBox_Xmax.Text)
+          - float.Parse(tBox_Xmin.Text)) / pictureBox1.Width;
+        float y_coord = p_e.Y * (float.Parse(tBox_Ymax.Text)
+          - float.Parse(tBox_Ymin.Text)) / pictureBox1.Height;
+        PointF p = new PointF(x_coord, y_coord);
+        SectionBorders.Add(p);
+        if (SectionBorders.Count == 2)
+        {
+          int PointCount = int.Parse(tBox_PointCount.Text);
+          double h_x =
+            (SectionBorders[1].X - SectionBorders[0].X) / PointCount;
+          double h_y =
+            (SectionBorders[1].Y - SectionBorders[0].Y) / PointCount;
+          double xmin = SectionBorders[0].X;
+          double ymin = SectionBorders[0].Y;
+          for (int i = 0; i < PointCount; i++)
+          {
+            double x = xmin + h_x * i;
+            double y = ymin + h_y * i;
+            double Q =
+              CalculateTargetFunction(x, y);
+            Point3D p3d = new Point3D((float)x, (float)y, (float)Q);
+            SectionPoints.Add(p3d);
+            dataGridView2.Rows.Add(Math.Round(x, 3),
+                                   Math.Round(y, 3),
+                                   Math.Round(Q, 3));
+          }
+          DrawSectionChart();
+        }
+      }
+    }
+
+    private void Button2_Click_1(object sender, EventArgs e)
+    {
+      SectionBorders.Clear();
+      SectionPoints.Clear();
+      chart2.Series.Clear();
+    }
+
+    private void Section_off_Click(object sender, EventArgs e)
+    {
+      section_btn_clicked = false;
     }
 
     private void CBox_LimitOn_CheckedChanged(object sender, EventArgs e)
@@ -674,9 +836,8 @@ namespace Equal_level_lines_UI
       Marshal.Copy(ptrSubLevelValues, Eque_lines[rowIdx].pQ, 0, M);
       Marshal.Copy(Data.Points, drawpoints, 0, Data.Count * 3);
 
-      ParseReceivedData(rowIdx, drawpoints, /*Eque_lines[funcIdx].pQ,*/
+      ParseReceivedData(rowIdx, drawpoints,
                         (N + 1) * (N + 1));
-      //DeleteData(ptrData);
 
       Marshal.FreeHGlobal(ptrData);
       Marshal.FreeCoTaskMem(ptrSubLevelValues);
@@ -706,9 +867,9 @@ namespace Equal_level_lines_UI
     {
       e.Graphics.SmoothingMode =
         System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-      //SendLines(e.Graphics, pictureBox1, int.Parse(tBox_NumOfGridLines.Text),
-      //          int.Parse(tBox_Density.Text));
+      Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
       SendLines(e.Graphics, pictureBox1, int.Parse(tBox_NumOfGridLines.Text), 4);
+      pictureBox1.Image = bmp;
     }
   }
 }
