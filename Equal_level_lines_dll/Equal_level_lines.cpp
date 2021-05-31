@@ -188,10 +188,8 @@ void CreateEmptyClass() {
 
 void SetImportingDllPath(char* _ImportingDllPath, int length)
 {
-  string temp;
   for (int i = 0; i < length; ++i)
-    temp.push_back(*(_ImportingDllPath + i));
-  ImportingDllPath = temp;
+    ImportingDllPath.push_back(*(_ImportingDllPath + i));
 }
 
 double CalculateTargetFunction(double x, double y)

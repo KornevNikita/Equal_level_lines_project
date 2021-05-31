@@ -12,54 +12,65 @@ namespace Equal_level_lines_UI
   {
     // ============== Equal_level_lines.dll import functions: ===============
 
-    const string dll = "Equal_level_lines_dll.dll";
+    const string dll1 = "Equal_level_lines_dll.dll";
+    const string dll2 = "UI_to_optimizer_adapter.dll";
 
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern void AllocMem(int _N, int _M1, int _M2, int _M3);
 
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SetArea(double _XMin, double _XMax, double _YMin,
                                       double _YMax);
 
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern void Calculate(int funcIdx, int Mode);
 
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern void CalculateFilling(int LimitIdx, int LimitFactor,
                                              int Width, int Height);
 
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void CalculateLimitZeroLine(int LimitIdx,
-                                                     int LimitFactor);
-
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int GetLimitZeroLineSize();
-
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern void GetData(IntPtr _ptrData, IntPtr _SubLevelValues);
 
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern void GetLimitValues(IntPtr _ptrLimitValues);
 
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void GetLimitZeroLine(IntPtr _ptrLimitValues);
-
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern void InitData(IntPtr _ptrData);
 
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void DeleteData(IntPtr _ptrData);
-
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern void CreateEmptyClass();
 
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SetImportingDllPath(string DllPath, int length);
 
-    [DllImport(dll, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern double CalculateTargetFunction(double x, double y);
 
     // ============ End of Equal_level_lines.dll import functions ===========
+
+    // ============== UI_to_optimizer_adapter.dll import functions: ===============
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SetImportingDllPath2(string _ImportingDllPath, int length);
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SetOptimizerArea(double _XMin, double _XMax, double _YMin, double _YMax);
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SetNumOptimizerIterations(int NumIters);
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void RunOptimizer();
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern double GetOptimizerSolutionCoords(int NumCoord);
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern double GetOptimizerSolution();
+
+    // ============ End of UI_to_optimizer_adapter.dll import functions ===========
+
 
     public static int GridLinesThickness = 1, PicWidth, PicHeight, NumOfFuncs = 8;
     public static bool AddGrid, AddXAxis, AddYAxis, CalcLimit, ExpensiveLimit,
@@ -72,6 +83,9 @@ namespace Equal_level_lines_UI
     List<Point3D> SectionPoints =
       new List<Point3D>();
     public static bool TaskLoaded = false;
+    public double Xmin, Xmax, Ymin, Ymax;
+    Point3D OptimizerSolution = new Point3D();
+    public bool CalculatedSolution = false;
 
     public struct MyPoint
     {
@@ -98,8 +112,8 @@ namespace Equal_level_lines_UI
     public Form1()
     {
       InitializeComponent();
-      LimitColor = colorDialog2.Color;
       GridColor = colorDialog1.Color;
+      LimitColor = Color.Red;
 
       dataGridView1.ColumnCount = 12;
       dataGridView1.Columns[0].HeaderCell.Value = "Func #";
@@ -115,10 +129,11 @@ namespace Equal_level_lines_UI
       dataGridView1.Columns[10].HeaderCell.Value = "M2";
       dataGridView1.Columns[11].HeaderCell.Value = "M3";
 
-      dataGridView2.ColumnCount = 3;
-      dataGridView2.Columns[0].HeaderCell.Value = "x1";
-      dataGridView2.Columns[1].HeaderCell.Value = "x2";
-      dataGridView2.Columns[2].HeaderCell.Value = "Q";
+      dataGridView2.ColumnCount = 4;
+      dataGridView2.Columns[0].HeaderCell.Value = "N";
+      dataGridView2.Columns[1].HeaderCell.Value = "x1";
+      dataGridView2.Columns[2].HeaderCell.Value = "x2";
+      dataGridView2.Columns[3].HeaderCell.Value = "Q";
 
       chart2.ChartAreas[0].AxisX.LabelStyle.Format = "{ 0.000 }";
     }
@@ -299,7 +314,7 @@ namespace Equal_level_lines_UI
             }
           }
 
-          if (Eque_lines[I].Mode == 2)
+          if (cBox_filling.Checked && Eque_lines[I].Mode == 2)
           {
             for (i = 0; i < pic.Width / LimitFactor; ++i)
               for (j = 0; j < pic.Height / LimitFactor; ++j)
@@ -348,8 +363,6 @@ namespace Equal_level_lines_UI
         g.DrawEllipse(pen,
                       SectionBorders[i].X / area_width * pictureBox1.Width +
                       pictureBox1.Width / 2,
-                      //SectionBorders[i].Y / area_height * pictureBox1.Height +
-                      //pictureBox1.Height / 2,
                       pictureBox1.Height / 2 - SectionBorders[i].Y / area_height * pictureBox1.Height,
                       3, 3);
       }
@@ -362,14 +375,23 @@ namespace Equal_level_lines_UI
           - float.Parse(tBox_Ymin.Text);
         g.DrawLine(pen, SectionBorders[0].X / area_width * pictureBox1.Width +
                    pictureBox1.Width / 2,
-                   //SectionBorders[0].Y / area_height * pictureBox1.Height +
-                   //pictureBox1.Height / 2,
                    pictureBox1.Height / 2 - SectionBorders[0].Y / area_height * pictureBox1.Height,
                    SectionBorders[1].X / area_width * pictureBox1.Width +
                    pictureBox1.Width / 2,
-                   //SectionBorders[1].Y / area_height * pictureBox1.Height +
-                   //pictureBox1.Height / 2);
                    pictureBox1.Height / 2 - SectionBorders[1].Y / area_height * pictureBox1.Height);
+      }
+
+      if (CalculatedSolution)
+      {
+        Pen pen = new Pen(Color.Cyan, 5);
+        float area_width = float.Parse(tBox_Xmax.Text)
+          - float.Parse(tBox_Xmin.Text);
+        float area_height = float.Parse(tBox_Ymax.Text)
+          - float.Parse(tBox_Ymin.Text);
+        float X = OptimizerSolution.X / area_width * pictureBox1.Width
+          + pictureBox1.Width / 2;
+        float Y = pictureBox1.Height / 2 - OptimizerSolution.Y / area_height * pictureBox1.Height;
+        g.DrawEllipse(pen, X, Y, 3, 3);
       }
     }
 
@@ -396,129 +418,6 @@ namespace Equal_level_lines_UI
 
     static eque_lines[] Eque_lines = new eque_lines[NumOfFuncs];
     public static Color LimitColor, GridColor;
-
-    private void Button3_Click(object sender, EventArgs e)
-    {
-      //pictureBox1.Width = int.Parse(tBox_PicWidth.Text);
-      //pictureBox1.Height = int.Parse(tBox_PicHeight.Text);
-      pictureBox1.Invalidate();
-    }
-
-    private void btn_SaveSettings_Click(object sender, EventArgs e)
-    {
-      //Properties.Settings.Default.FuncIdx = int.Parse(tBox_funcIdx.Text);
-      //Properties.Settings.Default.LimitIdx = int.Parse(tBox_LimitIdx.Text);
-      //Properties.Settings.Default.LimitFactor =
-        //int.Parse(tBox_Density.Text);
-
-      //Properties.Settings.Default.CalcLimitOn = cBox_CalcLimit.Checked;
-      Properties.Settings.Default.xmin = int.Parse(tBox_Xmin.Text);
-      Properties.Settings.Default.xmax = int.Parse(tBox_Xmax.Text);
-      Properties.Settings.Default.ymin = int.Parse(tBox_Ymin.Text);
-      Properties.Settings.Default.ymin = int.Parse(tBox_Ymax.Text);
-
-      Properties.Settings.Default.N = int.Parse(tBox_N.Text);
-      Properties.Settings.Default.M1 = int.Parse(tBox_M1.Text);
-      Properties.Settings.Default.M2 = int.Parse(tBox_M2.Text);
-      Properties.Settings.Default.M3 = int.Parse(tBox_M3.Text);
-
-      Properties.Settings.Default.AddGrid = cBox_AddGrid.Checked;
-      Properties.Settings.Default.AddXaxis = cBox_AddXaxis.Checked;
-      Properties.Settings.Default.AddYaxis = cBox_AddYaxis.Checked;
-      Properties.Settings.Default.NumOfGridLines =
-        int.Parse(tBox_NumOfGridLines.Text);
-      Properties.Settings.Default.GridLinesThickness =
-        int.Parse(tBox_GridLinesThickness.Text);
-
-      //Properties.Settings.Default.PicWidth = int.Parse(tBox_PicWidth.Text);
-      //Properties.Settings.Default.PicHeight = int.Parse(tBox_PicHeight.Text);
-      Properties.Settings.Default.Save();
-    }
-
-    private void Btn_AddFunc_Click(object sender, EventArgs e)
-    {
-      //int DrawingMode = rBtn_EqLvlLns.Checked ? 1 :
-      //  (rBtn_Filling.Checked ? 2 : 3);
-
-      //int FuncIdx = int.Parse(tBox_funcIdx.Text);
-      //Color color = colorDialog2.Color;
-      //int Density = int.Parse(tBox_Density.Text);
-
-      double XMin, XMax, YMin, YMax;
-      XMin = Double.Parse(tBox_Xmin.Text);
-      XMax = Double.Parse(tBox_Xmax.Text);
-      YMin = Double.Parse(tBox_Ymin.Text);
-      YMax = Double.Parse(tBox_Ymax.Text);
-
-      int N, M1, M2, M3;
-      N = int.Parse(tBox_N.Text);
-      M1 = int.Parse(tBox_M1.Text);
-      M2 = int.Parse(tBox_M2.Text);
-      M3 = int.Parse(tBox_M3.Text);
-
-      //dataGridView1.Rows.Add(FuncIdx, DrawingMode, Density, color,
-      //  XMin, XMax, YMin, YMax, N, M1, M2, M3);
-      NumOfGridRows++;
-      int GridFuncIdx = GridFuncIdxSet.Contains(NumOfGridRows - 1) ?
-        NumOfGridRows : NumOfGridRows - 1;
-      GridFuncIdxSet.Add(GridFuncIdx);
-      dataGridView1.Rows[NumOfGridRows - 1].HeaderCell.Value =
-        GridFuncIdx.ToString();
-    }
-
-    private void Btn_DeleteFunc_Click(object sender, EventArgs e)
-    {
-      if (tBox_DeletePos.Text != "")
-      {
-        int Idx = int.Parse(tBox_DeletePos.Text);
-        dataGridView1.Rows.RemoveAt(Idx);
-        GridFuncIdxSet.Remove(Idx);
-        NumOfGridRows--;
-      }
-    }
-
-    private void ClearFunc_Click(object sender, EventArgs e)
-    {
-      dataGridView1.Rows.Clear();
-      GridFuncIdxSet.Clear();
-      NumOfGridRows = 0;
-    }
-
-    private void btn_LoadSettings_Click(object sender, EventArgs e)
-    {
-      //tBox_funcIdx.Text = Properties.Settings.Default.FuncIdx.ToString();
-      //tBox_LimitIdx.Text = Properties.Settings.Default.LimitIdx.ToString();
-      //tBox_Density.Text =
-        //Properties.Settings.Default.LimitFactor.ToString();
-
-      //cBox_CalcLimit.Checked = Properties.Settings.Default.CalcLimitOn;
-      tBox_Xmin.Text = Properties.Settings.Default.xmin.ToString();
-      tBox_Xmax.Text = Properties.Settings.Default.xmax.ToString();
-      tBox_Ymin.Text = Properties.Settings.Default.ymin.ToString();
-      tBox_Ymax.Text = Properties.Settings.Default.ymin.ToString();
-
-      tBox_N.Text = Properties.Settings.Default.N.ToString();
-      tBox_M1.Text = Properties.Settings.Default.M1.ToString();
-      tBox_M2.Text = Properties.Settings.Default.M2.ToString();
-      tBox_M3.Text = Properties.Settings.Default.M3.ToString();
-
-      cBox_AddGrid.Checked = Properties.Settings.Default.AddGrid;
-      cBox_AddXaxis.Checked = Properties.Settings.Default.AddXaxis;
-      cBox_AddYaxis.Checked = Properties.Settings.Default.AddYaxis;
-      tBox_NumOfGridLines.Text =
-        Properties.Settings.Default.NumOfGridLines.ToString();
-      tBox_GridLinesThickness.Text =
-        Properties.Settings.Default.GridLinesThickness.ToString();
-
-      //tBox_PicWidth.Text = Properties.Settings.Default.PicWidth.ToString();
-      //tBox_PicHeight.Text = Properties.Settings.Default.PicHeight.ToString();
-    }
-
-    private void Button2_Click(object sender, EventArgs e)
-    {
-      colorDialog2.ShowDialog();
-      LimitColor = colorDialog2.Color;
-    }
 
     private void btn_Run_click(object sender, EventArgs e)
     {
@@ -566,6 +465,9 @@ namespace Equal_level_lines_UI
 
       label_Time.Text = "Time: " + stopwatch.Elapsed.TotalSeconds.ToString();
       label_Time.BackColor = Color.LightGreen;
+      btn_section.Enabled = true;
+      btn_section_cancel.Enabled = true;
+      btn_section_clear.Enabled = true;
     }
 
     private void CBox_AddXaxis_CheckedChanged(object sender, EventArgs e)
@@ -635,6 +537,8 @@ namespace Equal_level_lines_UI
 
       if (pDll != IntPtr.Zero)
       {
+        btn_Run.Enabled = true;
+        btn_run_optimizer.Enabled = true;
         SetImportingDllPath(DllPath, DllPath.Length);
 
         label5.Text = "Loading status: loaded";
@@ -663,10 +567,10 @@ namespace Equal_level_lines_UI
             pAddressOfFunctionToCall3,
             typeof(GetDensity));
 
-        double Xmin = getTaskArea(0);
-        double Xmax = getTaskArea(1);
-        double Ymin = getTaskArea(2);
-        double Ymax = getTaskArea(3);
+        Xmin = getTaskArea(0);
+        Xmax = getTaskArea(1);
+        Ymin = getTaskArea(2);
+        Ymax = getTaskArea(3);
 
         int N = getTaskLinesCalcParams(0);
         int M1 = getTaskLinesCalcParams(1);
@@ -764,7 +668,8 @@ namespace Equal_level_lines_UI
               CalculateTargetFunction(x, y);
             Point3D p3d = new Point3D((float)x, (float)y, (float)Q);
             SectionPoints.Add(p3d);
-            dataGridView2.Rows.Add(Math.Round(x, 3),
+            dataGridView2.Rows.Add(i,
+                                   Math.Round(x, 3),
                                    Math.Round(y, 3),
                                    Math.Round(Q, 3));
           }
@@ -778,6 +683,7 @@ namespace Equal_level_lines_UI
       SectionBorders.Clear();
       SectionPoints.Clear();
       chart2.Series.Clear();
+      dataGridView2.Rows.Clear();
     }
 
     private void Section_off_Click(object sender, EventArgs e)
@@ -785,11 +691,20 @@ namespace Equal_level_lines_UI
       section_btn_clicked = false;
     }
 
-    private void CBox_LimitOn_CheckedChanged(object sender, EventArgs e)
+    private void btn_run_optimizer_Click(object sender, EventArgs e)
     {
-      //ParseArea();
-      //CalcLimit = cBox_CalcLimit.Checked;
-      pictureBox1.Invalidate();
+      String DllPath = tBox_DllPath.Text.ToString();
+      SetImportingDllPath2(DllPath, DllPath.Length);
+      SetOptimizerArea(Xmin, Xmax, Ymin, Ymax);
+      SetNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
+      RunOptimizer();
+      OptimizerSolution.X = (float)GetOptimizerSolutionCoords(0);
+      OptimizerSolution.Y = (float)GetOptimizerSolutionCoords(1);
+      OptimizerSolution.Z = (float)GetOptimizerSolution();
+      tBox_OptSolX.Text = OptimizerSolution.X.ToString();
+      tBox_OptSolY.Text = OptimizerSolution.Y.ToString();
+      tBox_OptSolQ.Text = OptimizerSolution.Z.ToString();
+      CalculatedSolution = true;
     }
 
     private void CBox_AddYaxis_CheckedChanged(object sender, EventArgs e)
@@ -808,12 +723,6 @@ namespace Equal_level_lines_UI
     {
       AddGrid = cBox_AddGrid.Checked;
       pictureBox1.Invalidate();
-    }
-
-    private void btn_Clear_click(object sender, EventArgs e)
-    {
-      //Eque_lines.DeleteData();
-      pictureBox1.Image = null;
     }
 
     public static void GetDataFromDll(int funcIdx, int rowIdx, int N, int M)
