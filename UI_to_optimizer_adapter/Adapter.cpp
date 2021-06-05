@@ -60,8 +60,8 @@ int RunOptimizer() {
   double minPoint[2] = {};
   double* aPoint = minPoint;
 
-  if (MeasurementsNumber < 50)
-  {
+  //if (MeasurementsNumber < 100)
+  //{
     MeasurementsNumber = Direct::GetMeasurementsNumber();
     std::cout << "Iteration: " << Iteration
       << " Measurements number: " << MeasurementsNumber
@@ -100,15 +100,28 @@ int RunOptimizer() {
     MeasurementsNumber = Direct::GetMeasurementsNumber();
     std::cout << "Measurements number: " << MeasurementsNumber
       << std::endl;
-    return 1;
-  } else {
-    double p[2] = {};
+    if (MeasurementsNumber < 100)
+      return 1;
+    else {
+      double p[2] = {};
+      Direct::GetMinimumCoords(aPoint, aParameters->dimention);
+      SolutionCoords[0] = aPoint[0];
+      SolutionCoords[1] = aPoint[1];
+      Solution = Direct::GetCurrentSolution();
+      return 0;
+    }
+      
+  //} else {
+    /*double p[2] = {};
     Direct::GetMinimumCoords(aPoint, aParameters->dimention);
     SolutionCoords[0] = aPoint[0];
     SolutionCoords[1] = aPoint[1];
-    Solution = Direct::GetCurrentSolution();
+    Solution = Direct::GetCurrentSolution();*/
+    /*cout << "SolutionCoords[0] " << SolutionCoords[0] << endl
+      << "SolutionCoords[1] " << SolutionCoords[1] << endl
+      << "Solution " << Solution << endl;*/
     return 0;
-  }
+  //}
 }
 
 double GetOptimizerSolutionCoords(int NumCoord) {
@@ -134,8 +147,8 @@ void GetMeasurementsOnLastIteration(double* Measurements) {
   }
   copy(NewMeasurements.begin(), NewMeasurements.end(),
     Measurements);
-  cout << "Count = " << Count << endl;
-  for (int i = 0; i < Count; i++) {
+  cout << "Count = " << NewMeasurements.size() / 2 << endl;
+  for (int i = 0; i < NewMeasurements.size() / 2; i++) {
     cout << Measurements[i] << endl;
   }
 }

@@ -390,19 +390,6 @@ namespace Equal_level_lines_UI
                    pictureBox1.Height / 2 - SectionBorders[1].Y / area_height * pictureBox1.Height);
       }
 
-      if (CalculatedSolution)
-      {
-        Pen pen = new Pen(Color.Cyan, 5);
-        float area_width = float.Parse(tBox_Xmax.Text)
-          - float.Parse(tBox_Xmin.Text);
-        float area_height = float.Parse(tBox_Ymax.Text)
-          - float.Parse(tBox_Ymin.Text);
-        float X = OptimizerSolution.X / area_width * pictureBox1.Width
-          + pictureBox1.Width / 2;
-        float Y = pictureBox1.Height / 2 - OptimizerSolution.Y / area_height * pictureBox1.Height;
-        g.DrawEllipse(pen, X, Y, 3, 3);
-      }
-
       for (i = 0; i < OptimizerPoints.Count; i++)
       {
         Pen pen = new Pen(Color.Gray, 5);
@@ -414,6 +401,19 @@ namespace Equal_level_lines_UI
                       pictureBox1.Width / 2;
         float Y = pictureBox1.Height / 2 -
           OptimizerPoints[i].Y / area_height * pictureBox1.Height;
+        g.DrawEllipse(pen, X, Y, 3, 3);
+      }
+
+      if (CalculatedSolution)
+      {
+        Pen pen = new Pen(Color.Cyan, 5);
+        float area_width = float.Parse(tBox_Xmax.Text)
+          - float.Parse(tBox_Xmin.Text);
+        float area_height = float.Parse(tBox_Ymax.Text)
+          - float.Parse(tBox_Ymin.Text);
+        float X = OptimizerSolution.X / area_width * pictureBox1.Width
+          + pictureBox1.Width / 2;
+        float Y = pictureBox1.Height / 2 - OptimizerSolution.Y / area_height * pictureBox1.Height;
         g.DrawEllipse(pen, X, Y, 3, 3);
       }
     }
@@ -714,6 +714,23 @@ namespace Equal_level_lines_UI
       section_btn_clicked = false;
     }
 
+    private void GetMeasurements()
+    {
+      int NewMeasurementsCount = GetNewMeasurementsCountOnLastIteration();
+      IntPtr ptrNewMeasurements = Marshal.AllocCoTaskMem(
+        2 * NewMeasurementsCount * sizeof(double));
+      GetMeasurementsOnLastIteration(ptrNewMeasurements);
+      double[] TempArray = new double[NewMeasurementsCount * 2];
+      Marshal.Copy(ptrNewMeasurements, TempArray, 0, NewMeasurementsCount * 2);
+      Marshal.FreeCoTaskMem(ptrNewMeasurements);
+      for (int i = 0; i < NewMeasurementsCount; i++)
+      {
+        PointF p = new PointF((float)TempArray[i * 2],
+                              (float)TempArray[i * 2 + 1]);
+        OptimizerPoints.Add(p);
+      }
+    }
+
     private void btn_run_optimizer_Click(object sender, EventArgs e)
     {
       String DllPath = tBox_DllPath.Text.ToString();
@@ -722,23 +739,11 @@ namespace Equal_level_lines_UI
       SetNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
       SetOptimizerParameters();
       int OptimizerIsWorking = 1;
-      IntPtr ptrNewMeasurements;
+      GetMeasurements();
       while (OptimizerIsWorking == 1) {
         OptimizerIsWorking = RunOptimizer();
-        int NewMeasurementsConut = GetNewMeasurementsCountOnLastIteration();
-        ptrNewMeasurements = Marshal.AllocCoTaskMem(
-          2 * NewMeasurementsConut * sizeof(double));
-        GetMeasurementsOnLastIteration(ptrNewMeasurements);
-        double[] TempArray = new double[NewMeasurementsConut * 2];
-        Marshal.Copy(ptrNewMeasurements, TempArray, 0, NewMeasurementsConut * 2);
-        Marshal.FreeCoTaskMem(ptrNewMeasurements);
-        for (int i = 0; i < NewMeasurementsConut - 1; i++)
-        {
-          PointF p = new PointF((float)TempArray[i * 2],
-                                (float)TempArray[i * 2 + 1]);
-          OptimizerPoints.Add(p);
-        }
-      } 
+        GetMeasurements();
+      }
       OptimizerSolution.X = (float)GetOptimizerSolutionCoords(0);
       OptimizerSolution.Y = (float)GetOptimizerSolutionCoords(1);
       OptimizerSolution.Z = (float)GetOptimizerSolution();
