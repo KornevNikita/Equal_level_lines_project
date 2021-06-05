@@ -11,6 +11,9 @@ Parameters* aParameters;
 MyTargetFunction* aTargetFunction;
 MyConditionFunction* aConditionFunction;
 
+int MeasurementsNumber = 0;
+int Iteration = 0;
+
 void SetImportingDllPath2(char* _ImportingDllPath, int length) {
   for (int i = 0; i < length; ++i)
     ImportingDllPath2.push_back(*(_ImportingDllPath + i));
@@ -53,21 +56,19 @@ void SetOptimizerParameters() {
   Direct::SetDParameters(&*aParameters, Method::ExtDir_diag);
 }
 
-void RunOptimizer() {
+int RunOptimizer() {
   double minPoint[2] = {};
   double* aPoint = minPoint;
 
-  int MeasurementsNumber = 0;
-  int i = 0;
-  while (MeasurementsNumber < 50)
+  if (MeasurementsNumber < 50)
   {
     MeasurementsNumber = Direct::GetMeasurementsNumber();
-    std::cout << "Iteration: " << i
+    std::cout << "Iteration: " << Iteration
       << " Measurements number: " << MeasurementsNumber
       << std::endl;
-    if (i == 0)
+    if (Iteration == 0)
     {
-      std::cout << "-------Iteration: " << i
+      std::cout << "-------Iteration: " << Iteration
         << " New Measurements count: " << MeasurementsNumber
         << std::endl;
       for (int ii = 1; ii <= MeasurementsNumber; ++ii)
@@ -78,9 +79,9 @@ void RunOptimizer() {
       std::cout << "-------\n" << std::endl;
     }
     Direct::DoIteration();
-    ++i;
+    ++Iteration;
     int newMeasurementsCount = Direct::GetNewMeasurementsCountOnLastIterathion();
-    std::cout << "-------Iteration: " << i
+    std::cout << "-------Iteration: " << Iteration
       << " New Measurements count: " << newMeasurementsCount
       << std::endl;
     for (int ii = 1; ii <= newMeasurementsCount; ++ii)
@@ -99,12 +100,15 @@ void RunOptimizer() {
     MeasurementsNumber = Direct::GetMeasurementsNumber();
     std::cout << "Measurements number: " << MeasurementsNumber
       << std::endl;
+    return 1;
+  } else {
+    double p[2] = {};
+    Direct::GetMinimumCoords(aPoint, aParameters->dimention);
+    SolutionCoords[0] = aPoint[0];
+    SolutionCoords[1] = aPoint[1];
+    Solution = Direct::GetCurrentSolution();
+    return 0;
   }
-
-  SolutionCoords[0] = aPoint[0];
-  SolutionCoords[1] = aPoint[1];
-  Solution = Direct::GetCurrentSolution();
-  cout << "Solution: " << Solution << endl;
 }
 
 double GetOptimizerSolutionCoords(int NumCoord) {
@@ -113,4 +117,25 @@ double GetOptimizerSolutionCoords(int NumCoord) {
 
 double GetOptimizerSolution() {
   return Solution;
+}
+
+int GetNewMeasurementsCountOnLastIteration() {
+  return Direct::GetNewMeasurementsCountOnLastIterathion();
+}
+
+void GetMeasurementsOnLastIteration(double* Measurements) {
+  int Count = Direct::GetNewMeasurementsCountOnLastIterathion();
+  vector<double> NewMeasurements(Count * 2);
+  double *p = new double[2];
+  for (int i = 1; i <= Count; ++i) {
+    Direct::GetNewPointCoords(p, i, 0, 1);
+    NewMeasurements[i * 2 - 2] = p[0];
+    NewMeasurements[i * 2 - 1] = p[1];
+  }
+  copy(NewMeasurements.begin(), NewMeasurements.end(),
+    Measurements);
+  cout << "Count = " << Count << endl;
+  for (int i = 0; i < Count; i++) {
+    cout << Measurements[i] << endl;
+  }
 }

@@ -64,13 +64,20 @@ namespace Equal_level_lines_UI
     public static extern void SetOptimizerParameters();
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void RunOptimizer();
+    public static extern int RunOptimizer();
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
     public static extern double GetOptimizerSolutionCoords(int NumCoord);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
     public static extern double GetOptimizerSolution();
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int GetNewMeasurementsCountOnLastIteration();
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void GetMeasurementsOnLastIteration(IntPtr Measurements);
+
 
     // ============ End of UI_to_optimizer_adapter.dll import functions ===========
 
@@ -273,9 +280,9 @@ namespace Equal_level_lines_UI
                             Font drawFont = new Font("Arial", 9);
                             SolidBrush drawBrush = new SolidBrush(Color.Black);
                             String text = Math.Round(
-                              Qu, 3,MidpointRounding.AwayFromZero).ToString();
+                              Qu, 3, MidpointRounding.AwayFromZero).ToString();
                             g.DrawString(text, drawFont, drawBrush, X2, Y2);
-                              
+
                             LineSignatures.Add(u, true);
                           }
                         }
@@ -329,7 +336,7 @@ namespace Equal_level_lines_UI
               }
           }
         }
-        
+
       }
 
       if (AddXAxis)
@@ -393,6 +400,20 @@ namespace Equal_level_lines_UI
         float X = OptimizerSolution.X / area_width * pictureBox1.Width
           + pictureBox1.Width / 2;
         float Y = pictureBox1.Height / 2 - OptimizerSolution.Y / area_height * pictureBox1.Height;
+        g.DrawEllipse(pen, X, Y, 3, 3);
+      }
+
+      for (i = 0; i < OptimizerPoints.Count; i++)
+      {
+        Pen pen = new Pen(Color.Gray, 5);
+        float area_width = float.Parse(tBox_Xmax.Text)
+          - float.Parse(tBox_Xmin.Text);
+        float area_height = float.Parse(tBox_Ymax.Text)
+          - float.Parse(tBox_Ymin.Text);
+        float X = OptimizerPoints[i].X / area_width * pictureBox1.Width +
+                      pictureBox1.Width / 2;
+        float Y = pictureBox1.Height / 2 -
+          OptimizerPoints[i].Y / area_height * pictureBox1.Height;
         g.DrawEllipse(pen, X, Y, 3, 3);
       }
     }
@@ -700,14 +721,30 @@ namespace Equal_level_lines_UI
       SetOptimizerArea(Xmin, Xmax, Ymin, Ymax);
       SetNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
       SetOptimizerParameters();
-      RunOptimizer();
+      int OptimizerIsWorking = 1;
+      IntPtr ptrNewMeasurements;
+      while (OptimizerIsWorking == 1) {
+        OptimizerIsWorking = RunOptimizer();
+        int NewMeasurementsConut = GetNewMeasurementsCountOnLastIteration();
+        ptrNewMeasurements = Marshal.AllocCoTaskMem(
+          2 * NewMeasurementsConut * sizeof(double));
+        GetMeasurementsOnLastIteration(ptrNewMeasurements);
+        double[] TempArray = new double[NewMeasurementsConut * 2];
+        Marshal.Copy(ptrNewMeasurements, TempArray, 0, NewMeasurementsConut * 2);
+        Marshal.FreeCoTaskMem(ptrNewMeasurements);
+        for (int i = 0; i < NewMeasurementsConut - 1; i++)
+        {
+          PointF p = new PointF((float)TempArray[i * 2],
+                                (float)TempArray[i * 2 + 1]);
+          OptimizerPoints.Add(p);
+        }
+      } 
       OptimizerSolution.X = (float)GetOptimizerSolutionCoords(0);
       OptimizerSolution.Y = (float)GetOptimizerSolutionCoords(1);
       OptimizerSolution.Z = (float)GetOptimizerSolution();
       tBox_OptSolX.Text = Math.Round(OptimizerSolution.X, 5).ToString();
       tBox_OptSolY.Text = Math.Round(OptimizerSolution.Y, 5).ToString();
       tBox_OptSolQ.Text = Math.Round(OptimizerSolution.Z, 5).ToString();
-
       CalculatedSolution = true;
     }
 

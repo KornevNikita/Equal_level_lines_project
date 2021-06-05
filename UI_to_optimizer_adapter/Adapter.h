@@ -99,7 +99,13 @@ extern "C" __declspec(dllexport)
 void SetOptimizerParameters();
 
 extern "C" __declspec(dllexport)
-void RunOptimizer();
+int RunOptimizer();
+
+extern "C" __declspec(dllexport)
+int GetNewMeasurementsCountOnLastIteration();
+
+extern "C" __declspec(dllexport)
+void GetMeasurementsOnLastIteration(double* Measurements);
 
 extern "C" __declspec(dllexport)
 double GetOptimizerSolutionCoords(int NumCoord);
