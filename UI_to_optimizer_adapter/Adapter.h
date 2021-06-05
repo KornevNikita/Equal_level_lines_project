@@ -96,6 +96,9 @@ extern "C" __declspec(dllexport)
 void SetNumOptimizerIterations(int NumIters);
 
 extern "C" __declspec(dllexport)
+void SetOptimizerParameters();
+
+extern "C" __declspec(dllexport)
 void RunOptimizer();
 
 extern "C" __declspec(dllexport)

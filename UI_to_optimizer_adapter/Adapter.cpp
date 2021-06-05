@@ -7,6 +7,10 @@ int NumIterations = 0;
 double SolutionCoords[2];
 double Solution = 0;
 
+Parameters* aParameters;
+MyTargetFunction* aTargetFunction;
+MyConditionFunction* aConditionFunction;
+
 void SetImportingDllPath2(char* _ImportingDllPath, int length) {
   for (int i = 0; i < length; ++i)
     ImportingDllPath2.push_back(*(_ImportingDllPath + i));
@@ -23,31 +27,33 @@ void SetNumOptimizerIterations(int NumIters) {
   NumIterations = NumIters;
 }
 
-void RunOptimizer() {
-  Parameters aParameters;
-  MyTargetFunction aTargetFunction;
-  MyConditionFunction aConditionFunction;
-  aTargetFunction.SetArea(XMin, YMin, XMax, YMax);
-  aConditionFunction.SetArea(XMin, YMin, XMax, YMax);
-  aParameters.testFunction = &aTargetFunction;
-  aParameters.conditionFunction = &aConditionFunction;
-  aParameters.thresholdNumberIntervals = NumIterations;
-  aParameters.numberIterationsMutiple = 2;
-  aParameters.epsilon = 0.5;
-  aParameters.epsilon1 = 0.1;
-  aParameters.epsilon2 = 0.0001;
-  aParameters.delta = 0.0;
-  aParameters.delta1 = -0.1;
-  aParameters.delta2 = -0.1;
-  aParameters.gamma = 1.0;
-  aParameters.gamma1 = 0.5;
-  aParameters.gamma2 = 2.0;
-  aParameters.LocalItNum = -1;
-  aParameters.GlobalItNum = -1;
-  aParameters.dimention = 2;
-  aParameters.concurrencyIsAllowed = false;
-  Direct::SetDParameters(&aParameters, Method::ExtDir_diag);
+void SetOptimizerParameters() {
+  aParameters = new Parameters;
+  aTargetFunction = new MyTargetFunction;
+  aConditionFunction = new MyConditionFunction;
+  aTargetFunction->SetArea(XMin, YMin, XMax, YMax);
+  aConditionFunction->SetArea(XMin, YMin, XMax, YMax);
+  aParameters->testFunction = &*aTargetFunction;
+  aParameters->conditionFunction = &*aConditionFunction;
+  aParameters->thresholdNumberIntervals = NumIterations;
+  aParameters->numberIterationsMutiple = 2;
+  aParameters->epsilon = 0.5;
+  aParameters->epsilon1 = 0.1;
+  aParameters->epsilon2 = 0.0001;
+  aParameters->delta = 0.0;
+  aParameters->delta1 = -0.1;
+  aParameters->delta2 = -0.1;
+  aParameters->gamma = 1.0;
+  aParameters->gamma1 = 0.5;
+  aParameters->gamma2 = 2.0;
+  aParameters->LocalItNum = -1;
+  aParameters->GlobalItNum = -1;
+  aParameters->dimention = 2;
+  aParameters->concurrencyIsAllowed = false;
+  Direct::SetDParameters(&*aParameters, Method::ExtDir_diag);
+}
 
+void RunOptimizer() {
   double minPoint[2] = {};
   double* aPoint = minPoint;
 
@@ -83,7 +89,7 @@ void RunOptimizer() {
       std::cout << "Xnew: " << aPoint[0] << " Ynew: " << aPoint[1] << std::endl;
     }
     std::cout << "-------\n" << std::endl;
-    Direct::GetMinimumCoords(aPoint, aParameters.dimention);
+    Direct::GetMinimumCoords(aPoint, aParameters->dimention);
 
     std::cout << "Xmin: " << aPoint[0] << " Ymin: " << aPoint[1] << std::endl;
     std::cout << "Current solution: " << Direct::GetCurrentSolution()

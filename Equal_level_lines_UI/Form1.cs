@@ -61,6 +61,9 @@ namespace Equal_level_lines_UI
     public static extern void SetNumOptimizerIterations(int NumIters);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void SetOptimizerParameters();
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
     public static extern void RunOptimizer();
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
@@ -78,14 +81,13 @@ namespace Equal_level_lines_UI
     HashSet<int> GridFuncIdxSet = new HashSet<int>();
     public static int NumOfGridRows = 0;
     public static bool section_btn_clicked = false;
-    List<PointF> SectionBorders =
-      new List<PointF>();
-    List<Point3D> SectionPoints =
-      new List<Point3D>();
+    List<PointF> SectionBorders = new List<PointF>();
+    List<Point3D> SectionPoints = new List<Point3D>();
     public static bool TaskLoaded = false;
     public double Xmin, Xmax, Ymin, Ymax;
     Point3D OptimizerSolution = new Point3D();
     public bool CalculatedSolution = false;
+    List<PointF> OptimizerPoints = new List<PointF>();
 
     public struct MyPoint
     {
@@ -697,13 +699,15 @@ namespace Equal_level_lines_UI
       SetImportingDllPath2(DllPath, DllPath.Length);
       SetOptimizerArea(Xmin, Xmax, Ymin, Ymax);
       SetNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
+      SetOptimizerParameters();
       RunOptimizer();
       OptimizerSolution.X = (float)GetOptimizerSolutionCoords(0);
       OptimizerSolution.Y = (float)GetOptimizerSolutionCoords(1);
       OptimizerSolution.Z = (float)GetOptimizerSolution();
-      tBox_OptSolX.Text = OptimizerSolution.X.ToString();
-      tBox_OptSolY.Text = OptimizerSolution.Y.ToString();
-      tBox_OptSolQ.Text = OptimizerSolution.Z.ToString();
+      tBox_OptSolX.Text = Math.Round(OptimizerSolution.X, 5).ToString();
+      tBox_OptSolY.Text = Math.Round(OptimizerSolution.Y, 5).ToString();
+      tBox_OptSolQ.Text = Math.Round(OptimizerSolution.Z, 5).ToString();
+
       CalculatedSolution = true;
     }
 
