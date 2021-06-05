@@ -24,19 +24,15 @@ void SetNumOptimizerIterations(int NumIters) {
 }
 
 void RunOptimizer() {
-  //Создание объекта набора параметров: 
   Parameters aParameters;
-
-  ////Создание объектов целевой функции и функции ограничения:
   MyTargetFunction aTargetFunction;
   MyConditionFunction aConditionFunction;
   aTargetFunction.SetArea(XMin, YMin, XMax, YMax);
   aConditionFunction.SetArea(XMin, YMin, XMax, YMax);
-  ////Передача адресов функций параметрам метода:
   aParameters.testFunction = &aTargetFunction;
   aParameters.conditionFunction = &aConditionFunction;
   aParameters.thresholdNumberIntervals = NumIterations;
-  aParameters.numberIterationsMutiple = 2;//Параметр чередования стратегий
+  aParameters.numberIterationsMutiple = 2;
   aParameters.epsilon = 0.5;
   aParameters.epsilon1 = 0.1;
   aParameters.epsilon2 = 0.0001;
@@ -50,15 +46,11 @@ void RunOptimizer() {
   aParameters.GlobalItNum = -1;
   aParameters.dimention = 2;
   aParameters.concurrencyIsAllowed = false;
-  //Установка параметров и типа метода
-  // (Method::TDIR_minimum, Method::TDIR_average,  Method::ExtDir_diag):
   Direct::SetDParameters(&aParameters, Method::ExtDir_diag);
 
-  //Иницилизация точки глобального минимума:
   double minPoint[2] = {};
   double* aPoint = minPoint;
 
-  //Выполнение 100 итераций метода и получение данных для каждой итерации:
   int MeasurementsNumber = 0;
   int i = 0;
   while (MeasurementsNumber < 50)
