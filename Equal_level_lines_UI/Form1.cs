@@ -95,6 +95,8 @@ namespace Equal_level_lines_UI
     Point3D OptimizerSolution = new Point3D();
     public bool CalculatedSolution = false;
     List<PointF> OptimizerPoints = new List<PointF>();
+    public int NumPointsOnLastIteration = 0;
+    public int LastOptimizerStatus = 1;
 
     public struct MyPoint
     {
@@ -390,7 +392,8 @@ namespace Equal_level_lines_UI
                    pictureBox1.Height / 2 - SectionBorders[1].Y / area_height * pictureBox1.Height);
       }
 
-      for (i = 0; i < OptimizerPoints.Count; i++)
+      int k = OptimizerPoints.Count - NumPointsOnLastIteration;
+      for (i = 0; i < k; i++)
       {
         Pen pen = new Pen(Color.Gray, 5);
         float area_width = float.Parse(tBox_Xmax.Text)
@@ -403,8 +406,21 @@ namespace Equal_level_lines_UI
           OptimizerPoints[i].Y / area_height * pictureBox1.Height;
         g.DrawEllipse(pen, X, Y, 3, 3);
       }
+      for (i = k; i < OptimizerPoints.Count; i++)
+      {
+        Pen pen = new Pen(Color.Red, 5);
+        float area_width = float.Parse(tBox_Xmax.Text)
+          - float.Parse(tBox_Xmin.Text);
+        float area_height = float.Parse(tBox_Ymax.Text)
+          - float.Parse(tBox_Ymin.Text);
+        float X = OptimizerPoints[i].X / area_width * pictureBox1.Width +
+                      pictureBox1.Width / 2;
+        float Y = pictureBox1.Height / 2 -
+          OptimizerPoints[i].Y / area_height * pictureBox1.Height;
+        g.DrawEllipse(pen, X, Y, 3, 3);
+      }
 
-      if (CalculatedSolution)
+        if (CalculatedSolution)
       {
         Pen pen = new Pen(Color.Cyan, 5);
         float area_width = float.Parse(tBox_Xmax.Text)
@@ -561,7 +577,7 @@ namespace Equal_level_lines_UI
       if (pDll != IntPtr.Zero)
       {
         btn_Run.Enabled = true;
-        btn_run_optimizer.Enabled = true;
+        btn_set_optimizer.Enabled = true;
         SetImportingDllPath(DllPath, DllPath.Length);
 
         label5.Text = "Loading status: loaded";
@@ -717,6 +733,7 @@ namespace Equal_level_lines_UI
     private void GetMeasurements()
     {
       int NewMeasurementsCount = GetNewMeasurementsCountOnLastIteration();
+      NumPointsOnLastIteration = NewMeasurementsCount;
       IntPtr ptrNewMeasurements = Marshal.AllocCoTaskMem(
         2 * NewMeasurementsCount * sizeof(double));
       GetMeasurementsOnLastIteration(ptrNewMeasurements);
@@ -731,19 +748,20 @@ namespace Equal_level_lines_UI
       }
     }
 
-    private void btn_run_optimizer_Click(object sender, EventArgs e)
+    private void btn_set_optimizer_Click(object sender, EventArgs e)
     {
       String DllPath = tBox_DllPath.Text.ToString();
       SetImportingDllPath2(DllPath, DllPath.Length);
       SetOptimizerArea(Xmin, Xmax, Ymin, Ymax);
       SetNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
       SetOptimizerParameters();
-      int OptimizerIsWorking = 1;
       GetMeasurements();
-      while (OptimizerIsWorking == 1) {
-        OptimizerIsWorking = RunOptimizer();
-        GetMeasurements();
-      }
+      btn_DoOptIter.Enabled = true;
+      btn_FindOptSol.Enabled = true;
+    }
+
+    private void GetSolution()
+    {
       OptimizerSolution.X = (float)GetOptimizerSolutionCoords(0);
       OptimizerSolution.Y = (float)GetOptimizerSolutionCoords(1);
       OptimizerSolution.Z = (float)GetOptimizerSolution();
@@ -751,6 +769,28 @@ namespace Equal_level_lines_UI
       tBox_OptSolY.Text = Math.Round(OptimizerSolution.Y, 5).ToString();
       tBox_OptSolQ.Text = Math.Round(OptimizerSolution.Z, 5).ToString();
       CalculatedSolution = true;
+    }
+
+    private void btn_FindOptSol_Click(object sender, EventArgs e)
+    {
+      int OptimizerIsWorking = 1;
+      while (OptimizerIsWorking == 1)
+      {
+        OptimizerIsWorking = RunOptimizer();
+        GetMeasurements();
+      }
+      GetSolution();
+    }
+
+    private void Btn_DoOptIter_Click(object sender, EventArgs e)
+    {
+      if (LastOptimizerStatus == 1) {
+        LastOptimizerStatus = RunOptimizer();
+        GetMeasurements();
+        if (LastOptimizerStatus == 0)
+          btn_DoOptIter.Enabled = false;
+      }
+      GetSolution();
     }
 
     private void CBox_AddYaxis_CheckedChanged(object sender, EventArgs e)
