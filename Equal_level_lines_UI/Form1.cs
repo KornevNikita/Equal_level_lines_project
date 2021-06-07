@@ -366,16 +366,16 @@ namespace Equal_level_lines_UI
 
       for (i = 0; i < SectionBorders.Count; i++)
       {
-        Pen pen = new Pen(Color.Red, 5);
+        SolidBrush brush = new SolidBrush(Color.Red);
         float area_width = float.Parse(tBox_Xmax.Text)
           - float.Parse(tBox_Xmin.Text);
         float area_height = float.Parse(tBox_Ymax.Text)
           - float.Parse(tBox_Ymin.Text);
-        g.DrawEllipse(pen,
-                      SectionBorders[i].X / area_width * pictureBox1.Width +
-                      pictureBox1.Width / 2,
-                      pictureBox1.Height / 2 - SectionBorders[i].Y / area_height * pictureBox1.Height,
-                      3, 3);
+        float X = SectionBorders[i].X / area_width * pictureBox1.Width +
+                  pictureBox1.Width / 2;
+        float Y = pictureBox1.Height / 2 - SectionBorders[i].Y /
+                  area_height * pictureBox1.Height;
+        g.FillEllipse(brush, X, Y, 5, 5);
       }
       if (SectionBorders.Count == 2)
       {
@@ -384,18 +384,21 @@ namespace Equal_level_lines_UI
           - float.Parse(tBox_Xmin.Text);
         float area_height = float.Parse(tBox_Ymax.Text)
           - float.Parse(tBox_Ymin.Text);
-        g.DrawLine(pen, SectionBorders[0].X / area_width * pictureBox1.Width +
-                   pictureBox1.Width / 2,
-                   pictureBox1.Height / 2 - SectionBorders[0].Y / area_height * pictureBox1.Height,
-                   SectionBorders[1].X / area_width * pictureBox1.Width +
-                   pictureBox1.Width / 2,
-                   pictureBox1.Height / 2 - SectionBorders[1].Y / area_height * pictureBox1.Height);
+        float X1 = SectionBorders[0].X / area_width * pictureBox1.Width +
+                   pictureBox1.Width / 2;
+        float Y1 = pictureBox1.Height / 2 - SectionBorders[0].Y /
+                   area_height * pictureBox1.Height;
+        float X2 = SectionBorders[1].X / area_width * pictureBox1.Width +
+                   pictureBox1.Width / 2;
+        float Y2 = pictureBox1.Height / 2 - SectionBorders[1].Y /
+                   area_height * pictureBox1.Height;
+        g.DrawLine(pen, X1, Y1, X2, Y2);
       }
 
       int k = OptimizerPoints.Count - NumPointsOnLastIteration;
       for (i = 0; i < k; i++)
       {
-        Pen pen = new Pen(Color.Gray, 5);
+        SolidBrush brush = new SolidBrush(Color.Gray);
         float area_width = float.Parse(tBox_Xmax.Text)
           - float.Parse(tBox_Xmin.Text);
         float area_height = float.Parse(tBox_Ymax.Text)
@@ -404,11 +407,11 @@ namespace Equal_level_lines_UI
                       pictureBox1.Width / 2;
         float Y = pictureBox1.Height / 2 -
           OptimizerPoints[i].Y / area_height * pictureBox1.Height;
-        g.DrawEllipse(pen, X, Y, 3, 3);
+        g.FillEllipse(brush, X, Y, 5, 5);
       }
       for (i = k; i < OptimizerPoints.Count; i++)
       {
-        Pen pen = new Pen(Color.Red, 5);
+        SolidBrush brush = new SolidBrush(Color.Red);
         float area_width = float.Parse(tBox_Xmax.Text)
           - float.Parse(tBox_Xmin.Text);
         float area_height = float.Parse(tBox_Ymax.Text)
@@ -417,12 +420,12 @@ namespace Equal_level_lines_UI
                       pictureBox1.Width / 2;
         float Y = pictureBox1.Height / 2 -
           OptimizerPoints[i].Y / area_height * pictureBox1.Height;
-        g.DrawEllipse(pen, X, Y, 3, 3);
+        g.FillEllipse(brush, X, Y, 5, 5);
       }
 
         if (CalculatedSolution)
       {
-        Pen pen = new Pen(Color.Cyan, 5);
+        SolidBrush brush = new SolidBrush(Color.Cyan);
         float area_width = float.Parse(tBox_Xmax.Text)
           - float.Parse(tBox_Xmin.Text);
         float area_height = float.Parse(tBox_Ymax.Text)
@@ -430,7 +433,7 @@ namespace Equal_level_lines_UI
         float X = OptimizerSolution.X / area_width * pictureBox1.Width
           + pictureBox1.Width / 2;
         float Y = pictureBox1.Height / 2 - OptimizerSolution.Y / area_height * pictureBox1.Height;
-        g.DrawEllipse(pen, X, Y, 3, 3);
+        g.FillEllipse(brush, X, Y, 5, 5);
       }
     }
 
