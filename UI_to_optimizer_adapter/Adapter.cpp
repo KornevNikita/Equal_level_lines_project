@@ -3,7 +3,6 @@
 #include "Adapter.h"
 
 double XMin, XMax, YMin, YMax;
-int NumIterations = 0;
 double SolutionCoords[2];
 double Solution = 0;
 
@@ -13,6 +12,7 @@ MyConditionFunction* aConditionFunction;
 
 int MeasurementsNumber = 0;
 int Iteration = 0;
+int NumIterations = 0;
 
 void SetImportingDllPath2(char* _ImportingDllPath, int length) {
   for (int i = 0; i < length; ++i)
@@ -60,7 +60,7 @@ int RunOptimizer() {
   double minPoint[2] = {};
   double* aPoint = minPoint;
 
-  if (Iteration < 100)
+  if (Iteration < NumIterations)
   {
     MeasurementsNumber = Direct::GetMeasurementsNumber();
     if (Iteration == 0)
@@ -73,7 +73,7 @@ int RunOptimizer() {
       Direct::GetNewPointCoords(aPoint, ii, 0, 1);
     Direct::GetMinimumCoords(aPoint, aParameters->dimention);
     MeasurementsNumber = Direct::GetMeasurementsNumber();
-    if (Iteration < 100)
+    if (Iteration < NumIterations)
       return 1;
     else {
       double p[2] = {};
