@@ -86,6 +86,20 @@ int RunOptimizer() {
   }
 }
 
+void DoIterations(int NumOfIterations) {
+  for (int i = 0; i < NumOfIterations; ++i, ++Iteration)
+    Direct::DoIteration();
+  double* p = new double[2];
+  Direct::GetMinimumCoords(p, aParameters->dimention);
+  SolutionCoords[0] = p[0];
+  SolutionCoords[1] = p[1];
+  Solution = Direct::GetCurrentSolution();
+}
+
+int GetCurrentNumberOfIterations() {
+  return Iteration;
+}
+
 double GetOptimizerSolutionCoords(int NumCoord) {
   return SolutionCoords[NumCoord];
 }

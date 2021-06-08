@@ -78,6 +78,11 @@ namespace Equal_level_lines_UI
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
     public static extern void GetMeasurementsOnLastIteration(IntPtr Measurements);
 
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void DoIterations(int NumOfIterations);
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int GetCurrentNumberOfIterations();
 
     // ============ End of UI_to_optimizer_adapter.dll import functions ===========
 
@@ -97,6 +102,7 @@ namespace Equal_level_lines_UI
     List<PointF> OptimizerPoints = new List<PointF>();
     public int NumPointsOnLastIteration = 0;
     public int LastOptimizerStatus = 1;
+    public int TotalMeasurementesNumber = 0;
 
     public struct MyPoint
     {
@@ -736,6 +742,9 @@ namespace Equal_level_lines_UI
     private void GetMeasurements()
     {
       int NewMeasurementsCount = GetNewMeasurementsCountOnLastIteration();
+      TotalMeasurementesNumber += NewMeasurementsCount;
+      tBox_NumOfMeasurements.Text = TotalMeasurementesNumber.ToString();
+      tBox_CurrentNumOfIters.Text = GetCurrentNumberOfIterations().ToString();
       NumPointsOnLastIteration = NewMeasurementsCount;
       IntPtr ptrNewMeasurements = Marshal.AllocCoTaskMem(
         2 * NewMeasurementsCount * sizeof(double));
@@ -787,13 +796,7 @@ namespace Equal_level_lines_UI
 
     private void Btn_DoOptIter_Click(object sender, EventArgs e)
     {
-      //if (LastOptimizerStatus == 1) {
-      //  LastOptimizerStatus = RunOptimizer();
-      //  GetMeasurements();
-      //  if (LastOptimizerStatus == 0)
-      //    btn_DoOptIter.Enabled = false;
-      //}
-      RunOptimizer();
+      DoIterations(int.Parse(tBox_NumItersPerClick.Text));
       GetMeasurements();
       GetSolution();
     }

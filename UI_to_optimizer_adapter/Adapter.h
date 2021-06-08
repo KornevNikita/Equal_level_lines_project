@@ -102,7 +102,13 @@ extern "C" __declspec(dllexport)
 int RunOptimizer();
 
 extern "C" __declspec(dllexport)
+void DoIterations(int NumOfIterations);
+
+extern "C" __declspec(dllexport)
 int GetNewMeasurementsCountOnLastIteration();
+
+extern "C" __declspec(dllexport)
+int GetCurrentNumberOfIterations();
 
 extern "C" __declspec(dllexport)
 void GetMeasurementsOnLastIteration(double* Measurements);
