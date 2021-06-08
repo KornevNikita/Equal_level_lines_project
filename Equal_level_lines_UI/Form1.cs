@@ -787,12 +787,14 @@ namespace Equal_level_lines_UI
 
     private void Btn_DoOptIter_Click(object sender, EventArgs e)
     {
-      if (LastOptimizerStatus == 1) {
-        LastOptimizerStatus = RunOptimizer();
-        GetMeasurements();
-        if (LastOptimizerStatus == 0)
-          btn_DoOptIter.Enabled = false;
-      }
+      //if (LastOptimizerStatus == 1) {
+      //  LastOptimizerStatus = RunOptimizer();
+      //  GetMeasurements();
+      //  if (LastOptimizerStatus == 0)
+      //    btn_DoOptIter.Enabled = false;
+      //}
+      RunOptimizer();
+      GetMeasurements();
       GetSolution();
     }
 

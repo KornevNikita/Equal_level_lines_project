@@ -48,7 +48,6 @@
       this.tBox_OptSolQ = new System.Windows.Forms.TextBox();
       this.tBox_OptSolX = new System.Windows.Forms.TextBox();
       this.tBox_OptSolY = new System.Windows.Forms.TextBox();
-      this.label1 = new System.Windows.Forms.Label();
       this.tBox_OptNumIters = new System.Windows.Forms.TextBox();
       this.btn_set_optimizer = new System.Windows.Forms.Button();
       this.label5 = new System.Windows.Forms.Label();
@@ -91,6 +90,11 @@
       this.tBox_PointCount = new System.Windows.Forms.TextBox();
       this.dataGridView2 = new System.Windows.Forms.DataGridView();
       this.groupBox5 = new System.Windows.Forms.GroupBox();
+      this.tBox_NumItersPerClick = new System.Windows.Forms.TextBox();
+      this.tBox_NumOfMeasurements = new System.Windows.Forms.TextBox();
+      this.label1 = new System.Windows.Forms.Label();
+      this.label11 = new System.Windows.Forms.Label();
+      this.tBox_CurrentNumOfIters = new System.Windows.Forms.TextBox();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       this.groupBox6.SuspendLayout();
@@ -139,6 +143,11 @@
       // 
       // groupBox6
       // 
+      this.groupBox6.Controls.Add(this.tBox_CurrentNumOfIters);
+      this.groupBox6.Controls.Add(this.label11);
+      this.groupBox6.Controls.Add(this.label1);
+      this.groupBox6.Controls.Add(this.tBox_NumOfMeasurements);
+      this.groupBox6.Controls.Add(this.tBox_NumItersPerClick);
       this.groupBox6.Controls.Add(this.btn_FindOptSol);
       this.groupBox6.Controls.Add(this.btn_DoOptIter);
       this.groupBox6.Controls.Add(this.label10);
@@ -147,13 +156,12 @@
       this.groupBox6.Controls.Add(this.tBox_OptSolQ);
       this.groupBox6.Controls.Add(this.tBox_OptSolX);
       this.groupBox6.Controls.Add(this.tBox_OptSolY);
-      this.groupBox6.Controls.Add(this.label1);
       this.groupBox6.Controls.Add(this.tBox_OptNumIters);
       this.groupBox6.Controls.Add(this.btn_set_optimizer);
       this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
       this.groupBox6.Location = new System.Drawing.Point(8, 476);
       this.groupBox6.Name = "groupBox6";
-      this.groupBox6.Size = new System.Drawing.Size(324, 157);
+      this.groupBox6.Size = new System.Drawing.Size(324, 184);
       this.groupBox6.TabIndex = 37;
       this.groupBox6.TabStop = false;
       this.groupBox6.Text = "Optimizer";
@@ -161,7 +169,7 @@
       // btn_FindOptSol
       // 
       this.btn_FindOptSol.Enabled = false;
-      this.btn_FindOptSol.Location = new System.Drawing.Point(126, 86);
+      this.btn_FindOptSol.Location = new System.Drawing.Point(131, 54);
       this.btn_FindOptSol.Name = "btn_FindOptSol";
       this.btn_FindOptSol.Size = new System.Drawing.Size(118, 23);
       this.btn_FindOptSol.TabIndex = 48;
@@ -172,18 +180,18 @@
       // btn_DoOptIter
       // 
       this.btn_DoOptIter.Enabled = false;
-      this.btn_DoOptIter.Location = new System.Drawing.Point(126, 115);
+      this.btn_DoOptIter.Location = new System.Drawing.Point(131, 83);
       this.btn_DoOptIter.Name = "btn_DoOptIter";
       this.btn_DoOptIter.Size = new System.Drawing.Size(118, 23);
       this.btn_DoOptIter.TabIndex = 47;
-      this.btn_DoOptIter.Text = "Do iteration";
+      this.btn_DoOptIter.Text = "Do iteration(s)";
       this.btn_DoOptIter.UseVisualStyleBackColor = true;
       this.btn_DoOptIter.Click += new System.EventHandler(this.Btn_DoOptIter_Click);
       // 
       // label10
       // 
       this.label10.AutoSize = true;
-      this.label10.Location = new System.Drawing.Point(4, 117);
+      this.label10.Location = new System.Drawing.Point(9, 85);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(24, 18);
       this.label10.TabIndex = 46;
@@ -192,7 +200,7 @@
       // label9
       // 
       this.label9.AutoSize = true;
-      this.label9.Location = new System.Drawing.Point(4, 87);
+      this.label9.Location = new System.Drawing.Point(9, 55);
       this.label9.Name = "label9";
       this.label9.Size = new System.Drawing.Size(30, 18);
       this.label9.TabIndex = 45;
@@ -201,7 +209,7 @@
       // label8
       // 
       this.label8.AutoSize = true;
-      this.label8.Location = new System.Drawing.Point(4, 57);
+      this.label8.Location = new System.Drawing.Point(9, 25);
       this.label8.Name = "label8";
       this.label8.Size = new System.Drawing.Size(30, 18);
       this.label8.TabIndex = 44;
@@ -209,7 +217,7 @@
       // 
       // tBox_OptSolQ
       // 
-      this.tBox_OptSolQ.Location = new System.Drawing.Point(40, 114);
+      this.tBox_OptSolQ.Location = new System.Drawing.Point(45, 82);
       this.tBox_OptSolQ.Name = "tBox_OptSolQ";
       this.tBox_OptSolQ.ReadOnly = true;
       this.tBox_OptSolQ.Size = new System.Drawing.Size(75, 24);
@@ -218,7 +226,7 @@
       // 
       // tBox_OptSolX
       // 
-      this.tBox_OptSolX.Location = new System.Drawing.Point(40, 54);
+      this.tBox_OptSolX.Location = new System.Drawing.Point(45, 22);
       this.tBox_OptSolX.Name = "tBox_OptSolX";
       this.tBox_OptSolX.ReadOnly = true;
       this.tBox_OptSolX.Size = new System.Drawing.Size(75, 24);
@@ -227,26 +235,16 @@
       // 
       // tBox_OptSolY
       // 
-      this.tBox_OptSolY.Location = new System.Drawing.Point(40, 84);
+      this.tBox_OptSolY.Location = new System.Drawing.Point(45, 52);
       this.tBox_OptSolY.Name = "tBox_OptSolY";
       this.tBox_OptSolY.ReadOnly = true;
       this.tBox_OptSolY.Size = new System.Drawing.Size(75, 24);
       this.tBox_OptSolY.TabIndex = 41;
       this.tBox_OptSolY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
-      // label1
-      // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(-1, 26);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(121, 18);
-      this.label1.TabIndex = 40;
-      this.label1.Text = "Num of iterations";
-      this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-      // 
       // tBox_OptNumIters
       // 
-      this.tBox_OptNumIters.Location = new System.Drawing.Point(126, 23);
+      this.tBox_OptNumIters.Location = new System.Drawing.Point(255, 53);
       this.tBox_OptNumIters.Name = "tBox_OptNumIters";
       this.tBox_OptNumIters.Size = new System.Drawing.Size(50, 24);
       this.tBox_OptNumIters.TabIndex = 39;
@@ -256,7 +254,7 @@
       // btn_set_optimizer
       // 
       this.btn_set_optimizer.Enabled = false;
-      this.btn_set_optimizer.Location = new System.Drawing.Point(126, 55);
+      this.btn_set_optimizer.Location = new System.Drawing.Point(131, 23);
       this.btn_set_optimizer.Name = "btn_set_optimizer";
       this.btn_set_optimizer.Size = new System.Drawing.Size(118, 23);
       this.btn_set_optimizer.TabIndex = 38;
@@ -734,6 +732,53 @@
       this.groupBox5.TabStop = false;
       this.groupBox5.Text = "Section";
       // 
+      // tBox_NumItersPerClick
+      // 
+      this.tBox_NumItersPerClick.Location = new System.Drawing.Point(255, 82);
+      this.tBox_NumItersPerClick.Name = "tBox_NumItersPerClick";
+      this.tBox_NumItersPerClick.Size = new System.Drawing.Size(50, 24);
+      this.tBox_NumItersPerClick.TabIndex = 49;
+      this.tBox_NumItersPerClick.Text = "1";
+      this.tBox_NumItersPerClick.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // tBox_NumOfMeasurements
+      // 
+      this.tBox_NumOfMeasurements.Location = new System.Drawing.Point(124, 112);
+      this.tBox_NumOfMeasurements.Name = "tBox_NumOfMeasurements";
+      this.tBox_NumOfMeasurements.ReadOnly = true;
+      this.tBox_NumOfMeasurements.Size = new System.Drawing.Size(50, 24);
+      this.tBox_NumOfMeasurements.TabIndex = 50;
+      this.tBox_NumOfMeasurements.Text = "0";
+      this.tBox_NumOfMeasurements.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(7, 115);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(107, 18);
+      this.label1.TabIndex = 51;
+      this.label1.Text = "Measurements";
+      // 
+      // label11
+      // 
+      this.label11.AutoSize = true;
+      this.label11.Location = new System.Drawing.Point(9, 145);
+      this.label11.Name = "label11";
+      this.label11.Size = new System.Drawing.Size(72, 18);
+      this.label11.TabIndex = 52;
+      this.label11.Text = "Iteration #";
+      // 
+      // tBox_CurrentNumOfIters
+      // 
+      this.tBox_CurrentNumOfIters.Location = new System.Drawing.Point(124, 142);
+      this.tBox_CurrentNumOfIters.Name = "tBox_CurrentNumOfIters";
+      this.tBox_CurrentNumOfIters.ReadOnly = true;
+      this.tBox_CurrentNumOfIters.Size = new System.Drawing.Size(50, 24);
+      this.tBox_CurrentNumOfIters.TabIndex = 37;
+      this.tBox_CurrentNumOfIters.Text = "0";
+      this.tBox_CurrentNumOfIters.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -819,10 +864,14 @@
     private System.Windows.Forms.TextBox tBox_OptSolQ;
     private System.Windows.Forms.TextBox tBox_OptSolX;
     private System.Windows.Forms.TextBox tBox_OptSolY;
-    private System.Windows.Forms.Label label1;
     private System.Windows.Forms.CheckBox cBox_filling;
     private System.Windows.Forms.Button btn_FindOptSol;
     private System.Windows.Forms.Button btn_DoOptIter;
+    private System.Windows.Forms.TextBox tBox_NumOfMeasurements;
+    private System.Windows.Forms.TextBox tBox_NumItersPerClick;
+    private System.Windows.Forms.TextBox tBox_CurrentNumOfIters;
+    private System.Windows.Forms.Label label11;
+    private System.Windows.Forms.Label label1;
   }
 }
 
