@@ -52,15 +52,11 @@ int GetDensity() {
 }
 
 double Temp::target_func(double x, double y) {
-  //return (x * x - cos(18 * x * x)) + (y * y - cos(18 * y * y));
-  return ((4 - 2.1 * x * x + pow(x, 4) / 3) * x * x +
-    x * y + (4 * y * y - 4) * y * y);
+  return (x * x - cos(18 * x * x)) + (y * y - cos(18 * y * y));
 }
 
 double Temp::limit_func(double x, double y) {
-  ////return x * x + y * y - 1;
-  //double g1 = x - 0.75;
-  //double g2 = 2 * y - 1;
-  //return max(g1, g2);
-  return x * x + y * y - 1;
+  double g1 = x - 0.75;
+  double g2 = 2 * y - 1;
+  return max(g1, g2);
 }

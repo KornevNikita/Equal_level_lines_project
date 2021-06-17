@@ -19,7 +19,7 @@ public:
   static double target_func(double x, double y);
   static double limit_func(double x, double y);
 
-  static constexpr double Xmin = -1, Xmax = 1, Ymin = -1, Ymax = 1; // Task's area parameters
+  static constexpr double Xmin = -2.5, Xmax = 1.5, Ymin = -1.5, Ymax = 2.5; // Task's area parameters
   static constexpr int N = 100, M1 = 10, M2 = 5, M3 = 3; // Lines's calculation parameters
   static constexpr int Density = 4; // Density of filling
 };

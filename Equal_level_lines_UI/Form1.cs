@@ -99,7 +99,7 @@ namespace Equal_level_lines_UI
     public double Xmin, Xmax, Ymin, Ymax;
     Point3D OptimizerSolution = new Point3D();
     public bool CalculatedSolution = false;
-    List<PointF> OptimizerPoints = new List<PointF>();
+    public List<PointF> OptimizerPoints = new List<PointF>();
     public int NumPointsOnLastIteration = 0;
     public int LastOptimizerStatus = 1;
     public int TotalMeasurementesNumber = 0;
@@ -194,7 +194,8 @@ namespace Equal_level_lines_UI
       {
         if (Eque_lines[I] != null)
         {
-          if (Eque_lines[I].Mode == 1 || Eque_lines[I].Mode == 3)
+          if (Eque_lines[I].Mode == 1 || Eque_lines[I].Mode == 3 && cBox_DrawLimit.Checked)
+            //if (Eque_lines[I].Mode == 1)
           {
             int N = Eque_lines[I].N;
             double XMin = Eque_lines[I].XMin;
@@ -331,14 +332,14 @@ namespace Equal_level_lines_UI
             }
           }
 
-          if (cBox_filling.Checked && Eque_lines[I].Mode == 2)
+          if (Eque_lines[I].Mode == 2 && cBox_filling.Checked)
           {
             for (i = 0; i < pic.Width / LimitFactor; ++i)
               for (j = 0; j < pic.Height / LimitFactor; ++j)
               {
                 if (Eque_lines[I].FillingArea[i * pic.Width / LimitFactor + j] == 0)
                 {
-                  Pen pen = new Pen(LimitColor, 0);
+                  Pen pen = new Pen(Color.LightBlue, 0);
                   g.DrawRectangle(pen, i * LimitFactor, j * LimitFactor, 1, 1);
                 }
               }
@@ -377,11 +378,13 @@ namespace Equal_level_lines_UI
           - float.Parse(tBox_Xmin.Text);
         float area_height = float.Parse(tBox_Ymax.Text)
           - float.Parse(tBox_Ymin.Text);
-        float X = SectionBorders[i].X / area_width * pictureBox1.Width +
-                  pictureBox1.Width / 2;
-        float Y = pictureBox1.Height / 2 - SectionBorders[i].Y /
-                  area_height * pictureBox1.Height;
-        g.FillEllipse(brush, X, Y, 5, 5);
+        //float X = SectionBorders[i].X / area_width * pictureBox1.Width +
+        //          pictureBox1.Width / 2;
+        //float Y = pictureBox1.Height / 2 - SectionBorders[i].Y /
+        //          area_height * pictureBox1.Height;
+        float X = Math.Abs((float)Xmin - SectionBorders[i].X) / area_width * pictureBox1.Width;
+        float Y = pictureBox1.Height - SectionBorders[i].Y / area_height * pictureBox1.Height;
+        g.FillEllipse(brush, X - 3, Y - 3, 6, 6);
       }
       if (SectionBorders.Count == 2)
       {
@@ -390,29 +393,45 @@ namespace Equal_level_lines_UI
           - float.Parse(tBox_Xmin.Text);
         float area_height = float.Parse(tBox_Ymax.Text)
           - float.Parse(tBox_Ymin.Text);
-        float X1 = SectionBorders[0].X / area_width * pictureBox1.Width +
-                   pictureBox1.Width / 2;
-        float Y1 = pictureBox1.Height / 2 - SectionBorders[0].Y /
-                   area_height * pictureBox1.Height;
-        float X2 = SectionBorders[1].X / area_width * pictureBox1.Width +
-                   pictureBox1.Width / 2;
-        float Y2 = pictureBox1.Height / 2 - SectionBorders[1].Y /
-                   area_height * pictureBox1.Height;
+        //float X1 = SectionBorders[0].X / area_width * pictureBox1.Width +
+        //           pictureBox1.Width / 2;
+        //float Y1 = pictureBox1.Height / 2 - SectionBorders[0].Y /
+        //           area_height * pictureBox1.Height;
+        //float X2 = SectionBorders[1].X / area_width * pictureBox1.Width +
+        //           pictureBox1.Width / 2;
+        //float Y2 = pictureBox1.Height / 2 - SectionBorders[1].Y /
+        //           area_height * pictureBox1.Height;
+        float X1 = Math.Abs((float)Xmin - SectionBorders[0].X) / area_width * pictureBox1.Width;
+        float Y1 = pictureBox1.Height - SectionBorders[0].Y / area_height * pictureBox1.Height;
+        float X2 = Math.Abs((float)Xmin - SectionBorders[1].X) / area_width * pictureBox1.Width;
+        float Y2 = pictureBox1.Height - SectionBorders[1].Y / area_height * pictureBox1.Height;
         g.DrawLine(pen, X1, Y1, X2, Y2);
       }
 
       int k = OptimizerPoints.Count - NumPointsOnLastIteration;
       for (i = 0; i < k; i++)
       {
+        //Console.WriteLine($"X = {OptimizerPoints[i].X}, Y = {OptimizerPoints[i].Y}");
         SolidBrush brush = new SolidBrush(Color.Gray);
         float area_width = float.Parse(tBox_Xmax.Text)
           - float.Parse(tBox_Xmin.Text);
         float area_height = float.Parse(tBox_Ymax.Text)
           - float.Parse(tBox_Ymin.Text);
-        float X = OptimizerPoints[i].X / area_width * pictureBox1.Width +
+        //Console.WriteLine($"area_width = {area_width}, area_height = {area_height}");
+        float X, Y;
+        if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
+        {
+          X = (OptimizerPoints[i].X - (float)Xmin) / area_width * pictureBox1.Width;
+          Y = pictureBox1.Height - (OptimizerPoints[i].Y / area_height) * pictureBox1.Height;
+        }
+        else
+        {
+          X = OptimizerPoints[i].X / area_width * pictureBox1.Width +
                       pictureBox1.Width / 2;
-        float Y = pictureBox1.Height / 2 -
-          OptimizerPoints[i].Y / area_height * pictureBox1.Height;
+          Y = pictureBox1.Height / 2 -
+            OptimizerPoints[i].Y / area_height * pictureBox1.Height;
+        }
+        //Console.WriteLine($"X = {X}, Y = {Y}");
         g.FillEllipse(brush, X, Y, 5, 5);
       }
       for (i = k; i < OptimizerPoints.Count; i++)
@@ -422,10 +441,19 @@ namespace Equal_level_lines_UI
           - float.Parse(tBox_Xmin.Text);
         float area_height = float.Parse(tBox_Ymax.Text)
           - float.Parse(tBox_Ymin.Text);
-        float X = OptimizerPoints[i].X / area_width * pictureBox1.Width +
+        float X, Y;
+        if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
+        {
+          X = (OptimizerPoints[i].X - (float)Xmin) / area_width * pictureBox1.Width;
+          Y = pictureBox1.Height - (OptimizerPoints[i].Y / area_height) * pictureBox1.Height;
+        }
+        else
+        {
+          X = OptimizerPoints[i].X / area_width * pictureBox1.Width +
                       pictureBox1.Width / 2;
-        float Y = pictureBox1.Height / 2 -
-          OptimizerPoints[i].Y / area_height * pictureBox1.Height;
+          Y = pictureBox1.Height / 2 -
+            OptimizerPoints[i].Y / area_height * pictureBox1.Height;
+        }
         g.FillEllipse(brush, X, Y, 5, 5);
       }
 
@@ -436,9 +464,19 @@ namespace Equal_level_lines_UI
           - float.Parse(tBox_Xmin.Text);
         float area_height = float.Parse(tBox_Ymax.Text)
           - float.Parse(tBox_Ymin.Text);
-        float X = OptimizerSolution.X / area_width * pictureBox1.Width
-          + pictureBox1.Width / 2;
-        float Y = pictureBox1.Height / 2 - OptimizerSolution.Y / area_height * pictureBox1.Height;
+        float X, Y;
+        if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
+        {
+          X = (OptimizerSolution.X - (float)Xmin) / area_width * pictureBox1.Width;
+          Y = pictureBox1.Height - (OptimizerSolution.Y / area_height) * pictureBox1.Height;
+        }
+        else
+        {
+          X = OptimizerSolution.X / area_width * pictureBox1.Width +
+                      pictureBox1.Width / 2;
+          Y = pictureBox1.Height / 2 -
+            OptimizerSolution.Y / area_height * pictureBox1.Height;
+        }
         g.FillEllipse(brush, X, Y, 5, 5);
       }
     }
@@ -465,7 +503,7 @@ namespace Equal_level_lines_UI
     }
 
     static eque_lines[] Eque_lines = new eque_lines[NumOfFuncs];
-    public static Color LimitColor, GridColor;
+    public static Color LimitColor = Color.Red, GridColor;
 
     private void btn_Run_click(object sender, EventArgs e)
     {
@@ -506,6 +544,9 @@ namespace Equal_level_lines_UI
           CalculateFilling(Eque_lines[i].FuncIdx, Eque_lines[i].Density,
             pictureBox1.Width, pictureBox1.Height);
           GetLimitData(i);
+
+          //for (int k = 0; k < Eque_lines[i].FillingArea.Length; k++)
+          //  Console.WriteLine($"FillingArea[{k}] = {Eque_lines[i].FillingArea[k]}");
         }
       }
 
@@ -646,7 +687,7 @@ namespace Equal_level_lines_UI
         dataGridView1.Rows.Add(0, 3, 0, Color.Red,
         Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
 
-        bool result = NativeMethods.FreeLibrary(pDll);
+        //bool result = NativeMethods.FreeLibrary(pDll);
       }
 
       //double Xmin = -6;
@@ -689,14 +730,34 @@ namespace Equal_level_lines_UI
         {
           SectionBorders.Clear();
           SectionPoints.Clear();
+          dataGridView2.Rows.Clear();
         }
-        PointF p_e = new PointF(e.X - pictureBox1.Width / 2,
-                                //e.Y + pictureBox1.Height / 2);
-                                pictureBox1.Height / 2 - e.Y);
-        float x_coord = p_e.X * (float.Parse(tBox_Xmax.Text)
-          - float.Parse(tBox_Xmin.Text)) / pictureBox1.Width;
-        float y_coord = p_e.Y * (float.Parse(tBox_Ymax.Text)
-          - float.Parse(tBox_Ymin.Text)) / pictureBox1.Height;
+
+        float x_coord;
+        float y_coord;
+        if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
+        {
+          x_coord = (float)Xmin + (float)(Xmax - Xmin) / pictureBox1.Width * e.X;
+          y_coord = (float)Ymax - (float)(Ymax - Ymin) / pictureBox1.Height * e.Y;
+        }
+        else
+        {
+          //PointF p_e = new PointF(e.X - pictureBox1.Width / 2,
+          //                        e.Y + pictureBox1.Height / 2);
+          //x_coord = p_e.X * (float.Parse(tBox_Xmax.Text)
+          //  - float.Parse(tBox_Xmin.Text)) / pictureBox1.Width;
+          //y_coord = p_e.Y * (float.Parse(tBox_Ymax.Text)
+          //  - float.Parse(tBox_Ymin.Text)) / pictureBox1.Height;
+          //Console.WriteLine($"p_e = {x_coord}, {y_coord}");
+          PointF p_e = new PointF(e.X - pictureBox1.Width / 2,
+                        //e.Y + pictureBox1.Height / 2);
+                        pictureBox1.Height / 2 - e.Y);
+          x_coord = p_e.X * (float.Parse(tBox_Xmax.Text)
+            - float.Parse(tBox_Xmin.Text)) / pictureBox1.Width;
+          y_coord = p_e.Y * (float.Parse(tBox_Ymax.Text)
+            - float.Parse(tBox_Ymin.Text)) / pictureBox1.Height;
+        }
+        
         PointF p = new PointF(x_coord, y_coord);
         SectionBorders.Add(p);
         if (SectionBorders.Count == 2)
@@ -712,13 +773,10 @@ namespace Equal_level_lines_UI
           {
             double x = xmin + h_x * i;
             double y = ymin + h_y * i;
-            double Q =
-              CalculateTargetFunction(x, y);
+            double Q = CalculateTargetFunction(x, y);
             Point3D p3d = new Point3D((float)x, (float)y, (float)Q);
             SectionPoints.Add(p3d);
-            dataGridView2.Rows.Add(i,
-                                   Math.Round(x, 3),
-                                   Math.Round(y, 3),
+            dataGridView2.Rows.Add(i,Math.Round(x, 3),Math.Round(y, 3),
                                    Math.Round(Q, 3));
           }
           DrawSectionChart();
@@ -737,6 +795,11 @@ namespace Equal_level_lines_UI
     private void Section_off_Click(object sender, EventArgs e)
     {
       section_btn_clicked = false;
+    }
+
+    private void CBox_filling_CheckedChanged(object sender, EventArgs e)
+    {
+
     }
 
     private void GetMeasurements()
@@ -767,7 +830,7 @@ namespace Equal_level_lines_UI
       SetOptimizerArea(Xmin, Xmax, Ymin, Ymax);
       SetNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
       SetOptimizerParameters();
-      GetMeasurements();
+      //GetMeasurements();
       btn_DoOptIter.Enabled = true;
       btn_FindOptSol.Enabled = true;
     }

@@ -11,6 +11,8 @@
 #include <Windows.h>
 #include <string>
 
+#include <iostream>
+
 using namespace std;
 
 typedef double (*import_func)(double, double);
@@ -34,8 +36,8 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
 }
 
 void Calculate(int FuncIdx, int Mode) {
-  ofstream fout("IncludingDll.txt");
-
+  //ofstream fout("IncludingDll.txt");
+  //cout << "CALCULATE" << endl;
   double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ = 0;
   double hx = lines->area.Width / lines->N; // вычисление шага по x
   double hy = lines->area.Height / lines->N; // вычисление шага по y
@@ -45,7 +47,7 @@ void Calculate(int FuncIdx, int Mode) {
   LPCWSTR sw = stemp.c_str();
   HINSTANCE hDll = LoadLibrary(sw);
   if (hDll != NULL) {
-    fout << "Library loaded" << endl;
+    //fout << "Library loaded" << endl;
   }
   import_func f;
   switch (Mode) {
@@ -59,7 +61,7 @@ void Calculate(int FuncIdx, int Mode) {
     f = nullptr;
   }
 
-  ifstream file("eq-lvl-log.txt");
+  //ifstream file("eq-lvl-log.txt");
 
   // обход сетки
   for (int i = 0; i <= lines->N; i++)
@@ -71,7 +73,10 @@ void Calculate(int FuncIdx, int Mode) {
       double y = lines->Data[Idx].y = lines->area.YMin + hy * j;
       // значение функции в узле
       
+      //cout << "Calculate b1" << endl;
       QQ = lines->Data[Idx].Q = (*f)(x, y);
+      //cout << "{ X = " << x << ", Y = " << y << ", Q = " << QQ << " } " << endl;
+      //cout << "Calculate b2" << endl;
 
       // поиск минимального и максимального значения на сетке
       if ((i == 0) && (j == 0) || (QQ < Qmin))
@@ -111,7 +116,7 @@ void CalculateFilling(int LimitIdx, int LimitFactor, int Width, int Height) {
   HINSTANCE hDll = LoadLibrary(sw);
   import_filling_func f =
     (import_filling_func)GetProcAddress(hDll, "filling_function");
-
+  cout << "calculating filling" << endl;
   for (int i = 0; i < Width / LimitFactor; ++i)
   {
     for (int j = 0; j < Height / LimitFactor; ++j)
@@ -120,7 +125,6 @@ void CalculateFilling(int LimitIdx, int LimitFactor, int Width, int Height) {
         (double)(i) / (double)Width * (lines->area.Width) * LimitFactor;
       double y = lines->area.YMax -
         (double)j / (double)Height * lines->area.Height * LimitFactor;
-      /*LimitValues[Count++] = Limit(x, y, LimitIdx);*/
       LimitValues[Count++] = (*f)(x, y);
     }
   }

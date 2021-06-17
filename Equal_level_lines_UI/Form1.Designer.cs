@@ -40,6 +40,11 @@
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.groupBox6 = new System.Windows.Forms.GroupBox();
+      this.tBox_CurrentNumOfIters = new System.Windows.Forms.TextBox();
+      this.label11 = new System.Windows.Forms.Label();
+      this.label1 = new System.Windows.Forms.Label();
+      this.tBox_NumOfMeasurements = new System.Windows.Forms.TextBox();
+      this.tBox_NumItersPerClick = new System.Windows.Forms.TextBox();
       this.btn_FindOptSol = new System.Windows.Forms.Button();
       this.btn_DoOptIter = new System.Windows.Forms.Button();
       this.label10 = new System.Windows.Forms.Label();
@@ -90,11 +95,7 @@
       this.tBox_PointCount = new System.Windows.Forms.TextBox();
       this.dataGridView2 = new System.Windows.Forms.DataGridView();
       this.groupBox5 = new System.Windows.Forms.GroupBox();
-      this.tBox_NumItersPerClick = new System.Windows.Forms.TextBox();
-      this.tBox_NumOfMeasurements = new System.Windows.Forms.TextBox();
-      this.label1 = new System.Windows.Forms.Label();
-      this.label11 = new System.Windows.Forms.Label();
-      this.tBox_CurrentNumOfIters = new System.Windows.Forms.TextBox();
+      this.cBox_DrawLimit = new System.Windows.Forms.CheckBox();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       this.groupBox6.SuspendLayout();
@@ -165,6 +166,53 @@
       this.groupBox6.TabIndex = 37;
       this.groupBox6.TabStop = false;
       this.groupBox6.Text = "Optimizer";
+      // 
+      // tBox_CurrentNumOfIters
+      // 
+      this.tBox_CurrentNumOfIters.Location = new System.Drawing.Point(124, 142);
+      this.tBox_CurrentNumOfIters.Name = "tBox_CurrentNumOfIters";
+      this.tBox_CurrentNumOfIters.ReadOnly = true;
+      this.tBox_CurrentNumOfIters.Size = new System.Drawing.Size(50, 24);
+      this.tBox_CurrentNumOfIters.TabIndex = 37;
+      this.tBox_CurrentNumOfIters.Text = "0";
+      this.tBox_CurrentNumOfIters.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // label11
+      // 
+      this.label11.AutoSize = true;
+      this.label11.Location = new System.Drawing.Point(9, 145);
+      this.label11.Name = "label11";
+      this.label11.Size = new System.Drawing.Size(72, 18);
+      this.label11.TabIndex = 52;
+      this.label11.Text = "Iteration #";
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(7, 115);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(107, 18);
+      this.label1.TabIndex = 51;
+      this.label1.Text = "Measurements";
+      // 
+      // tBox_NumOfMeasurements
+      // 
+      this.tBox_NumOfMeasurements.Location = new System.Drawing.Point(124, 112);
+      this.tBox_NumOfMeasurements.Name = "tBox_NumOfMeasurements";
+      this.tBox_NumOfMeasurements.ReadOnly = true;
+      this.tBox_NumOfMeasurements.Size = new System.Drawing.Size(50, 24);
+      this.tBox_NumOfMeasurements.TabIndex = 50;
+      this.tBox_NumOfMeasurements.Text = "0";
+      this.tBox_NumOfMeasurements.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // tBox_NumItersPerClick
+      // 
+      this.tBox_NumItersPerClick.Location = new System.Drawing.Point(255, 82);
+      this.tBox_NumItersPerClick.Name = "tBox_NumItersPerClick";
+      this.tBox_NumItersPerClick.Size = new System.Drawing.Size(50, 24);
+      this.tBox_NumItersPerClick.TabIndex = 49;
+      this.tBox_NumItersPerClick.Text = "1";
+      this.tBox_NumItersPerClick.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // btn_FindOptSol
       // 
@@ -300,7 +348,7 @@
       this.tBox_DllPath.Name = "tBox_DllPath";
       this.tBox_DllPath.Size = new System.Drawing.Size(310, 24);
       this.tBox_DllPath.TabIndex = 2;
-      this.tBox_DllPath.Text = "Dll1";
+      this.tBox_DllPath.Text = "CraneOptimizationTask";
       // 
       // dataGridView1
       // 
@@ -342,6 +390,7 @@
       // groupBox4
       // 
       this.groupBox4.BackColor = System.Drawing.SystemColors.InactiveCaption;
+      this.groupBox4.Controls.Add(this.cBox_DrawLimit);
       this.groupBox4.Controls.Add(this.cBox_filling);
       this.groupBox4.Controls.Add(this.cBox_EnableSignatures);
       this.groupBox4.Controls.Add(this.label14);
@@ -368,6 +417,7 @@
       this.cBox_filling.TabIndex = 36;
       this.cBox_filling.Text = "Filling";
       this.cBox_filling.UseVisualStyleBackColor = true;
+      this.cBox_filling.CheckedChanged += new System.EventHandler(this.CBox_filling_CheckedChanged);
       // 
       // cBox_EnableSignatures
       // 
@@ -732,52 +782,15 @@
       this.groupBox5.TabStop = false;
       this.groupBox5.Text = "Section";
       // 
-      // tBox_NumItersPerClick
+      // cBox_DrawLimit
       // 
-      this.tBox_NumItersPerClick.Location = new System.Drawing.Point(255, 82);
-      this.tBox_NumItersPerClick.Name = "tBox_NumItersPerClick";
-      this.tBox_NumItersPerClick.Size = new System.Drawing.Size(50, 24);
-      this.tBox_NumItersPerClick.TabIndex = 49;
-      this.tBox_NumItersPerClick.Text = "1";
-      this.tBox_NumItersPerClick.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
-      // tBox_NumOfMeasurements
-      // 
-      this.tBox_NumOfMeasurements.Location = new System.Drawing.Point(124, 112);
-      this.tBox_NumOfMeasurements.Name = "tBox_NumOfMeasurements";
-      this.tBox_NumOfMeasurements.ReadOnly = true;
-      this.tBox_NumOfMeasurements.Size = new System.Drawing.Size(50, 24);
-      this.tBox_NumOfMeasurements.TabIndex = 50;
-      this.tBox_NumOfMeasurements.Text = "0";
-      this.tBox_NumOfMeasurements.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
-      // label1
-      // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(7, 115);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(107, 18);
-      this.label1.TabIndex = 51;
-      this.label1.Text = "Measurements";
-      // 
-      // label11
-      // 
-      this.label11.AutoSize = true;
-      this.label11.Location = new System.Drawing.Point(9, 145);
-      this.label11.Name = "label11";
-      this.label11.Size = new System.Drawing.Size(72, 18);
-      this.label11.TabIndex = 52;
-      this.label11.Text = "Iteration #";
-      // 
-      // tBox_CurrentNumOfIters
-      // 
-      this.tBox_CurrentNumOfIters.Location = new System.Drawing.Point(124, 142);
-      this.tBox_CurrentNumOfIters.Name = "tBox_CurrentNumOfIters";
-      this.tBox_CurrentNumOfIters.ReadOnly = true;
-      this.tBox_CurrentNumOfIters.Size = new System.Drawing.Size(50, 24);
-      this.tBox_CurrentNumOfIters.TabIndex = 37;
-      this.tBox_CurrentNumOfIters.Text = "0";
-      this.tBox_CurrentNumOfIters.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      this.cBox_DrawLimit.AutoSize = true;
+      this.cBox_DrawLimit.Location = new System.Drawing.Point(120, 109);
+      this.cBox_DrawLimit.Name = "cBox_DrawLimit";
+      this.cBox_DrawLimit.Size = new System.Drawing.Size(58, 22);
+      this.cBox_DrawLimit.TabIndex = 37;
+      this.cBox_DrawLimit.Text = "Limit";
+      this.cBox_DrawLimit.UseVisualStyleBackColor = true;
       // 
       // Form1
       // 
@@ -872,6 +885,7 @@
     private System.Windows.Forms.TextBox tBox_CurrentNumOfIters;
     private System.Windows.Forms.Label label11;
     private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.CheckBox cBox_DrawLimit;
   }
 }
 

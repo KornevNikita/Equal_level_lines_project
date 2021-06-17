@@ -53,7 +53,7 @@ void SetOptimizerParameters() {
   aParameters->GlobalItNum = -1;
   aParameters->dimention = 2;
   aParameters->concurrencyIsAllowed = false;
-  Direct::SetDParameters(&*aParameters, Method::ExtDir_diag);
+  Direct::SetDParameters(&*aParameters, Method::TDIR_minimum);
 }
 
 int RunOptimizer() {
@@ -62,16 +62,12 @@ int RunOptimizer() {
 
   if (Iteration < NumIterations)
   {
-    MeasurementsNumber = Direct::GetMeasurementsNumber();
+    /*MeasurementsNumber = Direct::GetMeasurementsNumber();
     if (Iteration == 0)
       for (int ii = 1; ii <= MeasurementsNumber; ++ii)
-        Direct::GetNewPointCoords(aPoint, ii, 0, 1);
+        Direct::GetNewPointCoords(aPoint, ii, 0, 1);*/
     Direct::DoIteration();
     ++Iteration;
-    int newMeasurementsCount = Direct::GetNewMeasurementsCountOnLastIterathion();
-    for (int ii = 1; ii <= newMeasurementsCount; ++ii)
-      Direct::GetNewPointCoords(aPoint, ii, 0, 1);
-    Direct::GetMinimumCoords(aPoint, aParameters->dimention);
     MeasurementsNumber = Direct::GetMeasurementsNumber();
     if (Iteration < NumIterations)
       return 1;

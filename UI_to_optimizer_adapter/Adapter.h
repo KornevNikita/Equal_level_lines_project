@@ -31,7 +31,6 @@ void ParseImportFunction(import_func& IFunc, FunctionType FT) {
   case limit_function:
     IFunc = (import_func)GetProcAddress(hDll, "limit_function");
   }
-
 }
 
 class MyTargetFunction : public TestFunction
@@ -86,35 +85,57 @@ public:
   }
 };
 
+// Служебный метод для установки пути к DLL с задачей оптимизации, из которой
+// будут импортированы целевая функция и функции-ограничения
 extern "C" __declspec(dllexport)
 void SetImportingDllPath2(char* _ImportingDllPath, int length);
 
+// Метод для установки границ области, в которой будет производиться расчет
+// импортируемых математических функций
 extern "C" __declspec(dllexport)
 void SetOptimizerArea(double _XMin, double _XMax, double _YMin, double _YMax);
 
+
+// Метод для установки числа итераций методов оптимизации, после которого
+// выполнение алгоритма будет остановлено
 extern "C" __declspec(dllexport)
 void SetNumOptimizerIterations(int NumIters);
 
+// Метод для установки параметров оптимизатора: (вычисляемые математические
+// функции), параметры работы метода, тип метода
 extern "C" __declspec(dllexport)
 void SetOptimizerParameters();
 
+// Один из главных методов библиотеки, прендназначен для запуска выполнения
+// расчетов оптимизатора, число итераций фиксируется в качестве параметра и не
+// может быть изменено
 extern "C" __declspec(dllexport)
 int RunOptimizer();
 
+// Аналогичный приведённому выше методу алгоритм, отличающийся тем, что
+// выполняет изменяемое число (NumOfIterations) итераций (нужен для того,
+// чтобы в процессе работы метода можно было отследить порядок построения
+// множества точек измерения
 extern "C" __declspec(dllexport)
 void DoIterations(int NumOfIterations);
 
+// Метод для получения числа измерений, выполненных на последней итерации
 extern "C" __declspec(dllexport)
 int GetNewMeasurementsCountOnLastIteration();
 
+// Метод для получения текущего числа проведенных итераций
 extern "C" __declspec(dllexport)
 int GetCurrentNumberOfIterations();
 
+// Метод для получения графической оболочкой значений измерений на последней
+// итерации
 extern "C" __declspec(dllexport)
 void GetMeasurementsOnLastIteration(double* Measurements);
 
+// Метод для получения координат решения, найденного оптимизатором
 extern "C" __declspec(dllexport)
 double GetOptimizerSolutionCoords(int NumCoord);
 
+// Метод для получения решения, найденного оптимизатором
 extern "C" __declspec(dllexport)
 double GetOptimizerSolution();
