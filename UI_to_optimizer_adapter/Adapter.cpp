@@ -62,10 +62,6 @@ int RunOptimizer() {
 
   if (Iteration < NumIterations)
   {
-    /*MeasurementsNumber = Direct::GetMeasurementsNumber();
-    if (Iteration == 0)
-      for (int ii = 1; ii <= MeasurementsNumber; ++ii)
-        Direct::GetNewPointCoords(aPoint, ii, 0, 1);*/
     Direct::DoIteration();
     ++Iteration;
     MeasurementsNumber = Direct::GetMeasurementsNumber();

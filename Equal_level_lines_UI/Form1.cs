@@ -130,7 +130,7 @@ namespace Equal_level_lines_UI
     {
       InitializeComponent();
       GridColor = colorDialog1.Color;
-      LimitColor = Color.Red;
+      LimitColor = Color.LightGreen;
 
       dataGridView1.ColumnCount = 12;
       dataGridView1.Columns[0].HeaderCell.Value = "Func #";
@@ -412,7 +412,7 @@ namespace Equal_level_lines_UI
       for (i = 0; i < k; i++)
       {
         //Console.WriteLine($"X = {OptimizerPoints[i].X}, Y = {OptimizerPoints[i].Y}");
-        SolidBrush brush = new SolidBrush(Color.Gray);
+        SolidBrush brush = new SolidBrush(Color.Red);
         float area_width = float.Parse(tBox_Xmax.Text)
           - float.Parse(tBox_Xmin.Text);
         float area_height = float.Parse(tBox_Ymax.Text)
@@ -503,7 +503,7 @@ namespace Equal_level_lines_UI
     }
 
     static eque_lines[] Eque_lines = new eque_lines[NumOfFuncs];
-    public static Color LimitColor = Color.Red, GridColor;
+    public static Color LimitColor = Color.LightGreen, GridColor;
 
     private void btn_Run_click(object sender, EventArgs e)
     {
@@ -681,10 +681,10 @@ namespace Equal_level_lines_UI
         dataGridView1.Rows.Add(0, 1, 0, Color.Black,
         Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
 
-        dataGridView1.Rows.Add(0, 2, Density, Color.Red,
+        dataGridView1.Rows.Add(0, 2, Density, Color.LightGreen,
         Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
 
-        dataGridView1.Rows.Add(0, 3, 0, Color.Red,
+        dataGridView1.Rows.Add(0, 3, 0, Color.GreenYellow,
         Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
 
         //bool result = NativeMethods.FreeLibrary(pDll);

@@ -36,8 +36,6 @@ void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
 }
 
 void Calculate(int FuncIdx, int Mode) {
-  //ofstream fout("IncludingDll.txt");
-  //cout << "CALCULATE" << endl;
   double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ = 0;
   double hx = lines->area.Width / lines->N; // вычисление шага по x
   double hy = lines->area.Height / lines->N; // вычисление шага по y
@@ -73,10 +71,7 @@ void Calculate(int FuncIdx, int Mode) {
       double y = lines->Data[Idx].y = lines->area.YMin + hy * j;
       // значение функции в узле
       
-      //cout << "Calculate b1" << endl;
       QQ = lines->Data[Idx].Q = (*f)(x, y);
-      //cout << "{ X = " << x << ", Y = " << y << ", Q = " << QQ << " } " << endl;
-      //cout << "Calculate b2" << endl;
 
       // поиск минимального и максимального значения на сетке
       if ((i == 0) && (j == 0) || (QQ < Qmin))
