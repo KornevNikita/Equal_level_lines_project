@@ -1,202 +1,191 @@
 #include "pch.h"
+#define _USE_MATH_DEFINES
+
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <limits>
+#include <string>
+
+#include <math.h>
+#include <Windows.h>
 
 #include "Equal_level_lines.h"
 
-#define _USE_MATH_DEFINES
-
-#include <limits>
-#include <fstream>
-#include <math.h>
-#include <iomanip>
-#include <Windows.h>
-#include <string>
-
-#include <iostream>
-
 using namespace std;
 
-typedef double (*import_func)(double, double);
-typedef bool (*import_filling_func)(double, double);
+typedef double (*Import_func)(double, double);
+typedef bool (*Import_filling_func)(double, double);
 
-void AllocMem(int _N, int _M1, int _M2, int _M3) {
-  lines = new Lines(_N, _M1, _M2, _M3);
+void allocMem(int N, int M1, int M2, int M3) {
+  L = new Lines(N, M1, M2, M3);
 }
 
-void SetArea(double _XMin, double _XMax, double _YMin, double _YMax) {
-  lines->setArea(_XMin, _XMax, _YMin, _YMax);
+void setArea(double XMin, double XMax, double YMin, double YMax) {
+  L->setArea(XMin, XMax, YMin, YMax);
 }
 
-void Lines::setArea(double _XMin, double _XMax, double _YMin, double _YMax) {
-  area.XMin = _XMin;
-  area.XMax = _XMax;
-  area.YMin = _YMin;
-  area.YMax = _YMax;
-  area.Width = _XMax - _XMin;
-  area.Height = _YMax - _YMin;
+void Lines::setArea(double XMin, double XMax, double YMin, double YMax) {
+  Area.XMin = XMin;
+  Area.XMax = XMax;
+  Area.YMin = YMin;
+  Area.YMax = YMax;
+  Area.Width = XMax - XMin;
+  Area.Height = YMax - YMin;
 }
 
-void Calculate(int FuncIdx, int Mode) {
-  double Qmin = DBL_MAX, Qmax = DBL_MIN, QQ = 0;
-  double hx = lines->area.Width / lines->N; // вычисление шага по x
-  double hy = lines->area.Height / lines->N; // вычисление шага по y
+void loadDllByPath(HINSTANCE& HDll) {
+  wstring PathWString = wstring(ImportingDllPath.begin(),
+    ImportingDllPath.end());
+  LPCWSTR PathLPCWSTR = PathWString.c_str();
+  HDll = LoadLibrary(PathLPCWSTR);
+}
 
-  std::wstring stemp = std::wstring(ImportingDllPath.begin(),
-                                    ImportingDllPath.end());
-  LPCWSTR sw = stemp.c_str();
-  HINSTANCE hDll = LoadLibrary(sw);
-  if (hDll != NULL) {
-    //fout << "Library loaded" << endl;
-  }
-  import_func f;
-  switch (Mode) {
-  case FunctionClass::TargetFunction:
-    f = (import_func)GetProcAddress(hDll, "target_function");
-    break;
-  case FunctionClass::LimitFunction:
-    f = (import_func)GetProcAddress(hDll, "limit_function");
-    break;
-  default:
-    f = nullptr;
-  }
-
-  //ifstream file("eq-lvl-log.txt");
-
-  // обход сетки
-  for (int i = 0; i <= lines->N; i++)
-    for (int j = 0; j <= lines->N; j++)
-    {
-       // заполнение структуры сетки
-      size_t Idx = (lines->N + 1) * i + j;
-      double x = lines->Data[Idx].x = lines->area.XMin + hx * i;
-      double y = lines->Data[Idx].y = lines->area.YMin + hy * j;
-      // значение функции в узле
-      
-      QQ = lines->Data[Idx].Q = (*f)(x, y);
-
-      // поиск минимального и максимального значения на сетке
-      if ((i == 0) && (j == 0) || (QQ < Qmin))
-        Qmin = QQ;
-      if ((i == 0) && (j == 0) || (QQ > Qmax))
-        Qmax = QQ;
-      QQ = 0;
+void calculate(int FuncIdx, int FuncClass) {
+  HINSTANCE HDll;
+  loadDllByPath(HDll);
+  if (HDll != NULL) {
+    Import_func F;
+    switch (FuncClass) {
+    case FunctionClass::TargetFunction:
+      F = (Import_func)GetProcAddress(HDll, TargetFunc);
+      break;
+    case FunctionClass::LimitFunction:
+      F = (Import_func)GetProcAddress(HDll, LimitFunc);
+      break;
+    default:
+      F = nullptr;
     }
-
-  double hQ1 = (Qmax - Qmin) / lines->M1; // шаг функции по уровням
-  int ku = 0; // позиция в сетке уровней   
-  for (int i = 0; i < lines->M1; i++) // вычисление значений функции на основных уровнях 
-    lines->SubLevelValues[ku++] = Mode == 1 ? Qmax - hQ1 * i : 0;
     
-  if (Mode == 1) {
-    double hQ2 = hQ1 / (lines->M2 + 1); // шаг функции по подуровням
-    for (int i = 1; i <= lines->M2; i++) // вычисление значений функции на подуровнях
-    {
-      lines->SubLevelValues[ku++] = lines->SubLevelValues[lines->M1 - 1] - hQ2 * i;
-    }
+    // Grid traversal
+    double Hx = L->Area.Width / L->N;
+    double Hy = L->Area.Height / L->N;
+    double X = 0.0, Y = 0.0, Q = 0.0;
+    double Qmin = DBL_MAX, Qmax = DBL_MIN;
+    for (int i = 0; i <= L->N; ++i)
+      for (int j = 0; j <= L->N; ++j)
+      {
+        // Grid structure filling
+        size_t Idx = (L->N + 1) * i + j;
+        X = L->Data[Idx].X = L->Area.XMin + Hx * i;
+        Y = L->Data[Idx].Y = L->Area.YMin + Hy * j;
+        Q = L->Data[Idx].Q = (*F)(X, Y);
 
-    for (int i = 1; i <= lines->M3; i++) // вычисление значений функции на "под-подуровнях"
-    {
-      lines->SubLevelValues[ku++] = lines->SubLevelValues[lines->M1 + lines->M2 - 1] -
-        (hQ2 / (lines->M3 + 1)) * i;
+        // Searching for the minimum and maximum values on the grid
+        if (i == 0 && j == 0 || Q < Qmin)
+          Qmin = Q;
+        if (i == 0 && j == 0 || Q > Qmax)
+          Qmax = Q;
+      }
+
+    double HQ1 = (Qmax - Qmin) / L->M1; // Function step by level
+    int K = 0; // Position in the grid
+    // Calculation of function values at basic level
+    for (int i = 0; i < L->M1; ++i)
+      L->SubLevelValues[K++] = FuncClass == FunctionClass::TargetFunction ? 
+                                                           Qmax - HQ1 * i : 0;
+
+    if (FuncClass == FunctionClass::TargetFunction) {
+      double HQ2 = HQ1 / (L->M2 + 1); // Function step by sublevel
+      // Calculation of function values at sublevel
+      for (int i = 1; i <= L->M2; ++i)
+        L->SubLevelValues[K++] = L->SubLevelValues[L->M1 - 1] - HQ2 * i;
+
+      double HQ3 = HQ2 / (L->M3 + 1); // Function step by sub-sublevel
+      // Calculation of function values at sub-sublevel
+      for (int i = 1; i <= L->M3; ++i)
+        L->SubLevelValues[K++] = L->SubLevelValues[L->M1 + L->M2 - 1] - HQ3 * i;
     }
+    FreeLibrary(HDll);
   }
-  FreeLibrary(hDll);
 }
 
-void CalculateFilling(int LimitIdx, int LimitFactor, int Width, int Height) {
+void calculateFilling(int LimitIdx, int LimitFactor, int Width, int Height) {
   LimitValues.resize(Width / LimitFactor * Height / LimitFactor, true);
   int Count = 0;
-  string DllPath = ImportingDllPath;
-  std::wstring stemp = std::wstring(DllPath.begin(), DllPath.end());
-  LPCWSTR sw = stemp.c_str();
-  HINSTANCE hDll = LoadLibrary(sw);
-  import_filling_func f =
-    (import_filling_func)GetProcAddress(hDll, "filling_function");
-  cout << "calculating filling" << endl;
+  HINSTANCE HDll;
+  loadDllByPath(HDll);
+  Import_filling_func F =
+    (Import_filling_func)GetProcAddress(HDll, FillingFunc);
+
   for (int i = 0; i < Width / LimitFactor; ++i)
   {
     for (int j = 0; j < Height / LimitFactor; ++j)
     {
-      double x = lines->area.XMin +
-        (double)(i) / (double)Width * (lines->area.Width) * LimitFactor;
-      double y = lines->area.YMax -
-        (double)j / (double)Height * lines->area.Height * LimitFactor;
-      LimitValues[Count++] = (*f)(x, y);
+      double X = L->Area.XMin +
+        (double)(i) / (double)Width * (L->Area.Width) * LimitFactor;
+      double Y = L->Area.YMax -
+        (double)j / (double)Height * L->Area.Height * LimitFactor;
+      LimitValues[Count++] = (*F)(X, Y);
     }
   }
 }
 
-bool Limit(double x, double y, int funcidx) {
-  Function f;
-  double Value = f(x, y, funcidx);
-  if (Value > 0)
-    return false;
-  return true;
+bool limit(double X, double Y, int FuncIdx) {
+  Function F;
+  double Value = F(X, Y, FuncIdx);
+  return Value <= 0;
 }
 
-double Function::operator()(double x, double y, int funcidx) {
-  switch (funcidx) {
+double Function::operator()(double X, double Y, int FuncIdx) {
+  switch (FuncIdx) {
   case 1:
-    return (-1.5 * x * x * exp(1 - x * x - 20.25 * pow((x - y), 2))) -
-      pow(0.5 * (x - 1) * (y - 1), 4) * exp(2 - pow(0.5 * (x - 1), 4) -
-        pow(y - 1, 4));
+    return (-1.5 * X * X * exp(1 - X * X - 20.25 * pow((X - Y), 2))) -
+      pow(0.5 * (X - 1) * (Y - 1), 4) * exp(2 - pow(0.5 * (X - 1), 4) -
+        pow(Y - 1, 4));
   case 2:
-    return ((4 - 2.1 * x * x + pow(x, 4) / 3) * x * x +
-      x * y + (4 * y * y - 4) * y * y);
+    return ((4 - 2.1 * X * X + pow(X, 4) / 3) * X * X +
+      X * Y + (4 * Y * Y - 4) * Y * Y);
   case 3:
-    return 0.01 * (x * y + pow(x - M_PI, 2) +
-      3 * pow(y * y - M_PI, 2)) - pow(sin(x) * sin(2 * y), 2);
+    return 0.01 * (X * Y + pow(X - M_PI, 2) +
+      3 * pow(Y * Y - M_PI, 2)) - pow(sin(X) * sin(2 * Y), 2);
   case 4:
-    return (x * x - cos(18 * x * x)) + (y * y - cos(18 * y * y));
+    return (X * X - cos(18 * X * X)) + (Y * Y - cos(18 * Y * Y));
   case 5:
-    return M_PI / 2 * (pow(10 * (sin(M_PI * (1 + (x - 1) / 4))), 2) +
-      pow((x - 1) / 4, 2) * (1 + 10 * pow(sin(M_PI * (1 + (y - 1) / 4)), 2)) +
-      pow((y - 1) / 4, 2));
+    return M_PI / 2 * (pow(10 * (sin(M_PI * (1 + (X - 1) / 4))), 2) +
+      pow((X - 1) / 4, 2) * (1 + 10 * pow(sin(M_PI * (1 + (Y - 1) / 4)), 2)) +
+      pow((Y - 1) / 4, 2));
   case 6:
-    return x * x + y * y - 1;
+    return X * X + Y * Y - 1;
   case 7:
-    return (x - 2) * (x - 2) + (y - 2) * (y - 2) - 1;
+    return (X - 2) * (X - 2) + (Y - 2) * (Y - 2) - 1;
   default:
     return 0.0;
   }
 }
 
-void GetData(DrawPoints<Lines::Point>* Points, double* SubLevelValues) {
-  Points->Data = lines->Data.data();
-
-  copy(lines->SubLevelValues.begin(), lines->SubLevelValues.end(),
-       SubLevelValues);
+void getData(DrawPoints<Lines::Point> &Points, double *SubLevelValues) {
+  Points.Data = L->Data.data();
+  copy(L->SubLevelValues.begin(), L->SubLevelValues.end(), SubLevelValues);
 }
 
-void GetLimitValues(int* Array) {
-  copy(LimitValues.begin(), LimitValues.end(),
-    Array);
+void getLimitValues(int *Array) {
+  copy(LimitValues.begin(), LimitValues.end(), Array);
 }
 
-void InitData(DrawPoints<Lines::Point>* array) {
-  array->AllocMem(array->Count);
+void initData(DrawPoints<Lines::Point> &Array) {
+  Array.AllocMem(Array.Count);
 }
 
-void DeleteData(DrawPoints<Lines::Point> *Data) {
-  Data->FreeMem();
-  delete lines;
+void deleteData(DrawPoints<Lines::Point> &Data) {
+  Data.FreeMem();
+  delete L;
 }
 
-void CreateEmptyClass() {
-  lines = new Lines();
+void createEmptyClass() {
+  L = new Lines();
 }
 
-void SetImportingDllPath(char* _ImportingDllPath, int length)
+void setImportingDllPath(char *TheImportingDllPath, int Length)
 {
-  for (int i = 0; i < length; ++i)
-    ImportingDllPath.push_back(*(_ImportingDllPath + i));
+  for (int i = 0; i < Length; ++i)
+    ImportingDllPath.push_back(*(TheImportingDllPath + i));
 }
 
-double CalculateTargetFunction(double x, double y)
+double calculateTargetFunction(double X, double Y)
 {
-  std::wstring stemp = std::wstring(ImportingDllPath.begin(),
-                                    ImportingDllPath.end());
-  LPCWSTR sw = stemp.c_str();
-  HINSTANCE hDll = LoadLibrary(sw);
-  import_func f = (import_func)GetProcAddress(hDll, "target_function");
-  return (*f)(x, y);
+  HINSTANCE HDll;
+  loadDllByPath(HDll);
+  Import_func F = (Import_func)GetProcAddress(HDll, TargetFunc);
+  return (*F)(X, Y);
 }

@@ -16,73 +16,73 @@ namespace Equal_level_lines_UI
     const string dll2 = "UI_to_optimizer_adapter.dll";
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void AllocMem(int _N, int _M1, int _M2, int _M3);
+    public static extern void allocMem(int _N, int _M1, int _M2, int _M3);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetArea(double _XMin, double _XMax, double _YMin,
+    public static extern void setArea(double _XMin, double _XMax, double _YMin,
                                       double _YMax);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void Calculate(int funcIdx, int Mode);
+    public static extern void calculate(int funcIdx, int Mode);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void CalculateFilling(int LimitIdx, int LimitFactor,
+    public static extern void calculateFilling(int LimitIdx, int LimitFactor,
                                              int Width, int Height);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void GetData(IntPtr _ptrData, IntPtr _SubLevelValues);
+    public static extern void getData(IntPtr _ptrData, IntPtr _SubLevelValues);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void GetLimitValues(IntPtr _ptrLimitValues);
+    public static extern void getLimitValues(IntPtr _ptrLimitValues);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void InitData(IntPtr _ptrData);
+    public static extern void initData(IntPtr _ptrData);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void CreateEmptyClass();
+    public static extern void createEmptyClass();
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetImportingDllPath(string DllPath, int length);
+    public static extern void setImportingDllPath(string DllPath, int length);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern double CalculateTargetFunction(double x, double y);
+    public static extern double calculateTargetFunction(double x, double y);
 
     // ============ End of Equal_level_lines.dll import functions ===========
 
     // ============== UI_to_optimizer_adapter.dll import functions: ===============
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetImportingDllPath2(string _ImportingDllPath, int length);
+    public static extern void setImportingDllPath2(string _ImportingDllPath, int length);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetOptimizerArea(double _XMin, double _XMax, double _YMin, double _YMax);
+    public static extern void setOptimizerArea(double _XMin, double _XMax, double _YMin, double _YMax);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetNumOptimizerIterations(int NumIters);
+    public static extern void setNumOptimizerIterations(int NumIters);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetOptimizerParameters();
+    public static extern void setOptimizerParameters();
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int RunOptimizer();
+    public static extern int runOptimizer();
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern double GetOptimizerSolutionCoords(int NumCoord);
+    public static extern double getOptimizerSolutionCoords(int NumCoord);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern double GetOptimizerSolution();
+    public static extern double getOptimizerSolution();
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int GetNewMeasurementsCountOnLastIteration();
+    public static extern int getNewMeasurementsCountOnLastIteration();
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void GetMeasurementsOnLastIteration(IntPtr Measurements);
+    public static extern void getMeasurementsOnLastIteration(IntPtr Measurements);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void DoIterations(int NumOfIterations);
+    public static extern void doIterations(int NumOfIterations);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int GetCurrentNumberOfIterations();
+    public static extern int getCurrentNumberOfIterations();
 
     // ============ End of UI_to_optimizer_adapter.dll import functions ===========
 
@@ -524,24 +524,24 @@ namespace Equal_level_lines_UI
             Eque_lines[i].M3 = 0;
           }
 
-          AllocMem(Eque_lines[i].N, Eque_lines[i].M1, Eque_lines[i].M2,
+          allocMem(Eque_lines[i].N, Eque_lines[i].M1, Eque_lines[i].M2,
             Eque_lines[i].M3);
-          SetArea(Eque_lines[i].XMin, Eque_lines[i].XMax,
+          setArea(Eque_lines[i].XMin, Eque_lines[i].XMax,
             Eque_lines[i].YMin, Eque_lines[i].YMax);
-          Calculate(Eque_lines[i].FuncIdx, Eque_lines[i].Mode);
+          calculate(Eque_lines[i].FuncIdx, Eque_lines[i].Mode);
           GetDataFromDll(Eque_lines[i].FuncIdx, i, Eque_lines[i].N,
             Eque_lines[i].M + 1);
         }
         else
         {
-          CreateEmptyClass();
-          SetArea(Eque_lines[i].XMin, Eque_lines[i].XMax,
+          createEmptyClass();
+          setArea(Eque_lines[i].XMin, Eque_lines[i].XMax,
             Eque_lines[i].YMin, Eque_lines[i].YMax);
 
           PicWidth = pictureBox1.Width;
           PicHeight = pictureBox1.Height;
 
-          CalculateFilling(Eque_lines[i].FuncIdx, Eque_lines[i].Density,
+          calculateFilling(Eque_lines[i].FuncIdx, Eque_lines[i].Density,
             pictureBox1.Width, pictureBox1.Height);
           GetLimitData(i);
 
@@ -628,7 +628,7 @@ namespace Equal_level_lines_UI
       {
         btn_Run.Enabled = true;
         btn_set_optimizer.Enabled = true;
-        SetImportingDllPath(DllPath, DllPath.Length);
+        setImportingDllPath(DllPath, DllPath.Length);
 
         label5.Text = "Loading status: loaded";
         label5.BackColor = Color.LightGreen;
@@ -773,7 +773,7 @@ namespace Equal_level_lines_UI
           {
             double x = xmin + h_x * i;
             double y = ymin + h_y * i;
-            double Q = CalculateTargetFunction(x, y);
+            double Q = calculateTargetFunction(x, y);
             Point3D p3d = new Point3D((float)x, (float)y, (float)Q);
             SectionPoints.Add(p3d);
             dataGridView2.Rows.Add(i,Math.Round(x, 3),Math.Round(y, 3),
@@ -804,14 +804,14 @@ namespace Equal_level_lines_UI
 
     private void GetMeasurements()
     {
-      int NewMeasurementsCount = GetNewMeasurementsCountOnLastIteration();
+      int NewMeasurementsCount = getNewMeasurementsCountOnLastIteration();
       TotalMeasurementesNumber += NewMeasurementsCount;
       tBox_NumOfMeasurements.Text = TotalMeasurementesNumber.ToString();
-      tBox_CurrentNumOfIters.Text = GetCurrentNumberOfIterations().ToString();
+      tBox_CurrentNumOfIters.Text = getCurrentNumberOfIterations().ToString();
       NumPointsOnLastIteration = NewMeasurementsCount;
       IntPtr ptrNewMeasurements = Marshal.AllocCoTaskMem(
         2 * NewMeasurementsCount * sizeof(double));
-      GetMeasurementsOnLastIteration(ptrNewMeasurements);
+      getMeasurementsOnLastIteration(ptrNewMeasurements);
       double[] TempArray = new double[NewMeasurementsCount * 2];
       Marshal.Copy(ptrNewMeasurements, TempArray, 0, NewMeasurementsCount * 2);
       Marshal.FreeCoTaskMem(ptrNewMeasurements);
@@ -826,10 +826,10 @@ namespace Equal_level_lines_UI
     private void btn_set_optimizer_Click(object sender, EventArgs e)
     {
       String DllPath = tBox_DllPath.Text.ToString();
-      SetImportingDllPath2(DllPath, DllPath.Length);
-      SetOptimizerArea(Xmin, Xmax, Ymin, Ymax);
-      SetNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
-      SetOptimizerParameters();
+      setImportingDllPath2(DllPath, DllPath.Length);
+      setOptimizerArea(Xmin, Xmax, Ymin, Ymax);
+      setNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
+      setOptimizerParameters();
       //GetMeasurements();
       btn_DoOptIter.Enabled = true;
       btn_FindOptSol.Enabled = true;
@@ -837,9 +837,9 @@ namespace Equal_level_lines_UI
 
     private void GetSolution()
     {
-      OptimizerSolution.X = (float)GetOptimizerSolutionCoords(0);
-      OptimizerSolution.Y = (float)GetOptimizerSolutionCoords(1);
-      OptimizerSolution.Z = (float)GetOptimizerSolution();
+      OptimizerSolution.X = (float)getOptimizerSolutionCoords(0);
+      OptimizerSolution.Y = (float)getOptimizerSolutionCoords(1);
+      OptimizerSolution.Z = (float)getOptimizerSolution();
       tBox_OptSolX.Text = Math.Round(OptimizerSolution.X, 5).ToString();
       tBox_OptSolY.Text = Math.Round(OptimizerSolution.Y, 5).ToString();
       tBox_OptSolQ.Text = Math.Round(OptimizerSolution.Z, 5).ToString();
@@ -851,7 +851,7 @@ namespace Equal_level_lines_UI
       int OptimizerIsWorking = 1;
       while (OptimizerIsWorking == 1)
       {
-        OptimizerIsWorking = RunOptimizer();
+        OptimizerIsWorking = runOptimizer();
         GetMeasurements();
       }
       GetSolution();
@@ -859,7 +859,7 @@ namespace Equal_level_lines_UI
 
     private void Btn_DoOptIter_Click(object sender, EventArgs e)
     {
-      DoIterations(int.Parse(tBox_NumItersPerClick.Text));
+      doIterations(int.Parse(tBox_NumItersPerClick.Text));
       GetMeasurements();
       GetSolution();
     }
@@ -895,8 +895,8 @@ namespace Equal_level_lines_UI
       IntPtr ptrSubLevelValues = Marshal.AllocCoTaskMem(M * sizeof(double));
 
       Marshal.StructureToPtr(Data, ptrData, false); // копируем данные из неуправляемой в управляемую
-      InitData(ptrData);
-      GetData(ptrData, ptrSubLevelValues);
+      initData(ptrData);
+      getData(ptrData, ptrSubLevelValues);
       Data = (DrawPoints)Marshal.PtrToStructure(ptrData, typeof(DrawPoints));
 
       Marshal.Copy(ptrSubLevelValues, Eque_lines[rowIdx].pQ, 0, M);
@@ -915,7 +915,7 @@ namespace Equal_level_lines_UI
       int length = PicWidth / Density * PicHeight / Density;
       Eque_lines[rowIdx].FillingArea = new int[length];
       IntPtr ptrFillingArea = Marshal.AllocCoTaskMem(length * sizeof(int));
-      GetLimitValues(ptrFillingArea);
+      getLimitValues(ptrFillingArea);
       Marshal.Copy(ptrFillingArea, Eque_lines[rowIdx].FillingArea, 0, length);
       Marshal.FreeCoTaskMem(ptrFillingArea);
     }

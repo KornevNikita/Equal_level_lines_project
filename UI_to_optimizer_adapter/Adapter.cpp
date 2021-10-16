@@ -1,40 +1,40 @@
 #include "pch.h"
-
 #include "Adapter.h"
 
-double XMin, XMax, YMin, YMax;
-double SolutionCoords[2];
-double Solution = 0;
+double XMin = 0.0, XMax = 0.0, YMin = 0.0, YMax = 0.0;
+double SolutionCoords[2] = { 0.0, 0.0 };
+double Solution = 0.0;
 
-Parameters* aParameters;
-MyTargetFunction* aTargetFunction;
-MyConditionFunction* aConditionFunction;
+Parameters *aParameters;
+MyTargetFunction *aTargetFunction;
+MyConditionFunction *aConditionFunction;
 
 int MeasurementsNumber = 0;
 int Iteration = 0;
 int NumIterations = 0;
 
-void SetImportingDllPath2(char* _ImportingDllPath, int length) {
-  for (int i = 0; i < length; ++i)
-    ImportingDllPath2.push_back(*(_ImportingDllPath + i));
+void setImportingDllPath2(char *ImportingDllPath, int Length) {
+  for (int i = 0; i < Length; ++i)
+    ImportingDllPath2.push_back(*(ImportingDllPath + i));
 }
 
-void SetOptimizerArea(double _XMin, double _XMax, double _YMin, double _YMax) {
-  XMin = _XMin;
-  XMax = _XMax;
-  YMin = _YMin;
-  YMax = _YMax;
+void setOptimizerArea(double TheXMin, double TheXMax, double TheYMin,
+                      double TheYMax) {
+  XMin = TheXMin;
+  XMax = TheXMax;
+  YMin = TheYMin;
+  YMax = TheYMax;
 }
 
-void SetNumOptimizerIterations(int NumIters) {
+void setNumOptimizerIterations(int NumIters) {
   NumIterations = NumIters;
 }
 
-void SetOptimizerParameters() {
+void setOptimizerParameters() {
   aParameters = new Parameters;
   aTargetFunction = new MyTargetFunction;
   aConditionFunction = new MyConditionFunction;
-  aTargetFunction->SetArea(XMin, YMin, XMax, YMax);
+  aTargetFunction->setArea(XMin, YMin, XMax, YMax);
   aConditionFunction->SetArea(XMin, YMin, XMax, YMax);
   aParameters->testFunction = &*aTargetFunction;
   aParameters->conditionFunction = &*aConditionFunction;
@@ -56,10 +56,7 @@ void SetOptimizerParameters() {
   Direct::SetDParameters(&*aParameters, Method::TDIR_minimum);
 }
 
-int RunOptimizer() {
-  double minPoint[2] = {};
-  double* aPoint = minPoint;
-
+int runOptimizer() {
   if (Iteration < NumIterations)
   {
     Direct::DoIteration();
@@ -68,51 +65,47 @@ int RunOptimizer() {
     if (Iteration < NumIterations)
       return 1;
     else {
-      double p[2] = {};
-      Direct::GetMinimumCoords(aPoint, aParameters->dimention);
-      SolutionCoords[0] = aPoint[0];
-      SolutionCoords[1] = aPoint[1];
+      double *Ptr = SolutionCoords;
+      Direct::GetMinimumCoords(Ptr, aParameters->dimention);
       Solution = Direct::GetCurrentSolution();
       return 0;
     }
   }
 }
 
-void DoIterations(int NumOfIterations) {
+void doIterations(int NumOfIterations) {
   for (int i = 0; i < NumOfIterations; ++i, ++Iteration)
     Direct::DoIteration();
-  double* p = new double[2];
-  Direct::GetMinimumCoords(p, aParameters->dimention);
-  SolutionCoords[0] = p[0];
-  SolutionCoords[1] = p[1];
+  double *Ptr = SolutionCoords;
+  Direct::GetMinimumCoords(Ptr, aParameters->dimention);
   Solution = Direct::GetCurrentSolution();
 }
 
-int GetCurrentNumberOfIterations() {
+int getCurrentNumberOfIterations() {
   return Iteration;
 }
 
-double GetOptimizerSolutionCoords(int NumCoord) {
+double getOptimizerSolutionCoords(int NumCoord) {
   return SolutionCoords[NumCoord];
 }
 
-double GetOptimizerSolution() {
+double getOptimizerSolution() {
   return Solution;
 }
 
-int GetNewMeasurementsCountOnLastIteration() {
+int getNewMeasurementsCountOnLastIteration() {
   return Direct::GetNewMeasurementsCountOnLastIterathion();
 }
 
-void GetMeasurementsOnLastIteration(double* Measurements) {
+void getMeasurementsOnLastIteration(double* Measurements) {
   int Count = Direct::GetNewMeasurementsCountOnLastIterathion();
   vector<double> NewMeasurements(Count * 2);
-  double *p = new double[2];
+  double *Ptr = new double[2];
   for (int i = 1; i <= Count; ++i) {
-    Direct::GetNewPointCoords(p, i, 0, 1);
-    NewMeasurements[i * 2 - 2] = p[0];
-    NewMeasurements[i * 2 - 1] = p[1];
+    Direct::GetNewPointCoords(Ptr, i, 0, 1);
+    NewMeasurements[i * 2 - 2] = Ptr[0];
+    NewMeasurements[i * 2 - 1] = Ptr[1];
   }
-  copy(NewMeasurements.begin(), NewMeasurements.end(),
-    Measurements);
+  copy(NewMeasurements.begin(), NewMeasurements.end(), Measurements);
+  delete[] Ptr;
 }

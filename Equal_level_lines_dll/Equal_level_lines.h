@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -9,6 +9,10 @@ enum FunctionClass {
   TargetFunction = 1,
   LimitFunction = 3
 };
+
+const char* TargetFunc= "target_function";
+const char* LimitFunc = "limit_function";
+const char* FillingFunc = "filling_function";
 
 template <typename T>
 struct DrawPoints {
@@ -35,7 +39,7 @@ class Lines {
 
 public:
   struct Point {
-    double x, y, Q;
+    double X, Y, Q;
   };
 
   Lines(int _N = 0, int _M1 = 0, int _M2 = 0, int _M3 = 0) : N(_N),
@@ -50,7 +54,7 @@ public:
   int N, M1, M2, M3, M;
   vector<Point> Data;
   vector<double> SubLevelValues, LimitZeroLine;
-  Area area;
+  Area Area;
 };
 
 class Function {
@@ -58,41 +62,43 @@ public:
   double operator()(double x, double y, int funcidx);
 };
 
-Lines* lines;
+Lines* L;
 vector<int> LimitValues;
 string ImportingDllPath;
 
-bool Limit(double x, double y, int LimitIdx);
+bool limit(double x, double y, int LimitIdx);
+
+void loadDllByPath(HINSTANCE& HDll);
 
 extern "C" __declspec(dllexport)
-void AllocMem(int _N, int _M1, int _M2, int _M3);
+void allocMem(int N, int M1, int M2, int M3);
 
 extern "C" __declspec(dllexport)
-void SetArea(double _XMin, double _XMax, double _YMin, double _YMax);
+void setArea(double XMin, double XMax, double YMin, double YMax);
 
 extern "C" __declspec(dllexport)
-void Calculate(int FuncIdx, int Mode);
+void calculate(int FuncIdx, int Mode);
 
 extern "C" __declspec(dllexport)
-void CalculateFilling(int LimitIdx, int LimitFactor, int Width, int Height);
+void calculateFilling(int LimitIdx, int LimitFactor, int Width, int Height);
 
 extern "C" __declspec(dllexport)
-void GetData(DrawPoints<Lines::Point> *Points, double *SubLevelValues);
+void getData(DrawPoints<Lines::Point> &Points, double *SubLevelValues);
 
 extern "C" __declspec(dllexport)
-void GetLimitValues(int* LimitValues);
+void getLimitValues(int *LimitValues);
 
 extern "C" __declspec(dllexport)
-void InitData(DrawPoints<Lines::Point> *Data);
+void initData(DrawPoints<Lines::Point> &Data);
 
 extern "C" __declspec(dllexport)
-void DeleteData(DrawPoints<Lines::Point> *Data);
+void deleteData(DrawPoints<Lines::Point> &Data);
 
 extern "C" __declspec(dllexport)
-void CreateEmptyClass();
+void createEmptyClass();
 
 extern "C" __declspec(dllexport)
-void SetImportingDllPath(char* _ImportingDllPath, int length);
+void setImportingDllPath(char *TheImportingDllPath, int length);
 
 extern "C" __declspec(dllexport)
-double CalculateTargetFunction(double x, double y);
+double calculateTargetFunction(double x, double y);
