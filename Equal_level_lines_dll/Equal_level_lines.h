@@ -5,6 +5,11 @@
 
 using namespace std;
 
+enum FunctionClass {
+  TargetFunction = 1,
+  LimitFunction = 3
+};
+
 template <typename T>
 struct DrawPoints {
   T* Data;

@@ -49,10 +49,10 @@ void Calculate(int FuncIdx, int Mode) {
   }
   import_func f;
   switch (Mode) {
-  case 1:
+  case FunctionClass::TargetFunction:
     f = (import_func)GetProcAddress(hDll, "target_function");
     break;
-  case 3:
+  case FunctionClass::LimitFunction:
     f = (import_func)GetProcAddress(hDll, "limit_function");
     break;
   default:
