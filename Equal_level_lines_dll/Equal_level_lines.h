@@ -10,7 +10,7 @@ enum FunctionClass {
   LimitFunction = 3
 };
 
-const char* TargetFunc= "target_function";
+const char* TargetFunc = "target_function";
 const char* LimitFunc = "limit_function";
 const char* FillingFunc = "filling_function";
 
@@ -19,9 +19,9 @@ struct DrawPoints {
   T* Data;
   int Count;
 
-  void AllocMem(int _Count) {
-    Count = _Count;
-    Data = new T[_Count];
+  void AllocMem(int TheCount) {
+    Count = TheCount;
+    Data = new T[Count];
   }
 
   void FreeMem() {
@@ -42,14 +42,14 @@ public:
     double X, Y, Q;
   };
 
-  Lines(int _N = 0, int _M1 = 0, int _M2 = 0, int _M3 = 0) : N(_N),
-    M1(_M1), M2(_M2), M3(_M3) {
+  Lines(int N = 0, int M1 = 0, int M2 = 0, int M3 = 0) : N(N),
+    M1(M1), M2(M2), M3(M3) {
     M = M1 + M2 + M3;
     Data.resize((N + 1) * (N + 1));
     SubLevelValues.resize(M + 1);
   }
 
-  void setArea(double _XMin, double _XMax, double _YMin, double _YMax);
+  void setArea(double XMin, double XMax, double YMin, double YMax);
 
   int N, M1, M2, M3, M;
   vector<Point> Data;
@@ -60,14 +60,14 @@ public:
 
 class Function {
 public:
-  double operator()(double x, double y, int funcidx);
+  double operator()(double X, double Y, int FuncIdx);
 };
 
 Lines* L;
 vector<int> LimitValues;
 string ImportingDllPath;
 
-bool limit(double x, double y, int LimitIdx);
+bool limit(double X, double Y, int LimitIdx);
 
 void loadDllByPath(HINSTANCE& HDll);
 
@@ -99,7 +99,7 @@ extern "C" __declspec(dllexport)
 void createEmptyClass();
 
 extern "C" __declspec(dllexport)
-void setImportingDllPath(char *TheImportingDllPath, int length);
+void setImportingDllPath(char *TheImportingDllPath, int Length);
 
 extern "C" __declspec(dllexport)
-double calculateTargetFunction(double x, double y);
+double calculateTargetFunction(double X, double Y);
