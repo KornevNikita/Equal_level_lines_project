@@ -62,6 +62,9 @@ void calculate(int FuncIdx, int FuncClass) {
     double Hy = L->Area.Height / L->N;
     double X = 0.0, Y = 0.0, Q = 0.0;
     double Qmin = DBL_MAX, Qmax = DBL_MIN;
+    vector<Lines::Point> *Values =
+        new vector<Lines::Point>((L->N + 1) * (L->N + 1));
+
     for (int i = 0; i <= L->N; ++i)
       for (int j = 0; j <= L->N; ++j)
       {
@@ -70,6 +73,7 @@ void calculate(int FuncIdx, int FuncClass) {
         X = L->Data[Idx].X = L->Area.XMin + Hx * i;
         Y = L->Data[Idx].Y = L->Area.YMin + Hy * j;
         Q = L->Data[Idx].Q = (*F)(X, Y);
+        Values->operator[](Idx) = L->Data[Idx];
 
         // Searching for the minimum and maximum values on the grid
         if (i == 0 && j == 0 || Q < Qmin)
@@ -77,6 +81,8 @@ void calculate(int FuncIdx, int FuncClass) {
         if (i == 0 && j == 0 || Q > Qmax)
           Qmax = Q;
       }
+
+    L->FunctionValues.push_back(Values);
 
     double HQ1 = (Qmax - Qmin) / L->M1; // Function step by level
     int K = 0; // Position in the grid

@@ -53,6 +53,7 @@ public:
 
   int N, M1, M2, M3, M;
   vector<Point> Data;
+  vector<vector<Point> *> FunctionValues;
   vector<double> SubLevelValues, LimitZeroLine;
   Area Area;
 };
