@@ -14,6 +14,12 @@ const char* TargetFunc = "target_function";
 const char* LimitFunc = "limit_function";
 const char* FillingFunc = "filling_function";
 
+struct Point {
+  Point(double X = 0.0, double Y = 0.0, double Q = 0.0) : X(X), Y(Y), Q(Q) {};
+
+  double X, Y, Q;
+};
+
 template <typename T>
 struct DrawPoints {
   T* Data;
@@ -38,11 +44,6 @@ class Lines {
   };
 
 public:
-  struct Point {
-    Point(double X = 0.0, double Y = 0.0, double Q = 0.0) : X(X), Y(Y), Q(Q) {};
-    double X, Y, Q;
-  };
-
   Lines(int N = 0, int M1 = 0, int M2 = 0, int M3 = 0) : N(N),
     M1(M1), M2(M2), M3(M3) {
     M = M1 + M2 + M3;
@@ -90,16 +91,16 @@ extern "C" __declspec(dllexport)
 void calculateFilling(int LimitIdx, int LimitFactor, int Width, int Height);
 
 extern "C" __declspec(dllexport)
-void getData(DrawPoints<Lines::Point> &Points, double *SubLevelValues);
+void getData(DrawPoints<Point> &Points, double *SubLevelValues);
 
 extern "C" __declspec(dllexport)
 void getLimitValues(int *LimitValues);
 
 extern "C" __declspec(dllexport)
-void initData(DrawPoints<Lines::Point> &Data);
+void initData(DrawPoints<Point> &Data);
 
 extern "C" __declspec(dllexport)
-void deleteData(DrawPoints<Lines::Point> &Data);
+void deleteData(DrawPoints<Point> &Data);
 
 extern "C" __declspec(dllexport)
 void createEmptyClass();

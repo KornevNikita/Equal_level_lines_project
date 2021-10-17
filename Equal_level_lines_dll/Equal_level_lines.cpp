@@ -62,8 +62,7 @@ void calculate(int FuncIdx, int FuncClass) {
     double Hy = L->Area.Height / L->N;
     double X = 0.0, Y = 0.0, Q = 0.0;
     double Qmin = DBL_MAX, Qmax = DBL_MIN;
-    vector<Lines::Point> *Values =
-        new vector<Lines::Point>((L->N + 1) * (L->N + 1));
+    vector<Point> *Values = new vector<Point>((L->N + 1) * (L->N + 1));
 
     for (int i = 0; i <= L->N; ++i)
       for (int j = 0; j <= L->N; ++j)
@@ -73,7 +72,7 @@ void calculate(int FuncIdx, int FuncClass) {
         X = L->Area.XMin + Hx * i;
         Y = L->Area.YMin + Hy * j;
         Q = (*F)(X, Y);
-        Values->operator[](Idx) = Lines::Point(X, Y, Q);
+        Values->operator[](Idx) = Point(X, Y, Q);
 
         // Searching for the minimum and maximum values on the grid
         if (i == 0 && j == 0 || Q < Qmin)
@@ -164,7 +163,7 @@ double Function::operator()(double X, double Y, int FuncIdx) {
   }
 }
 
-void getData(DrawPoints<Lines::Point> &Points, double *SubLevelValues) {
+void getData(DrawPoints<Point> &Points, double *SubLevelValues) {
   Points.Data = L->FunctionValues[0]->data();
   copy(L->FunctionsSubLevelValues[0]->begin(),
        L->FunctionsSubLevelValues[0]->end(),
@@ -175,11 +174,11 @@ void getLimitValues(int *Array) {
   copy(LimitValues.begin(), LimitValues.end(), Array);
 }
 
-void initData(DrawPoints<Lines::Point> &Array) {
+void initData(DrawPoints<Point> &Array) {
   Array.AllocMem(Array.Count);
 }
 
-void deleteData(DrawPoints<Lines::Point> &Data) {
+void deleteData(DrawPoints<Point> &Data) {
   Data.FreeMem();
   delete L;
 }
