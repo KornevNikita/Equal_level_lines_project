@@ -14,8 +14,7 @@ int Iteration = 0;
 int NumIterations = 0;
 
 void setImportingDllPath2(char *ImportingDllPath, int Length) {
-  for (int i = 0; i < Length; ++i)
-    ImportingDllPath2.push_back(*(ImportingDllPath + i));
+  ImportingDllPath2 = std::string(ImportingDllPath);
 }
 
 void setOptimizerArea(double TheXMin, double TheXMax, double TheYMin,
