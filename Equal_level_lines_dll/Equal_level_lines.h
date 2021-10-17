@@ -39,22 +39,28 @@ class Lines {
 
 public:
   struct Point {
+    Point(double X = 0.0, double Y = 0.0, double Q = 0.0) : X(X), Y(Y), Q(Q) {};
     double X, Y, Q;
   };
 
   Lines(int N = 0, int M1 = 0, int M2 = 0, int M3 = 0) : N(N),
     M1(M1), M2(M2), M3(M3) {
     M = M1 + M2 + M3;
-    Data.resize((N + 1) * (N + 1));
-    SubLevelValues.resize(M + 1);
+  }
+
+  ~Lines() {
+    for (auto &I : FunctionValues)
+      delete I;
+    for (auto &I : FunctionsSubLevelValues)
+      delete I;
   }
 
   void setArea(double XMin, double XMax, double YMin, double YMax);
 
   int N, M1, M2, M3, M;
-  vector<Point> Data;
   vector<vector<Point> *> FunctionValues;
-  vector<double> SubLevelValues, LimitZeroLine;
+  vector<vector<double> *> FunctionsSubLevelValues;
+  vector<double> LimitZeroLine;
   Area Area;
 };
 

@@ -70,10 +70,10 @@ void calculate(int FuncIdx, int FuncClass) {
       {
         // Grid structure filling
         size_t Idx = (L->N + 1) * i + j;
-        X = L->Data[Idx].X = L->Area.XMin + Hx * i;
-        Y = L->Data[Idx].Y = L->Area.YMin + Hy * j;
-        Q = L->Data[Idx].Q = (*F)(X, Y);
-        Values->operator[](Idx) = L->Data[Idx];
+        X = L->Area.XMin + Hx * i;
+        Y = L->Area.YMin + Hy * j;
+        Q = (*F)(X, Y);
+        Values->operator[](Idx) = Lines::Point(X, Y, Q);
 
         // Searching for the minimum and maximum values on the grid
         if (i == 0 && j == 0 || Q < Qmin)
@@ -84,24 +84,28 @@ void calculate(int FuncIdx, int FuncClass) {
 
     L->FunctionValues.push_back(Values);
 
+    vector<double> *NewSubLevelValues = new vector<double>(L->M);
     double HQ1 = (Qmax - Qmin) / L->M1; // Function step by level
     int K = 0; // Position in the grid
     // Calculation of function values at basic level
     for (int i = 0; i < L->M1; ++i)
-      L->SubLevelValues[K++] = FuncClass == FunctionClass::TargetFunction ? 
-                                                           Qmax - HQ1 * i : 0;
+      NewSubLevelValues->operator[](K++) =
+        FuncClass == FunctionClass::TargetFunction ? Qmax - HQ1 * i : 0;
 
     if (FuncClass == FunctionClass::TargetFunction) {
       double HQ2 = HQ1 / (L->M2 + 1); // Function step by sublevel
       // Calculation of function values at sublevel
       for (int i = 1; i <= L->M2; ++i)
-        L->SubLevelValues[K++] = L->SubLevelValues[L->M1 - 1] - HQ2 * i;
+        NewSubLevelValues->operator[](K++) =
+          NewSubLevelValues->operator[](L->M1 - 1) - HQ2 * i;
 
       double HQ3 = HQ2 / (L->M3 + 1); // Function step by sub-sublevel
       // Calculation of function values at sub-sublevel
       for (int i = 1; i <= L->M3; ++i)
-        L->SubLevelValues[K++] = L->SubLevelValues[L->M1 + L->M2 - 1] - HQ3 * i;
+        NewSubLevelValues->operator[](K++) =
+          NewSubLevelValues->operator[](L->M1 + L->M2 - 1) - HQ3 * i;
     }
+    L->FunctionsSubLevelValues.push_back(NewSubLevelValues);
     FreeLibrary(HDll);
   }
 }
@@ -161,8 +165,10 @@ double Function::operator()(double X, double Y, int FuncIdx) {
 }
 
 void getData(DrawPoints<Lines::Point> &Points, double *SubLevelValues) {
-  Points.Data = L->Data.data();
-  copy(L->SubLevelValues.begin(), L->SubLevelValues.end(), SubLevelValues);
+  Points.Data = L->FunctionValues[0]->data();
+  copy(L->FunctionsSubLevelValues[0]->begin(),
+       L->FunctionsSubLevelValues[0]->end(),
+       SubLevelValues);
 }
 
 void getLimitValues(int *Array) {
