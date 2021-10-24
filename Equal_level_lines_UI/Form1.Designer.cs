@@ -61,6 +61,7 @@
       this.tBox_DllPath = new System.Windows.Forms.TextBox();
       this.dataGridView1 = new System.Windows.Forms.DataGridView();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
+      this.cBox_DrawLimit = new System.Windows.Forms.CheckBox();
       this.cBox_filling = new System.Windows.Forms.CheckBox();
       this.cBox_EnableSignatures = new System.Windows.Forms.CheckBox();
       this.label14 = new System.Windows.Forms.Label();
@@ -95,7 +96,6 @@
       this.tBox_PointCount = new System.Windows.Forms.TextBox();
       this.dataGridView2 = new System.Windows.Forms.DataGridView();
       this.groupBox5 = new System.Windows.Forms.GroupBox();
-      this.cBox_DrawLimit = new System.Windows.Forms.CheckBox();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       this.groupBox6.SuspendLayout();
@@ -348,7 +348,8 @@
       this.tBox_DllPath.Name = "tBox_DllPath";
       this.tBox_DllPath.Size = new System.Drawing.Size(310, 24);
       this.tBox_DllPath.TabIndex = 2;
-      this.tBox_DllPath.Text = "CraneOptimizationTask";
+      this.tBox_DllPath.Text = "OptimizationTask";
+      this.tBox_DllPath.TextChanged += new System.EventHandler(this.tBox_DllPath_TextChanged);
       // 
       // dataGridView1
       // 
@@ -407,6 +408,16 @@
       this.groupBox4.TabIndex = 2;
       this.groupBox4.TabStop = false;
       this.groupBox4.Text = " Coordinate axes";
+      // 
+      // cBox_DrawLimit
+      // 
+      this.cBox_DrawLimit.AutoSize = true;
+      this.cBox_DrawLimit.Location = new System.Drawing.Point(120, 109);
+      this.cBox_DrawLimit.Name = "cBox_DrawLimit";
+      this.cBox_DrawLimit.Size = new System.Drawing.Size(58, 22);
+      this.cBox_DrawLimit.TabIndex = 37;
+      this.cBox_DrawLimit.Text = "Limit";
+      this.cBox_DrawLimit.UseVisualStyleBackColor = true;
       // 
       // cBox_filling
       // 
@@ -781,16 +792,6 @@
       this.groupBox5.TabIndex = 36;
       this.groupBox5.TabStop = false;
       this.groupBox5.Text = "Section";
-      // 
-      // cBox_DrawLimit
-      // 
-      this.cBox_DrawLimit.AutoSize = true;
-      this.cBox_DrawLimit.Location = new System.Drawing.Point(120, 109);
-      this.cBox_DrawLimit.Name = "cBox_DrawLimit";
-      this.cBox_DrawLimit.Size = new System.Drawing.Size(58, 22);
-      this.cBox_DrawLimit.TabIndex = 37;
-      this.cBox_DrawLimit.Text = "Limit";
-      this.cBox_DrawLimit.UseVisualStyleBackColor = true;
       // 
       // Form1
       // 

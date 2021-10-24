@@ -41,17 +41,21 @@ void loadDllByPath(HINSTANCE& HDll) {
   HDll = LoadLibrary(PathLPCWSTR);
 }
 
-void calculate(int FuncIdx, int FuncClass) {
+void calculate(int FuncIdx, int FuncType) {
   HINSTANCE HDll;
   loadDllByPath(HDll);
   if (HDll != NULL) {
     Import_func F;
-    switch (FuncClass) {
+    string FuncName =
+        FuncType == FunctionClass::TargetFunction ? string(TargetFunc)
+                                                  : string(LimitFunc);
+    FuncName += to_string(0);
+    switch (FuncType) {
     case FunctionClass::TargetFunction:
-      F = (Import_func)GetProcAddress(HDll, TargetFunc);
+      F = (Import_func)GetProcAddress(HDll, FuncName.c_str());
       break;
     case FunctionClass::LimitFunction:
-      F = (Import_func)GetProcAddress(HDll, LimitFunc);
+      F = (Import_func)GetProcAddress(HDll, FuncName.c_str());
       break;
     default:
       F = nullptr;
@@ -89,9 +93,9 @@ void calculate(int FuncIdx, int FuncClass) {
     // Calculation of function values at basic level
     for (int i = 0; i < L->M1; ++i)
       NewSubLevelValues->operator[](K++) =
-        FuncClass == FunctionClass::TargetFunction ? Qmax - HQ1 * i : 0;
+        FuncType == FunctionClass::TargetFunction ? Qmax - HQ1 * i : 0;
 
-    if (FuncClass == FunctionClass::TargetFunction) {
+    if (FuncType == FunctionClass::TargetFunction) {
       double HQ2 = HQ1 / (L->M2 + 1); // Function step by sublevel
       // Calculation of function values at sublevel
       for (int i = 1; i <= L->M2; ++i)

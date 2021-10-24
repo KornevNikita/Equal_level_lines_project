@@ -97,6 +97,7 @@ namespace Equal_level_lines_UI
     List<Point3D> SectionPoints = new List<Point3D>();
     public static bool TaskLoaded = false;
     public double Xmin, Xmax, Ymin, Ymax;
+    public int NumberOfFunctions;
     Point3D OptimizerSolution = new Point3D();
     public bool CalculatedSolution = false;
     public List<PointF> OptimizerPoints = new List<PointF>();
@@ -610,6 +611,9 @@ namespace Equal_level_lines_UI
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate int GetNumOfFuncs();
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate double GetTaskArea(int TaskAreaParam);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -634,12 +638,19 @@ namespace Equal_level_lines_UI
         label5.BackColor = Color.LightGreen;
         TaskLoaded = true;
 
+        IntPtr pAddressOfFunctionToCall0 =
+          NativeMethods.GetProcAddress(pDll, "GetNumOfFuncs");
         IntPtr pAddressOfFunctionToCall1 =
           NativeMethods.GetProcAddress(pDll, "GetTaskArea");
         IntPtr pAddressOfFunctionToCall2 =
           NativeMethods.GetProcAddress(pDll, "GetTaskLinesCalcParams");
         IntPtr pAddressOfFunctionToCall3 =
           NativeMethods.GetProcAddress(pDll, "GetDensity");
+
+        GetNumOfFuncs getNumOfFuncs =
+          (GetNumOfFuncs)Marshal.GetDelegateForFunctionPointer(
+            pAddressOfFunctionToCall0,
+            typeof(GetNumOfFuncs));
 
         GetTaskArea getTaskArea =
           (GetTaskArea)Marshal.GetDelegateForFunctionPointer(
@@ -655,6 +666,8 @@ namespace Equal_level_lines_UI
           (GetDensity)Marshal.GetDelegateForFunctionPointer(
             pAddressOfFunctionToCall3,
             typeof(GetDensity));
+
+        NumberOfFunctions = getNumOfFuncs();
 
         Xmin = getTaskArea(0);
         Xmax = getTaskArea(1);
@@ -678,14 +691,22 @@ namespace Equal_level_lines_UI
         tBox_M2.Text = M2.ToString();
         tBox_M3.Text = M3.ToString();
 
-        dataGridView1.Rows.Add(0, 1, 0, Color.Black,
-        Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
+        //dataGridView1.Rows.Add(0, 1, 0, Color.Black,
+        //Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
 
-        dataGridView1.Rows.Add(0, 2, Density, Color.LightGreen,
-        Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
+        //dataGridView1.Rows.Add(0, 2, Density, Color.LightGreen,
+        //Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
 
-        dataGridView1.Rows.Add(0, 3, 0, Color.GreenYellow,
-        Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
+        //dataGridView1.Rows.Add(0, 3, 0, Color.GreenYellow,
+        //Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
+        for (int i = 0; i < NumberOfFunctions; ++i)
+        {
+          dataGridView1.Rows.Add(i, 1, 0, Color.Black, Xmin, Xmax, Ymin, Ymax,
+                                 N, M1, M2, M3);
+        }
+
+        dataGridView1.Rows[2].Cells[1].Value = 2;
+        dataGridView1.Rows[3].Cells[1].Value = 3;
 
         //bool result = NativeMethods.FreeLibrary(pDll);
       }
@@ -798,6 +819,11 @@ namespace Equal_level_lines_UI
     }
 
     private void CBox_filling_CheckedChanged(object sender, EventArgs e)
+    {
+
+    }
+
+    private void tBox_DllPath_TextChanged(object sender, EventArgs e)
     {
 
     }
