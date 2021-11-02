@@ -13,16 +13,25 @@ double target_function1(double x, double y) {
   return Temp::target_func1(x, y);
 }
 
-double limit_function0(double x, double y) {
-  return Temp::limit_func0(x, y);
+double limit_function2(double x, double y) {
+  return Temp::limit_func2(x, y);
 }
 
 bool filling_function(double x, double y) {
-  return Temp::limit_func0(x, y) > 0 ? true : false;
+  return Temp::limit_func2(x, y) > 0 ? true : false;
 }
 
-int GetNumOfFuncs() {
-  return Temp::NumOfFuncs;
+int GetNumOfFuncs(int FuncType) {
+  switch (FuncType) {
+  case 1:
+    return Temp::NumOfTargetFuncs;
+  case 2:
+    return Temp::NumOfFillingFuncs;
+  case 3:
+    return Temp::NumOfLimitFuncs;
+  default:
+    return 0;
+  }
 }
 
 double GetTaskArea(int TaskAreaParam) {
@@ -68,7 +77,7 @@ double Temp::target_func1(double x, double y) {
   return (x * x - cos(18 * x * x)) + (y * y - cos(18 * y * y));
 }
 
-double Temp::limit_func0(double x, double y) {
+double Temp::limit_func2(double x, double y) {
   double g1 = x - 0.75;
   double g2 = 2 * y - 1;
   return max(g1, g2);

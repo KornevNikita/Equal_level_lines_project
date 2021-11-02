@@ -91,7 +91,7 @@ extern "C" __declspec(dllexport)
 void calculateFilling(int LimitIdx, int LimitFactor, int Width, int Height);
 
 extern "C" __declspec(dllexport)
-void getData(DrawPoints<Point> &Points, double *SubLevelValues);
+void getData(int FuncIdx, DrawPoints<Point> &Points, double *SubLevelValues);
 
 extern "C" __declspec(dllexport)
 void getLimitValues(int *LimitValues);

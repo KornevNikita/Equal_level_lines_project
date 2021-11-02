@@ -17,9 +17,7 @@ using namespace std;
 typedef double (*Import_func)(double, double);
 typedef bool (*Import_filling_func)(double, double);
 
-void allocMem(int N, int M1, int M2, int M3) {
-  L = new Lines(N, M1, M2, M3);
-}
+void allocMem(int N, int M1, int M2, int M3) { L = new Lines(N, M1, M2, M3); }
 
 void setArea(double XMin, double XMax, double YMin, double YMax) {
   L->setArea(XMin, XMax, YMin, YMax);
@@ -49,7 +47,8 @@ void calculate(int FuncIdx, int FuncType) {
     string FuncName =
         FuncType == FunctionClass::TargetFunction ? string(TargetFunc)
                                                   : string(LimitFunc);
-    FuncName += to_string(0);
+    FuncName += to_string(FuncIdx);
+
     switch (FuncType) {
     case FunctionClass::TargetFunction:
       F = (Import_func)GetProcAddress(HDll, FuncName.c_str());
@@ -60,7 +59,7 @@ void calculate(int FuncIdx, int FuncType) {
     default:
       F = nullptr;
     }
-    
+
     // Grid traversal
     double Hx = L->Area.Width / L->N;
     double Hy = L->Area.Height / L->N;
@@ -84,7 +83,6 @@ void calculate(int FuncIdx, int FuncType) {
         if (i == 0 && j == 0 || Q > Qmax)
           Qmax = Q;
       }
-
     L->FunctionValues.push_back(Values);
 
     vector<double> *NewSubLevelValues = new vector<double>(L->M);
@@ -167,10 +165,10 @@ double Function::operator()(double X, double Y, int FuncIdx) {
   }
 }
 
-void getData(DrawPoints<Point> &Points, double *SubLevelValues) {
-  Points.Data = L->FunctionValues[0]->data();
-  copy(L->FunctionsSubLevelValues[0]->begin(),
-       L->FunctionsSubLevelValues[0]->end(),
+void getData(int FuncIdx, DrawPoints<Point> &Points, double *SubLevelValues) {
+  Points.Data = L->FunctionValues[FuncIdx]->data();
+  copy(L->FunctionsSubLevelValues[FuncIdx]->begin(),
+       L->FunctionsSubLevelValues[FuncIdx]->end(),
        SubLevelValues);
 }
 

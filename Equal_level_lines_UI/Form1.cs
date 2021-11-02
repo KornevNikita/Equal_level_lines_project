@@ -30,7 +30,8 @@ namespace Equal_level_lines_UI
                                              int Width, int Height);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void getData(IntPtr _ptrData, IntPtr _SubLevelValues);
+    public static extern void getData(int Idx, IntPtr _ptrData,
+                                      IntPtr _SubLevelValues);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern void getLimitValues(IntPtr _ptrLimitValues);
@@ -97,13 +98,18 @@ namespace Equal_level_lines_UI
     List<Point3D> SectionPoints = new List<Point3D>();
     public static bool TaskLoaded = false;
     public double Xmin, Xmax, Ymin, Ymax;
-    public int NumberOfFunctions;
+    public int NumberOfTargetFunctions;
+    public int NumberOfLimitFunctions;
+    public int NumberOfFillingFunctions;
     Point3D OptimizerSolution = new Point3D();
     public bool CalculatedSolution = false;
     public List<PointF> OptimizerPoints = new List<PointF>();
     public int NumPointsOnLastIteration = 0;
     public int LastOptimizerStatus = 1;
     public int TotalMeasurementesNumber = 0;
+    public int NumOfTargetFuncs = 0;
+    public int NumOfLimitFuncs = 0;
+    public int NumOfFillingFuncs = 0;
 
     public struct MyPoint
     {
@@ -195,8 +201,9 @@ namespace Equal_level_lines_UI
       {
         if (Eque_lines[I] != null)
         {
-          if (Eque_lines[I].Mode == 1 || Eque_lines[I].Mode == 3 && cBox_DrawLimit.Checked)
-            //if (Eque_lines[I].Mode == 1)
+          int FuncIdxToDraw = int.Parse(TBox_CriteriaToDrow.Text);
+          if (Eque_lines[I].FuncIdx == FuncIdxToDraw && Eque_lines[I].Mode == 1 ||
+              Eque_lines[I].Mode == 3 && cBox_DrawLimit.Checked)
           {
             int N = Eque_lines[I].N;
             double XMin = Eque_lines[I].XMin;
@@ -503,7 +510,7 @@ namespace Equal_level_lines_UI
       }
     }
 
-    static eque_lines[] Eque_lines = new eque_lines[NumOfFuncs];
+    static eque_lines[] Eque_lines = new eque_lines[0];
     public static Color LimitColor = Color.LightGreen, GridColor;
 
     private void btn_Run_click(object sender, EventArgs e)
@@ -513,32 +520,28 @@ namespace Equal_level_lines_UI
 
       EnableSignatures = cBox_EnableSignatures.Checked;
 
+      Eque_lines = new eque_lines[dataGridView1.Rows.Count - 1];
+      for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+        Eque_lines[i] = new eque_lines(dataGridView1.Rows[i]);
+
+      if (NumOfTargetFuncs != 0)
+      {
+        allocMem(Eque_lines[0].N, Eque_lines[0].M1, Eque_lines[0].M2,
+                 Eque_lines[0].M3);
+        setArea(Eque_lines[0].XMin, Eque_lines[0].XMax, Eque_lines[0].YMin,
+                Eque_lines[0].YMax);
+      }
+
       for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
       {
-        Eque_lines[i] = new eque_lines(dataGridView1.Rows[i]);
-        if (Eque_lines[i].Mode == 1 || Eque_lines[i].Mode == 3)
+        if (Eque_lines[i].Mode != 2)
         {
-          if (Eque_lines[i].Mode == 2)
-          {
-            Eque_lines[i].M1 = 1;
-            Eque_lines[i].M2 = 0;
-            Eque_lines[i].M3 = 0;
-          }
-
-          allocMem(Eque_lines[i].N, Eque_lines[i].M1, Eque_lines[i].M2,
-            Eque_lines[i].M3);
-          setArea(Eque_lines[i].XMin, Eque_lines[i].XMax,
-            Eque_lines[i].YMin, Eque_lines[i].YMax);
           calculate(Eque_lines[i].FuncIdx, Eque_lines[i].Mode);
           GetDataFromDll(Eque_lines[i].FuncIdx, i, Eque_lines[i].N,
             Eque_lines[i].M + 1);
         }
         else
         {
-          createEmptyClass();
-          setArea(Eque_lines[i].XMin, Eque_lines[i].XMax,
-            Eque_lines[i].YMin, Eque_lines[i].YMax);
-
           PicWidth = pictureBox1.Width;
           PicHeight = pictureBox1.Height;
 
@@ -610,8 +613,9 @@ namespace Equal_level_lines_UI
       public static extern bool FreeLibrary(IntPtr hModule);
     }
 
+    // FuncType: 1 - target, 2 - filling, 3 - limit
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int GetNumOfFuncs();
+    private delegate int GetNumOfFuncs(int FuncType);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate double GetTaskArea(int TaskAreaParam);
@@ -634,8 +638,8 @@ namespace Equal_level_lines_UI
         btn_set_optimizer.Enabled = true;
         setImportingDllPath(DllPath, DllPath.Length);
 
-        label5.Text = "Loading status: loaded";
-        label5.BackColor = Color.LightGreen;
+        Label_LoadingStatus.Text = "Loading status: loaded";
+        Label_LoadingStatus.BackColor = Color.LightGreen;
         TaskLoaded = true;
 
         IntPtr pAddressOfFunctionToCall0 =
@@ -667,7 +671,9 @@ namespace Equal_level_lines_UI
             pAddressOfFunctionToCall3,
             typeof(GetDensity));
 
-        NumberOfFunctions = getNumOfFuncs();
+        NumOfTargetFuncs = getNumOfFuncs(1);
+        NumOfLimitFuncs = getNumOfFuncs(2);
+        NumOfFillingFuncs = getNumOfFuncs(3);
 
         Xmin = getTaskArea(0);
         Xmax = getTaskArea(1);
@@ -679,7 +685,7 @@ namespace Equal_level_lines_UI
         int M2 = getTaskLinesCalcParams(2);
         int M3 = getTaskLinesCalcParams(3);
 
-        int Density = getDensity();
+        int Density = NumOfFillingFuncs != 0 ? getDensity() : 0;
 
         tBox_Xmin.Text = Xmin.ToString();
         tBox_Xmax.Text = Xmax.ToString();
@@ -691,51 +697,18 @@ namespace Equal_level_lines_UI
         tBox_M2.Text = M2.ToString();
         tBox_M3.Text = M3.ToString();
 
-        //dataGridView1.Rows.Add(0, 1, 0, Color.Black,
-        //Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
-
-        //dataGridView1.Rows.Add(0, 2, Density, Color.LightGreen,
-        //Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
-
-        //dataGridView1.Rows.Add(0, 3, 0, Color.GreenYellow,
-        //Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
-        for (int i = 0; i < NumberOfFunctions; ++i)
-        {
+        for (int i = 0; i < NumOfTargetFuncs; ++i)
           dataGridView1.Rows.Add(i, 1, 0, Color.Black, Xmin, Xmax, Ymin, Ymax,
                                  N, M1, M2, M3);
-        }
-
-        dataGridView1.Rows[2].Cells[1].Value = 2;
-        dataGridView1.Rows[3].Cells[1].Value = 3;
-
-        //bool result = NativeMethods.FreeLibrary(pDll);
+        int NumOfTargLimFuncs = NumOfTargetFuncs + NumOfLimitFuncs;
+        for (int i = NumOfTargetFuncs; i < NumOfTargLimFuncs; ++i)
+          dataGridView1.Rows.Add(i, 3, 0, Color.Gray, Xmin, Xmax, Ymin, Ymax, N,
+                                 M1, M2, M3);
+        int NumOfTargLimFillFuncs = NumOfTargLimFuncs + NumOfFillingFuncs;
+        for (int i = NumOfTargLimFuncs; i < NumOfTargLimFillFuncs; ++i)
+          dataGridView1.Rows.Add(i, 2, Density, Color.LightGray, Xmin, Xmax,
+                                 Ymin, Ymax, N, M1, M2, M3);
       }
-
-      //double Xmin = -6;
-      //double Xmax = -0.1;
-      //double Ymin = 0;
-      //double Ymax = 3.05;
-
-      //int N = 100;
-      //int M1 = 80;
-      //int M2 = 40;
-      //int M3 = 20;
-
-      ////int Density = getDensity();
-
-      //tBox_Xmin.Text = Xmin.ToString();
-      //tBox_Xmax.Text = Xmax.ToString();
-      //tBox_Ymin.Text = Ymin.ToString();
-      //tBox_Ymax.Text = Ymax.ToString();
-
-      //tBox_N.Text = N.ToString();
-      //tBox_M1.Text = M1.ToString();
-      //tBox_M2.Text = M2.ToString();
-      //tBox_M3.Text = M3.ToString();
-
-      //dataGridView1.Rows.Add(0, 1, 0, Color.Black,
-      //Xmin, Xmax, Ymin, Ymax, N, M1, M2, M3);
-
     }
 
     private void Section_btn_Click(object sender, EventArgs e)
@@ -908,7 +881,7 @@ namespace Equal_level_lines_UI
       pictureBox1.Invalidate();
     }
 
-    public static void GetDataFromDll(int funcIdx, int rowIdx, int N, int M)
+    public static void GetDataFromDll(int FuncIdx, int rowIdx, int N, int M)
     {
       // определяем количество точек, которые будут отрисованы
       DrawPoints Data = new DrawPoints();
@@ -922,7 +895,7 @@ namespace Equal_level_lines_UI
 
       Marshal.StructureToPtr(Data, ptrData, false); // копируем данные из неуправляемой в управляемую
       initData(ptrData);
-      getData(ptrData, ptrSubLevelValues);
+      getData(FuncIdx, ptrData, ptrSubLevelValues);
       Data = (DrawPoints)Marshal.PtrToStructure(ptrData, typeof(DrawPoints));
 
       Marshal.Copy(ptrSubLevelValues, Eque_lines[rowIdx].pQ, 0, M);
