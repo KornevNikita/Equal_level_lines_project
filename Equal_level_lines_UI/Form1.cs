@@ -179,14 +179,14 @@ namespace Equal_level_lines_UI
         Density = (int)row.Cells[2].Value;
         color = (Color)row.Cells[3].Value;
         //color = Color.Black;
-        XMin = (double)row.Cells[4].Value;
-        XMax = (double)row.Cells[5].Value;
-        YMin = (double)row.Cells[6].Value;
-        YMax = (double)row.Cells[7].Value;
-        N = (int)row.Cells[8].Value;
-        M1 = (int)row.Cells[9].Value;
-        M2 = (int)row.Cells[10].Value;
-        M3 = (int)row.Cells[11].Value;
+        XMin = Convert.ToDouble(row.Cells[4].Value);
+        XMax = Convert.ToDouble(row.Cells[5].Value);
+        YMin = Convert.ToDouble(row.Cells[6].Value);
+        YMax = Convert.ToDouble(row.Cells[7].Value);
+        N = Convert.ToInt32(row.Cells[8].Value);
+        M1 = Convert.ToInt32(row.Cells[9].Value);
+        M2 = Convert.ToInt32(row.Cells[10].Value);
+        M3 = Convert.ToInt32(row.Cells[11].Value);
         M = M1 + M2 + M3 - 1;
         pDat = new MyPoint[(N + 1) * (N + 1)];
         pQ = new double[M + 1];
@@ -518,6 +518,8 @@ namespace Equal_level_lines_UI
       Stopwatch stopwatch = new Stopwatch();
       stopwatch.Start();
 
+
+
       EnableSignatures = cBox_EnableSignatures.Checked;
 
       Eque_lines = new eque_lines[dataGridView1.Rows.Count - 1];
@@ -799,6 +801,54 @@ namespace Equal_level_lines_UI
     private void tBox_DllPath_TextChanged(object sender, EventArgs e)
     {
 
+    }
+
+    private void tBox_Xmin_TextChanged(object sender, EventArgs e)
+    {
+      for (int i = 0; i < dataGridView1.RowCount; ++i)
+        dataGridView1.Rows[i].Cells[4].Value = tBox_Xmin.Text;
+    }
+
+    private void tBox_Xmax_TextChanged(object sender, EventArgs e)
+    {
+      for (int i = 0; i < dataGridView1.RowCount; ++i)
+        dataGridView1.Rows[i].Cells[5].Value = tBox_Xmax.Text;
+    }
+
+    private void tBox_Ymin_TextChanged(object sender, EventArgs e)
+    {
+      for (int i = 0; i < dataGridView1.RowCount; ++i)
+        dataGridView1.Rows[i].Cells[6].Value = tBox_Ymin.Text;
+    }
+
+    private void tBox_Ymax_TextChanged(object sender, EventArgs e)
+    {
+      for (int i = 0; i < dataGridView1.RowCount; ++i)
+        dataGridView1.Rows[i].Cells[7].Value = tBox_Ymax.Text;
+    }
+
+    private void tBox_N_TextChanged(object sender, EventArgs e)
+    {
+      for (int i = 0; i < dataGridView1.RowCount; ++i)
+        dataGridView1.Rows[i].Cells[8].Value = tBox_N.Text;
+    }
+
+    private void tBox_M1_TextChanged(object sender, EventArgs e)
+    {
+      for (int i = 0; i < dataGridView1.RowCount; ++i)
+        dataGridView1.Rows[i].Cells[9].Value = tBox_M1.Text;
+    }
+
+    private void tBox_M2_TextChanged(object sender, EventArgs e)
+    {
+      for (int i = 0; i < dataGridView1.RowCount; ++i)
+        dataGridView1.Rows[i].Cells[10].Value = tBox_M2.Text;
+    }
+
+    private void tBox_M3_TextChanged(object sender, EventArgs e)
+    {
+      for (int i = 0; i < dataGridView1.RowCount; ++i)
+        dataGridView1.Rows[i].Cells[11].Value = tBox_M3.Text;
     }
 
     private void GetMeasurements()
