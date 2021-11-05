@@ -46,7 +46,8 @@ namespace Equal_level_lines_UI
     public static extern void setImportingDllPath(string DllPath, int length);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern double calculateTargetFunction(double x, double y);
+    public static extern double calculateTargetFunction(double x, double y,
+                                                        int FuncIdx);
 
     // ============ End of Equal_level_lines.dll import functions ===========
 
@@ -94,8 +95,9 @@ namespace Equal_level_lines_UI
     HashSet<int> GridFuncIdxSet = new HashSet<int>();
     public static int NumOfGridRows = 0;
     public static bool section_btn_clicked = false;
-    List<PointF> SectionBorders = new List<PointF>();
-    List<Point3D> SectionPoints = new List<Point3D>();
+    List<Point> SectionBorders = new List<Point>();
+    //List<Point3D> SectionPoints = new List<Point3D>();
+    Point3D[] SectionPoints;
     public static bool TaskLoaded = false;
     public double Xmin, Xmax, Ymin, Ymax;
     public int N, M1, M2, M3, M;
@@ -163,7 +165,7 @@ namespace Equal_level_lines_UI
       public int FuncIdx, Mode, Density;
       public Color color;
       public int TheN, TheM1, TheM2, TheM3, TheM;
-      
+
       public eque_lines(DataGridViewRow row, int N, int M)
       {
         FuncIdx = (int)row.Cells[0].Value;
@@ -192,7 +194,7 @@ namespace Equal_level_lines_UI
       {
         if (Eque_lines[I] != null)
         {
-          int FuncIdxToDraw = int.Parse(TBox_CriteriaToDrow.Text);
+          int FuncIdxToDraw = int.Parse(tBox_CriteriaToDrow.Text);
           if (Eque_lines[I].FuncIdx == FuncIdxToDraw && Eque_lines[I].Mode == 1 ||
               Eque_lines[I].Mode == 3 && cBox_DrawLimit.Checked)
           {
@@ -367,38 +369,16 @@ namespace Equal_level_lines_UI
       for (i = 0; i < SectionBorders.Count; i++)
       {
         SolidBrush brush = new SolidBrush(Color.Red);
-        float area_width = float.Parse(tBox_Xmax.Text)
-          - float.Parse(tBox_Xmin.Text);
-        float area_height = float.Parse(tBox_Ymax.Text)
-          - float.Parse(tBox_Ymin.Text);
-        //float X = SectionBorders[i].X / area_width * pictureBox1.Width +
-        //          pictureBox1.Width / 2;
-        //float Y = pictureBox1.Height / 2 - SectionBorders[i].Y /
-        //          area_height * pictureBox1.Height;
-        float X = Math.Abs((float)Xmin - SectionBorders[i].X) / area_width * pictureBox1.Width;
-        float Y = pictureBox1.Height - SectionBorders[i].Y / area_height * pictureBox1.Height;
-        g.FillEllipse(brush, X - 3, Y - 3, 6, 6);
+        g.FillEllipse(brush, SectionBorders[i].X, SectionBorders[i].Y, 6, 6);
       }
       if (SectionBorders.Count == 2)
       {
         Pen pen = new Pen(Color.Red, 0);
-        float area_width = float.Parse(tBox_Xmax.Text)
-          - float.Parse(tBox_Xmin.Text);
-        float area_height = float.Parse(tBox_Ymax.Text)
-          - float.Parse(tBox_Ymin.Text);
-        //float X1 = SectionBorders[0].X / area_width * pictureBox1.Width +
-        //           pictureBox1.Width / 2;
-        //float Y1 = pictureBox1.Height / 2 - SectionBorders[0].Y /
-        //           area_height * pictureBox1.Height;
-        //float X2 = SectionBorders[1].X / area_width * pictureBox1.Width +
-        //           pictureBox1.Width / 2;
-        //float Y2 = pictureBox1.Height / 2 - SectionBorders[1].Y /
-        //           area_height * pictureBox1.Height;
-        float X1 = Math.Abs((float)Xmin - SectionBorders[0].X) / area_width * pictureBox1.Width;
-        float Y1 = pictureBox1.Height - SectionBorders[0].Y / area_height * pictureBox1.Height;
-        float X2 = Math.Abs((float)Xmin - SectionBorders[1].X) / area_width * pictureBox1.Width;
-        float Y2 = pictureBox1.Height - SectionBorders[1].Y / area_height * pictureBox1.Height;
-        g.DrawLine(pen, X1, Y1, X2, Y2);
+        float X1 = SectionBorders[0].X;
+        float Y1 = SectionBorders[0].Y;
+        float X2 = SectionBorders[1].X;
+        float Y2 = SectionBorders[1].Y;
+        g.DrawLine(pen, X1 + 3, Y1 + 3, X2 + 3, Y2 + 3);
       }
 
       int k = OptimizerPoints.Count - NumPointsOnLastIteration;
@@ -450,7 +430,7 @@ namespace Equal_level_lines_UI
         g.FillEllipse(brush, X, Y, 5, 5);
       }
 
-        if (CalculatedSolution)
+      if (CalculatedSolution)
       {
         SolidBrush brush = new SolidBrush(Color.Cyan);
         float area_width = float.Parse(tBox_Xmax.Text)
@@ -477,19 +457,19 @@ namespace Equal_level_lines_UI
     public void DrawSectionChart()
     {
       chart2.Series.Clear();
-      if (SectionPoints.Count > 1)
+      if (SectionPoints.Length > 1)
       {
         chart2.Series.Add("Trajectory");
         chart2.Series["Trajectory"].ChartType =
           System.Windows.Forms.DataVisualization.Charting
             .SeriesChartType.Spline;
         double x1 = SectionPoints[0].X;
-        double x2 = SectionPoints[SectionPoints.Count - 1].X;
+        double x2 = SectionPoints[SectionPoints.Length - 1].X;
         double y1 = SectionPoints[0].Y;
-        double y2 = SectionPoints[SectionPoints.Count - 1].Y;
+        double y2 = SectionPoints[SectionPoints.Length - 1].Y;
         double h = Math.Sqrt(Math.Pow((x2 - x1), 2) + Math.Pow((y2 - y1), 2))
-          / SectionPoints.Count;
-        for (int i = 0; i < SectionPoints.Count; i++)
+          / SectionPoints.Length;
+        for (int i = 0; i < SectionPoints.Length; i++)
           chart2.Series["Trajectory"].Points
             .AddXY(i * h, SectionPoints[i].Z);
       }
@@ -677,56 +657,46 @@ namespace Equal_level_lines_UI
         if (SectionBorders.Count == 2)
         {
           SectionBorders.Clear();
-          SectionPoints.Clear();
+          Array.Clear(SectionPoints, 0, SectionPoints.Length);
           dataGridView2.Rows.Clear();
         }
 
-        float x_coord;
-        float y_coord;
-        if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
-        {
-          x_coord = (float)Xmin + (float)(Xmax - Xmin) / pictureBox1.Width * e.X;
-          y_coord = (float)Ymax - (float)(Ymax - Ymin) / pictureBox1.Height * e.Y;
-        }
-        else
-        {
-          //PointF p_e = new PointF(e.X - pictureBox1.Width / 2,
-          //                        e.Y + pictureBox1.Height / 2);
-          //x_coord = p_e.X * (float.Parse(tBox_Xmax.Text)
-          //  - float.Parse(tBox_Xmin.Text)) / pictureBox1.Width;
-          //y_coord = p_e.Y * (float.Parse(tBox_Ymax.Text)
-          //  - float.Parse(tBox_Ymin.Text)) / pictureBox1.Height;
-          //Console.WriteLine($"p_e = {x_coord}, {y_coord}");
-          PointF p_e = new PointF(e.X - pictureBox1.Width / 2,
-                        //e.Y + pictureBox1.Height / 2);
-                        pictureBox1.Height / 2 - e.Y);
-          x_coord = p_e.X * (float.Parse(tBox_Xmax.Text)
-            - float.Parse(tBox_Xmin.Text)) / pictureBox1.Width;
-          y_coord = p_e.Y * (float.Parse(tBox_Ymax.Text)
-            - float.Parse(tBox_Ymin.Text)) / pictureBox1.Height;
-        }
-        
-        PointF p = new PointF(x_coord, y_coord);
-        SectionBorders.Add(p);
+        SectionBorders.Add(new Point(e.X - 3, e.Y - 3));
         if (SectionBorders.Count == 2)
         {
+          Stopwatch Stopwatch = new Stopwatch();
+          Stopwatch.Start();
+
           int PointCount = int.Parse(tBox_PointCount.Text);
-          double h_x =
-            (SectionBorders[1].X - SectionBorders[0].X) / PointCount;
-          double h_y =
-            (SectionBorders[1].Y - SectionBorders[0].Y) / PointCount;
-          double xmin = SectionBorders[0].X;
-          double ymin = SectionBorders[0].Y;
+          int W1 = pictureBox1.Width;
+          double W2 = Xmax - Xmin;
+          int H1 = pictureBox1.Height;
+          double H2 = Ymax - Ymin;
+
+          double X1 = Xmin + (double)SectionBorders[0].X / (double)W1 * W2;
+          double X2 = Xmin + (double)SectionBorders[1].X / (double)W1 * W2;
+          double Hx = (X2 - X1) / PointCount;
+
+          double Y1 = Ymin + (double)(H1 - SectionBorders[0].Y) / H1 * H2;
+          double Y2 = Ymin + (double)(H1 - SectionBorders[1].Y) / H1 * H2;
+          double Hy = (Y2 - Y1) / PointCount;
+
+          SectionPoints = new Point3D[PointCount];
           for (int i = 0; i < PointCount; i++)
           {
-            double x = xmin + h_x * i;
-            double y = ymin + h_y * i;
-            double Q = calculateTargetFunction(x, y);
+            double x = X1 + Hx * i;
+            double y = Y1 + Hy * i;
+            int FuncIdx = int.Parse(tBox_CriteriaToDrow.Text);
+            double Q = calculateTargetFunction(x, y, FuncIdx);
             Point3D p3d = new Point3D((float)x, (float)y, (float)Q);
-            SectionPoints.Add(p3d);
-            dataGridView2.Rows.Add(i,Math.Round(x, 3),Math.Round(y, 3),
+            SectionPoints[i] = p3d;
+            dataGridView2.Rows.Add(i, Math.Round(x, 3), Math.Round(y, 3),
                                    Math.Round(Q, 3));
           }
+
+          label_SectionTime.Text = "Time: " + Stopwatch.Elapsed.TotalSeconds.ToString();
+          label_SectionTime.BackColor = Color.LightGreen;
+
           DrawSectionChart();
         }
       }
@@ -735,7 +705,7 @@ namespace Equal_level_lines_UI
     private void Button2_Click_1(object sender, EventArgs e)
     {
       SectionBorders.Clear();
-      SectionPoints.Clear();
+      Array.Clear(SectionPoints, 0, SectionPoints.Length);
       chart2.Series.Clear();
       dataGridView2.Rows.Clear();
     }

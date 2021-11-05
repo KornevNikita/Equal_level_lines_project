@@ -194,10 +194,11 @@ void setImportingDllPath(char *TheImportingDllPath, int Length)
   ImportingDllPath = string(TheImportingDllPath);
 }
 
-double calculateTargetFunction(double X, double Y)
+double calculateTargetFunction(double X, double Y, int FuncIdx)
 {
   HINSTANCE HDll;
   loadDllByPath(HDll);
-  Import_func F = (Import_func)GetProcAddress(HDll, TargetFunc);
+  string FuncName = string(TargetFunc) + to_string(FuncIdx);
+  Import_func F = (Import_func)GetProcAddress(HDll, FuncName.c_str());
   return (*F)(X, Y);
 }
