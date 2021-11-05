@@ -366,13 +366,18 @@ namespace Equal_level_lines_UI
         }
       }
 
-      for (i = 0; i < SectionBorders.Count; i++)
+      if (SectionBorders.Count == 1)
       {
-        SolidBrush brush = new SolidBrush(Color.Red);
-        g.FillEllipse(brush, SectionBorders[i].X, SectionBorders[i].Y, 6, 6);
+        SolidBrush RedBrush = new SolidBrush(Color.Red);
+        g.FillEllipse(RedBrush, SectionBorders[0].X, SectionBorders[0].Y, 6, 6);
       }
+
       if (SectionBorders.Count == 2)
       {
+        SolidBrush RedBrush = new SolidBrush(Color.Red);
+        g.FillEllipse(RedBrush, SectionBorders[0].X, SectionBorders[0].Y, 6, 6);
+        SolidBrush BlackBrush = new SolidBrush(Color.Black);
+        g.FillEllipse(BlackBrush, SectionBorders[1].X, SectionBorders[1].Y, 6, 6);
         Pen pen = new Pen(Color.Red, 0);
         float X1 = SectionBorders[0].X;
         float Y1 = SectionBorders[0].Y;
