@@ -29,10 +29,10 @@ void setNumOptimizerIterations(int NumIters) {
   NumIterations = NumIters;
 }
 
-void setOptimizerParameters() {
+void setOptimizerParameters(int FuncIdx, int LimitIdx) {
   aParameters = new Parameters;
-  aTargetFunction = new MyTargetFunction;
-  aConditionFunction = new MyConditionFunction;
+  aTargetFunction = new MyTargetFunction(FuncIdx);
+  aConditionFunction = new MyConditionFunction(LimitIdx);
   aTargetFunction->setArea(XMin, YMin, XMax, YMax);
   aConditionFunction->SetArea(XMin, YMin, XMax, YMax);
   aParameters->testFunction = &*aTargetFunction;
@@ -52,7 +52,7 @@ void setOptimizerParameters() {
   aParameters->GlobalItNum = -1;
   aParameters->dimention = 2;
   aParameters->concurrencyIsAllowed = false;
-  Direct::SetDParameters(&*aParameters, Method::TDIR_minimum);
+  Direct::SetDParameters(&*aParameters, Method::ExtDir_diag);
 }
 
 int runOptimizer() {

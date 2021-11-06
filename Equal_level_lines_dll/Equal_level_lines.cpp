@@ -48,17 +48,7 @@ void calculate(int FuncIdx, int FuncType) {
         FuncType == FunctionClass::TargetFunction ? string(TargetFunc)
                                                   : string(LimitFunc);
     FuncName += to_string(FuncIdx);
-
-    switch (FuncType) {
-    case FunctionClass::TargetFunction:
-      F = (Import_func)GetProcAddress(HDll, FuncName.c_str());
-      break;
-    case FunctionClass::LimitFunction:
-      F = (Import_func)GetProcAddress(HDll, FuncName.c_str());
-      break;
-    default:
-      F = nullptr;
-    }
+    F = (Import_func)GetProcAddress(HDll, FuncName.c_str());
 
     // Grid traversal
     double Hx = L->Area.Width / L->N;

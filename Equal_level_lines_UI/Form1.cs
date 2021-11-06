@@ -63,7 +63,7 @@ namespace Equal_level_lines_UI
     public static extern void setNumOptimizerIterations(int NumIters);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void setOptimizerParameters();
+    public static extern void setOptimizerParameters(int FuncIdx, int LimitIdx);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
     public static extern int runOptimizer();
@@ -797,7 +797,8 @@ namespace Equal_level_lines_UI
       setImportingDllPath2(DllPath, DllPath.Length);
       setOptimizerArea(Xmin, Xmax, Ymin, Ymax);
       setNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
-      setOptimizerParameters();
+      setOptimizerParameters(int.Parse(tBox_CriteriaToDrow.Text), 2);
+      //setOptimizerParameters(int.Parse(tBox_CriteriaToDrow.Text));
       //GetMeasurements();
       btn_DoOptIter.Enabled = true;
       btn_FindOptSol.Enabled = true;
