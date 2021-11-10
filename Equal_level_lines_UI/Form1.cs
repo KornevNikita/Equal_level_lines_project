@@ -142,19 +142,6 @@ namespace Equal_level_lines_UI
       InitializeComponent();
       GridColor = colorDialog1.Color;
       LimitColor = Color.LightGreen;
-
-      dataGridView1.ColumnCount = 4;
-      dataGridView1.Columns[0].HeaderCell.Value = "Func #";
-      dataGridView1.Columns[1].HeaderCell.Value = "Mode";
-      dataGridView1.Columns[2].HeaderCell.Value = "Density";
-      dataGridView1.Columns[3].HeaderCell.Value = "Color";
-
-      dataGridView2.ColumnCount = 4;
-      dataGridView2.Columns[0].HeaderCell.Value = "N";
-      dataGridView2.Columns[1].HeaderCell.Value = "x1";
-      dataGridView2.Columns[2].HeaderCell.Value = "x2";
-      dataGridView2.Columns[3].HeaderCell.Value = "Q";
-
       chart2.ChartAreas[0].AxisX.LabelStyle.Format = "{ 0.000 }";
     }
 
@@ -173,15 +160,6 @@ namespace Equal_level_lines_UI
         Mode = (int)row.Cells[1].Value;
         Density = (int)row.Cells[2].Value;
         color = (Color)row.Cells[3].Value;
-        //Xmin = Convert.ToDouble(row.Cells[4].Value);
-        //Xmax = Convert.ToDouble(row.Cells[5].Value);
-        //Ymin = Convert.ToDouble(row.Cells[6].Value);
-        //Ymax = Convert.ToDouble(row.Cells[7].Value);
-        //TheN = Convert.ToInt32(tBox_N.Text);
-        //TheM1 = Convert.ToInt32(row.Cells[9].Value);
-        //TheM2 = Convert.ToInt32(row.Cells[10].Value);
-        //TheM3 = Convert.ToInt32(row.Cells[11].Value);
-        //TheM = M1 + M2 + M3 - 1;
         pDat = new MyPoint[(N + 1) * (N + 1)];
         pQ = new double[M + 1];
       }
@@ -392,10 +370,10 @@ namespace Equal_level_lines_UI
       {
         //Console.WriteLine($"X = {OptimizerPoints[i].X}, Y = {OptimizerPoints[i].Y}");
         SolidBrush brush = new SolidBrush(Color.Red);
-        float area_width = float.Parse(tBox_Xmax.Text)
-          - float.Parse(tBox_Xmin.Text);
-        float area_height = float.Parse(tBox_Ymax.Text)
-          - float.Parse(tBox_Ymin.Text);
+        float area_width = float.Parse(dataGridView3.Rows[0].Cells[2].Value.ToString()) -
+          float.Parse(dataGridView3.Rows[0].Cells[1].Value.ToString());
+        float area_height = float.Parse(dataGridView3.Rows[1].Cells[2].Value.ToString()) -
+          float.Parse(dataGridView3.Rows[1].Cells[1].Value.ToString());
         //Console.WriteLine($"area_width = {area_width}, area_height = {area_height}");
         float X, Y;
         if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
@@ -416,10 +394,10 @@ namespace Equal_level_lines_UI
       for (i = k; i < OptimizerPoints.Count; i++)
       {
         SolidBrush brush = new SolidBrush(Color.Red);
-        float area_width = float.Parse(tBox_Xmax.Text)
-          - float.Parse(tBox_Xmin.Text);
-        float area_height = float.Parse(tBox_Ymax.Text)
-          - float.Parse(tBox_Ymin.Text);
+        float area_width = float.Parse(dataGridView3.Rows[0].Cells[2].Value.ToString()) -
+          float.Parse(dataGridView3.Rows[0].Cells[1].Value.ToString());
+        float area_height = float.Parse(dataGridView3.Rows[1].Cells[2].Value.ToString()) -
+          float.Parse(dataGridView3.Rows[1].Cells[1].Value.ToString());
         float X, Y;
         if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
         {
@@ -439,10 +417,10 @@ namespace Equal_level_lines_UI
       if (CalculatedSolution)
       {
         SolidBrush brush = new SolidBrush(Color.Cyan);
-        float area_width = float.Parse(tBox_Xmax.Text)
-          - float.Parse(tBox_Xmin.Text);
-        float area_height = float.Parse(tBox_Ymax.Text)
-          - float.Parse(tBox_Ymin.Text);
+        float area_width = float.Parse(dataGridView3.Rows[0].Cells[2].Value.ToString()) -
+          float.Parse(dataGridView3.Rows[0].Cells[1].Value.ToString());
+        float area_height = float.Parse(dataGridView3.Rows[1].Cells[2].Value.ToString()) -
+          float.Parse(dataGridView3.Rows[1].Cells[1].Value.ToString());
         float X, Y;
         if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
         {
@@ -491,17 +469,25 @@ namespace Equal_level_lines_UI
 
       EnableSignatures = cBox_EnableSignatures.Checked;
 
-      Eque_lines = new eque_lines[dataGridView1.Rows.Count - 1];
-      for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+      Eque_lines = new eque_lines[dataGridView1.Rows.Count];
+      for (int i = 0; i < dataGridView1.Rows.Count; i++)
         Eque_lines[i] = new eque_lines(dataGridView1.Rows[i], N, M);
 
       if (NumOfTargetFuncs != 0)
       {
+        N = int.Parse(dataGridView4.Rows[0].Cells[0].Value.ToString());
+        M1 = int.Parse(dataGridView4.Rows[0].Cells[1].Value.ToString());
+        M2 = int.Parse(dataGridView4.Rows[0].Cells[2].Value.ToString());
+        M3 = int.Parse(dataGridView4.Rows[0].Cells[3].Value.ToString());
         allocMem(N, M1, M2, M3);
+        Xmin = double.Parse(dataGridView3.Rows[0].Cells[1].Value.ToString());
+        Xmax = double.Parse(dataGridView3.Rows[0].Cells[2].Value.ToString());
+        Ymin = double.Parse(dataGridView3.Rows[1].Cells[1].Value.ToString());
+        Ymax = double.Parse(dataGridView3.Rows[1].Cells[2].Value.ToString());
         setArea(Xmin, Xmax, Ymin, Ymax);
       }
 
-      for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+      for (int i = 0; i < dataGridView1.Rows.Count; i++)
       {
         if (Eque_lines[i].Mode != 2)
         {
@@ -571,7 +557,7 @@ namespace Equal_level_lines_UI
         btn_set_optimizer.Enabled = true;
         setImportingDllPath(DllPath, DllPath.Length);
 
-        Label_LoadingStatus.Text = "Loading status: loaded";
+        Label_LoadingStatus.Text = "Loaded";
         Label_LoadingStatus.BackColor = Color.LightGreen;
         TaskLoaded = true;
 
@@ -627,27 +613,12 @@ namespace Equal_level_lines_UI
         int Density = NumOfFillingFuncs != 0 ? getDensity() : 0;
         TaskDim = getTaskDim();
 
-        tBox_Xmin.Text = Xmin.ToString();
-        tBox_Xmax.Text = Xmax.ToString();
-        tBox_Ymin.Text = Ymin.ToString();
-        tBox_Ymax.Text = Ymax.ToString();
-        tBox_N.Text = N.ToString();
-        tBox_M1.Text = M1.ToString();
-        tBox_M2.Text = M2.ToString();
-        tBox_M3.Text = M3.ToString();
+        for (int i = 0; i < TaskDim; ++i)
+          dataGridView3.Rows.Add(i, 0, 0);
+
+        dataGridView4.Rows.Add(N, M1, M2, M3);
         tBox_TaskDim.Text = TaskDim.ToString();
 
-        //for (int i = 0; i < NumOfTargetFuncs; ++i)
-        //  dataGridView1.Rows.Add(i, 1, 0, Color.Black, Xmin, Xmax, Ymin, Ymax,
-        //                         N, M1, M2, M3);
-        //int NumOfTargLimFuncs = NumOfTargetFuncs + NumOfLimitFuncs;
-        //for (int i = NumOfTargetFuncs; i < NumOfTargLimFuncs; ++i)
-        //  dataGridView1.Rows.Add(i, 3, 0, Color.Gray, Xmin, Xmax, Ymin, Ymax, N,
-        //                         M1, M2, M3);
-        //int NumOfTargLimFillFuncs = NumOfTargLimFuncs + NumOfFillingFuncs;
-        //for (int i = NumOfTargLimFuncs; i < NumOfTargLimFillFuncs; ++i)
-        //  dataGridView1.Rows.Add(i, 2, Density, Color.LightGray, Xmin, Xmax,
-        //                         Ymin, Ymax, N, M1, M2, M3);
         for (int i = 0; i < NumOfTargetFuncs; ++i)
           dataGridView1.Rows.Add(i, 1, 0, Color.Black);
         int NumOfTargLimFuncs = NumOfTargetFuncs + NumOfLimitFuncs;
@@ -662,6 +633,11 @@ namespace Equal_level_lines_UI
     private void Section_btn_Click(object sender, EventArgs e)
     {
       section_btn_clicked = true;
+    }
+
+    private void cBox_filling_CheckedChanged(object sender, EventArgs e)
+    {
+
     }
 
     private void Chart1_MouseClick(object sender, MouseEventArgs e)
@@ -731,54 +707,9 @@ namespace Equal_level_lines_UI
       section_btn_clicked = false;
     }
 
-    private void CBox_filling_CheckedChanged(object sender, EventArgs e)
-    {
-
-    }
-
     private void tBox_DllPath_TextChanged(object sender, EventArgs e)
     {
 
-    }
-
-    private void tBox_Xmin_TextChanged(object sender, EventArgs e)
-    {
-      Xmin = Convert.ToDouble(tBox_Xmin.Text);
-    }
-
-    private void tBox_Xmax_TextChanged(object sender, EventArgs e)
-    {
-      Xmax = Convert.ToDouble(tBox_Xmax.Text);
-    }
-
-    private void tBox_Ymin_TextChanged(object sender, EventArgs e)
-    {
-      Ymin = Convert.ToDouble(tBox_Ymin.Text);
-    }
-
-    private void tBox_Ymax_TextChanged(object sender, EventArgs e)
-    {
-      Ymax = Convert.ToDouble(tBox_Ymax.Text);
-    }
-
-    private void tBox_N_TextChanged(object sender, EventArgs e)
-    {
-      N = Convert.ToInt32(tBox_N.Text);
-    }
-
-    private void tBox_M1_TextChanged(object sender, EventArgs e)
-    {
-      M1 = Convert.ToInt32(tBox_M1.Text);
-    }
-
-    private void tBox_M2_TextChanged(object sender, EventArgs e)
-    {
-      M2 = Convert.ToInt32(tBox_M2.Text);
-    }
-
-    private void tBox_M3_TextChanged(object sender, EventArgs e)
-    {
-      M3 = Convert.ToInt32(tBox_M3.Text);
     }
 
     private void GetMeasurements()
