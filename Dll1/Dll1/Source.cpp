@@ -5,30 +5,30 @@
 #include <sstream>
 #include <fstream>
 
-double target_function0(double x, double y) {
-  return Temp::target_func0(x, y);
+double target_function0(double *Point) {
+  return Task::target_func0(Point);
 }
 
-double target_function1(double x, double y) {
-  return Temp::target_func1(x, y);
+double target_function1(double *Point) {
+  return Task::target_func1(Point);
 }
 
-double limit_function2(double x, double y) {
-  return Temp::limit_func2(x, y);
+double limit_function2(double *Point) {
+  return Task::limit_func2(Point);
 }
 
-bool filling_function(double x, double y) {
-  return Temp::limit_func2(x, y) > 0 ? true : false;
+bool filling_function(double *Point) {
+  return Task::limit_func2(Point) > 0 ? true : false;
 }
 
 int GetNumOfFuncs(int FuncType) {
   switch (FuncType) {
   case 1:
-    return Temp::NumOfTargetFuncs;
+    return Task::NumOfTargetFuncs;
   case 2:
-    return Temp::NumOfFillingFuncs;
+    return Task::NumOfFillingFuncs;
   case 3:
-    return Temp::NumOfLimitFuncs;
+    return Task::NumOfLimitFuncs;
   default:
     return 0;
   }
@@ -37,13 +37,13 @@ int GetNumOfFuncs(int FuncType) {
 double GetTaskArea(int TaskAreaParam) {
   switch (TaskAreaParam) {
   case 0:
-    return Temp::Xmin;
+    return Task::Xmin;
   case 1:
-    return Temp::Xmax;
+    return Task::Xmax;
   case 2:
-    return Temp::Ymin;
+    return Task::Ymin;
   case 3:
-    return Temp::Ymax;
+    return Task::Ymax;
   default:
     return 0;
   }
@@ -52,32 +52,39 @@ double GetTaskArea(int TaskAreaParam) {
 int GetTaskLinesCalcParams(int TaskLinesCalcParam) {
   switch (TaskLinesCalcParam) {
   case 0:
-    return Temp::N;
+    return Task::N;
   case 1:
-    return Temp::M1;
+    return Task::M1;
   case 2:
-    return Temp::M2;
+    return Task::M2;
   case 3:
-    return Temp::M3;
+    return Task::M3;
   default:
     return 0;
   }
 }
 
 int GetDensity() {
-  return Temp::Density;
+  return Task::Density;
 }
 
-double Temp::target_func0(double x, double y) {
+int GetTaskDim() {
+  return Task::TaskDim;
+}
+
+double Task::target_func0(double *Point) {
+  double x = Point[0], y = Point[1];
   return (4.0 - 2.1 * x * x + pow(x, 4) / 3) * x * x + x * y +
     (4 * y * y - 4) * y * y;
 }
 
-double Temp::target_func1(double x, double y) {
+double Task::target_func1(double *Point) {
+  double x = Point[0], y = Point[1];
   return (x * x - cos(18 * x * x)) + (y * y - cos(18 * y * y));
 }
 
-double Temp::limit_func2(double x, double y) {
+double Task::limit_func2(double *Point) {
+  double x = Point[0], y = Point[1];
   double g1 = x - 0.75;
   double g2 = 2 * y - 1;
   return max(g1, g2);

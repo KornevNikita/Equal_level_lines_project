@@ -46,7 +46,7 @@ namespace Equal_level_lines_UI
     public static extern void setImportingDllPath(string DllPath, int length);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern double calculateTargetFunction(double x, double y,
+    public static extern double calculateTargetFunction(double[] Point,
                                                         int FuncIdx);
 
     // ============ End of Equal_level_lines.dll import functions ===========
@@ -113,6 +113,7 @@ namespace Equal_level_lines_UI
     public int NumOfTargetFuncs = 0;
     public int NumOfLimitFuncs = 0;
     public int NumOfFillingFuncs = 0;
+    public int TaskDim = 0;
 
     public struct MyPoint
     {
@@ -582,6 +583,8 @@ namespace Equal_level_lines_UI
           NativeMethods.GetProcAddress(pDll, "GetTaskLinesCalcParams");
         IntPtr pAddressOfFunctionToCall3 =
           NativeMethods.GetProcAddress(pDll, "GetDensity");
+        IntPtr pAddressOfFunctionToCall4 =
+          NativeMethods.GetProcAddress(pDll, "GetTaskDim");
 
         GetNumOfFuncs getNumOfFuncs =
           (GetNumOfFuncs)Marshal.GetDelegateForFunctionPointer(
@@ -603,10 +606,14 @@ namespace Equal_level_lines_UI
             pAddressOfFunctionToCall3,
             typeof(GetDensity));
 
+        GetDensity getTaskDim =
+          (GetDensity)Marshal.GetDelegateForFunctionPointer(
+            pAddressOfFunctionToCall4,
+            typeof(GetDensity));
+
         NumOfTargetFuncs = getNumOfFuncs(1);
         NumOfLimitFuncs = getNumOfFuncs(2);
         NumOfFillingFuncs = getNumOfFuncs(3);
-
         Xmin = getTaskArea(0);
         Xmax = getTaskArea(1);
         Ymin = getTaskArea(2);
@@ -618,6 +625,7 @@ namespace Equal_level_lines_UI
         M = M1 + M2 + M3 - 1;
 
         int Density = NumOfFillingFuncs != 0 ? getDensity() : 0;
+        TaskDim = getTaskDim();
 
         tBox_Xmin.Text = Xmin.ToString();
         tBox_Xmax.Text = Xmax.ToString();
@@ -627,6 +635,7 @@ namespace Equal_level_lines_UI
         tBox_M1.Text = M1.ToString();
         tBox_M2.Text = M2.ToString();
         tBox_M3.Text = M3.ToString();
+        tBox_TaskDim.Text = TaskDim.ToString();
 
         //for (int i = 0; i < NumOfTargetFuncs; ++i)
         //  dataGridView1.Rows.Add(i, 1, 0, Color.Black, Xmin, Xmax, Ymin, Ymax,
@@ -689,14 +698,16 @@ namespace Equal_level_lines_UI
           SectionPoints = new Point3D[PointCount];
           for (int i = 0; i < PointCount; i++)
           {
-            double x = X1 + Hx * i;
-            double y = Y1 + Hy * i;
+            int PointSize = 2;
+            double[] Point = new double[PointSize];
+            Point[0] = X1 + Hx * i;
+            Point[1] = Y1 + Hy * i;
             int FuncIdx = int.Parse(tBox_CriteriaToDrow.Text);
-            double Q = calculateTargetFunction(x, y, FuncIdx);
-            Point3D p3d = new Point3D((float)x, (float)y, (float)Q);
+            double Q = calculateTargetFunction(Point, FuncIdx);
+            Point3D p3d = new Point3D((float)Point[0], (float)Point[1], (float)Q);
             SectionPoints[i] = p3d;
-            dataGridView2.Rows.Add(i, Math.Round(x, 3), Math.Round(y, 3),
-                                   Math.Round(Q, 3));
+            dataGridView2.Rows.Add(i, Math.Round(Point[0], 3),
+                                   Math.Round(Point[1], 3), Math.Round(Q, 3));
           }
 
           label_SectionTime.Text = "Time: " + Stopwatch.Elapsed.TotalSeconds.ToString();

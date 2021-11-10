@@ -14,8 +14,8 @@
 
 using namespace std;
 
-typedef double (*Import_func)(double, double);
-typedef bool (*Import_filling_func)(double, double);
+typedef double (*Import_func)(double *);
+typedef bool (*Import_filling_func)(double *);
 
 void allocMem(int N, int M1, int M2, int M3) { L = new Lines(N, M1, M2, M3); }
 
@@ -62,9 +62,11 @@ void calculate(int FuncIdx, int FuncType) {
       {
         // Grid structure filling
         size_t Idx = (L->N + 1) * i + j;
-        X = L->Area.XMin + Hx * i;
-        Y = L->Area.YMin + Hy * j;
-        Q = (*F)(X, Y);
+        double *P = new double[2];
+        P[0] = X = L->Area.XMin + Hx * i;
+        P[1] = Y = L->Area.YMin + Hy * j;
+        // TODO: add code to fix specific variables 
+        Q = (*F)(P);
         Values->operator[](Idx) = Point(X, Y, Q);
 
         // Searching for the minimum and maximum values on the grid
@@ -113,11 +115,14 @@ void calculateFilling(int LimitIdx, int LimitFactor, int Width, int Height) {
   {
     for (int j = 0; j < Height / LimitFactor; ++j)
     {
+      double *P = new double[2];
       double X = L->Area.XMin +
         (double)(i) / (double)Width * (L->Area.Width) * LimitFactor;
       double Y = L->Area.YMax -
         (double)j / (double)Height * L->Area.Height * LimitFactor;
-      LimitValues[Count++] = (*F)(X, Y);
+      P[0] = X;
+      P[1] = Y;
+      LimitValues[Count++] = (*F)(P);
     }
   }
 }
@@ -184,11 +189,11 @@ void setImportingDllPath(char *TheImportingDllPath, int Length)
   ImportingDllPath = string(TheImportingDllPath);
 }
 
-double calculateTargetFunction(double X, double Y, int FuncIdx)
+double calculateTargetFunction(double *Point, int FuncIdx)
 {
   HINSTANCE HDll;
   loadDllByPath(HDll);
   string FuncName = string(TargetFunc) + to_string(FuncIdx);
   Import_func F = (Import_func)GetProcAddress(HDll, FuncName.c_str());
-  return (*F)(X, Y);
+  return (*F)(Point);
 }

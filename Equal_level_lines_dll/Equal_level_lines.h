@@ -109,4 +109,4 @@ extern "C" __declspec(dllexport)
 void setImportingDllPath(char *TheImportingDllPath, int Length);
 
 extern "C" __declspec(dllexport)
-double calculateTargetFunction(double X, double Y, int FuncIdx);
+double calculateTargetFunction(double *Point, int FuncIdx);

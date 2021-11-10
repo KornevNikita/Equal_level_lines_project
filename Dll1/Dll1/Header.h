@@ -1,28 +1,28 @@
 #pragma once
 
-#include <string>
-
 using namespace std;
 
 #ifndef __HEADER_H
 #define __HEADER_H
-extern "C" __declspec(dllexport) double target_function0(double x, double y);
-extern "C" __declspec(dllexport) double target_function1(double x, double y);
-extern "C" __declspec(dllexport) double limit_function2(double x, double y);
-extern "C" __declspec(dllexport) bool filling_function(double x, double y);
+extern "C" __declspec(dllexport) double target_function0(double *Point);
+extern "C" __declspec(dllexport) double target_function1(double *Point);
+extern "C" __declspec(dllexport) double limit_function2(double *Point);
+extern "C" __declspec(dllexport) bool filling_function(double *Point);
+
 extern "C" __declspec(dllexport) double GetTaskArea(int TaskAreaParam);
 extern "C" __declspec(dllexport) int GetNumOfFuncs(int FuncType);
 extern "C" __declspec(dllexport) int GetTaskLinesCalcParams(int TaskLinesCalcParam);
 extern "C" __declspec(dllexport) int GetDensity();
+extern "C" __declspec(dllexport) int GetTaskDim();
 #endif
 
-class Temp {
+class Task {
 public:
-  static double target_func0(double x, double y);
-  static double target_func1(double x, double y);
-  static double limit_func2(double x, double y);
+  static double target_func0(double *Point);
+  static double target_func1(double *Point);
+  static double limit_func2(double *Point);
 
-  static constexpr unsigned NumOfFuncs = 4;
+  static constexpr unsigned TaskDim = 2;
   static constexpr unsigned NumOfTargetFuncs = 2;
   static constexpr unsigned NumOfLimitFuncs = 1;
   static constexpr unsigned NumOfFillingFuncs = 1;
