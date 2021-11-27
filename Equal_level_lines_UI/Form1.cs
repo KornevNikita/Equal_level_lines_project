@@ -583,8 +583,7 @@ namespace Equal_level_lines_UI
         btn_set_optimizer.Enabled = true;
         setImportingDllPath(DllPath, DllPath.Length);
 
-        Label_LoadingStatus.Text = "Loaded";
-        Label_LoadingStatus.BackColor = Color.LightGreen;
+        btn_load_path.BackColor = Color.LightGreen;
         TaskLoaded = true;
 
         IntPtr pAddressOfFunctionToCall0 =
@@ -666,6 +665,23 @@ namespace Equal_level_lines_UI
     private void cBox_filling_CheckedChanged(object sender, EventArgs e)
     {
 
+    }
+
+    private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+
+    }
+
+    private void button2_Click(object sender, EventArgs e)
+    {
+      openFileDialog1.ShowDialog();
+      tBox_DllPath.Text = openFileDialog1.FileName;
+    }
+
+    private void button3_Click(object sender, EventArgs e)
+    {
+      Form2 f2 = new Form2();
+      f2.Show();
     }
 
     private void Chart1_MouseClick(object sender, MouseEventArgs e)
