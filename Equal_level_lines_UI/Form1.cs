@@ -23,7 +23,8 @@ namespace Equal_level_lines_UI
                                       double _YMax);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void calculate(int funcIdx, int Mode);
+    public static extern void calculate(int FuncIdx, int FuncType, int[] NumbersOfVars, int NFixedVars,
+                                        int[] NumbersOfFixedVars, double[] ValuesOfFixedVars);
 
     [DllImport(dll1, CallingConvention = CallingConvention.Cdecl)]
     public static extern void calculateFilling(int LimitIdx, int LimitFactor,
@@ -473,6 +474,11 @@ namespace Equal_level_lines_UI
       for (int i = 0; i < dataGridView1.Rows.Count; i++)
         Eque_lines[i] = new eque_lines(dataGridView1.Rows[i], N, M);
 
+      int[] NumbersOfFixedVars = new int[TaskDim - 2];
+      double[] ValuesOfFixedVars = new double[TaskDim - 2];
+      int NFixedVariables = 0;
+
+      int[] NumbersOfVariables = new int[2];
       if (NumOfTargetFuncs != 0)
       {
         N = int.Parse(dataGridView4.Rows[0].Cells[0].Value.ToString());
@@ -480,18 +486,36 @@ namespace Equal_level_lines_UI
         M2 = int.Parse(dataGridView4.Rows[0].Cells[2].Value.ToString());
         M3 = int.Parse(dataGridView4.Rows[0].Cells[3].Value.ToString());
         allocMem(N, M1, M2, M3);
-        Xmin = double.Parse(dataGridView3.Rows[0].Cells[1].Value.ToString());
-        Xmax = double.Parse(dataGridView3.Rows[0].Cells[2].Value.ToString());
-        Ymin = double.Parse(dataGridView3.Rows[1].Cells[1].Value.ToString());
-        Ymax = double.Parse(dataGridView3.Rows[1].Cells[2].Value.ToString());
-        setArea(Xmin, Xmax, Ymin, Ymax);
+
+        // all other variables except two must be fixed
+        double[] Area = new double[4];
+        int k = 0, l = 0;
+        for (int i = 0; i < dataGridView3.RowCount; i++) // find (2 non-fixed variables borders / values of fixed vars)
+        {
+          if (!bool.Parse(dataGridView3.Rows[i].Cells[1].Value.ToString())) // if non-fixed
+          {
+            NumbersOfVariables[l++] = int.Parse(dataGridView3.Rows[i].Cells[0].Value.ToString()); // numbers (№) if variables
+            Area[k++] = double.Parse(dataGridView3.Rows[i].Cells[3].Value.ToString()); // min
+            Area[k++] = double.Parse(dataGridView3.Rows[i].Cells[4].Value.ToString()); // max
+          }
+          else 
+          {
+            NumbersOfFixedVars[NFixedVariables] = int.Parse(dataGridView3.Rows[i].Cells[0].Value.ToString()); // numbers (№) of fixed variables
+            ValuesOfFixedVars[NFixedVariables++] = double.Parse(dataGridView3.Rows[i].Cells[2].Value.ToString()); // values of these variables
+          }
+        }
+        Xmin = Area[0];
+        Xmax = Area[1];
+        Ymin = Area[2];
+        Ymax = Area[3];
+        setArea(Area[0], Area[1], Area[2], Area[3]);
       }
 
       for (int i = 0; i < dataGridView1.Rows.Count; i++)
       {
         if (Eque_lines[i].Mode != 2)
         {
-          calculate(Eque_lines[i].FuncIdx, Eque_lines[i].Mode);
+          calculate(Eque_lines[i].FuncIdx, Eque_lines[i].Mode, NumbersOfVariables, NFixedVariables, NumbersOfFixedVars, ValuesOfFixedVars);
           GetDataFromDll(Eque_lines[i].FuncIdx, i, N, M + 1);
         }
         else
@@ -532,9 +556,8 @@ namespace Equal_level_lines_UI
       public static extern bool FreeLibrary(IntPtr hModule);
     }
 
-    // FuncType: 1 - target, 2 - filling, 3 - limit
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    private delegate int GetNumOfFuncs(int FuncType);
+    private delegate int GetNumOfFuncs(int FuncType); // FuncType: 1 - target, 2 - filling, 3 - limit
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate double GetTaskArea(int TaskAreaParam);
@@ -544,6 +567,9 @@ namespace Equal_level_lines_UI
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate int GetDensity();
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void GetVariableArea(int VarNo, double[] Area);
 
     private void Btn_load_path_Click(object sender, EventArgs e)
     {
@@ -571,16 +597,13 @@ namespace Equal_level_lines_UI
           NativeMethods.GetProcAddress(pDll, "GetDensity");
         IntPtr pAddressOfFunctionToCall4 =
           NativeMethods.GetProcAddress(pDll, "GetTaskDim");
+        IntPtr pAddressOfFunctionToCall5 =
+          NativeMethods.GetProcAddress(pDll, "GetVariableArea");
 
         GetNumOfFuncs getNumOfFuncs =
           (GetNumOfFuncs)Marshal.GetDelegateForFunctionPointer(
             pAddressOfFunctionToCall0,
             typeof(GetNumOfFuncs));
-
-        GetTaskArea getTaskArea =
-          (GetTaskArea)Marshal.GetDelegateForFunctionPointer(
-            pAddressOfFunctionToCall1,
-            typeof(GetTaskArea));
 
         GetTaskLinesCalcParams getTaskLinesCalcParams =
           (GetTaskLinesCalcParams)Marshal.GetDelegateForFunctionPointer(
@@ -597,13 +620,14 @@ namespace Equal_level_lines_UI
             pAddressOfFunctionToCall4,
             typeof(GetDensity));
 
+        GetVariableArea getVariableArea =
+          (GetVariableArea)Marshal.GetDelegateForFunctionPointer(
+            pAddressOfFunctionToCall5,
+            typeof(GetVariableArea));
+
         NumOfTargetFuncs = getNumOfFuncs(1);
         NumOfLimitFuncs = getNumOfFuncs(2);
         NumOfFillingFuncs = getNumOfFuncs(3);
-        Xmin = getTaskArea(0);
-        Xmax = getTaskArea(1);
-        Ymin = getTaskArea(2);
-        Ymax = getTaskArea(3);
         N = getTaskLinesCalcParams(0);
         M1 = getTaskLinesCalcParams(1);
         M2 = getTaskLinesCalcParams(2);
@@ -613,8 +637,12 @@ namespace Equal_level_lines_UI
         int Density = NumOfFillingFuncs != 0 ? getDensity() : 0;
         TaskDim = getTaskDim();
 
-        for (int i = 0; i < TaskDim; ++i)
-          dataGridView3.Rows.Add(i, 0, 0);
+        double[] VarArea = new double[2];
+        for (int i = 0; i < TaskDim; i++)
+        {
+          getVariableArea(i, VarArea);
+          dataGridView3.Rows.Add(i, false, 0, VarArea[0], VarArea[1]);
+        }
 
         dataGridView4.Rows.Add(N, M1, M2, M3);
         tBox_TaskDim.Text = TaskDim.ToString();

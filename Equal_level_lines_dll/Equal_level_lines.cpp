@@ -39,7 +39,14 @@ void loadDllByPath(HINSTANCE& HDll) {
   HDll = LoadLibrary(PathLPCWSTR);
 }
 
-void calculate(int FuncIdx, int FuncType) {
+void calculate(int FuncIdx, int FuncType, int* NumbersOfVars, int NFixedVars,
+               int* NumbersOfFixedVars, double* ValuesOfFixedVars) {
+  // FixedVarsNum = number of fixed variables (size of FixedVarsNo),
+  // FixedVarsNo = numbers of these variables, FixedVarsValue = values of these fixed variables
+  // VarsNo = numbers of the variables that will be used to calculate Q
+  // Example: TaskDim = 5, FixedVarsNo = { 1, 3, 4 }, FixedVarsValue = { 3.14, 2.7, 6.0 }
+  // P[0] = var1, P[2] = var2;
+  // P[1] = 3.14, , P[3] = 2.7, P[4] = 6.0;
   HINSTANCE HDll;
   loadDllByPath(HDll);
   if (HDll != NULL) {
@@ -57,14 +64,17 @@ void calculate(int FuncIdx, int FuncType) {
     double Qmin = DBL_MAX, Qmax = DBL_MIN;
     vector<Point> *Values = new vector<Point>((L->N + 1) * (L->N + 1));
 
+    double *P = new double[2 + NFixedVars];
+    for (int i = 0; i < NFixedVars; ++i)
+      P[NumbersOfFixedVars[i]] = ValuesOfFixedVars[i];
+
     for (int i = 0; i <= L->N; ++i)
       for (int j = 0; j <= L->N; ++j)
       {
         // Grid structure filling
         size_t Idx = (L->N + 1) * i + j;
-        double *P = new double[2];
-        P[0] = X = L->Area.XMin + Hx * i;
-        P[1] = Y = L->Area.YMin + Hy * j;
+        P[NumbersOfVars[0]] = X = L->Area.XMin + Hx * i;
+        P[NumbersOfVars[1]] = Y = L->Area.YMin + Hy * j;
         // TODO: add code to fix specific variables 
         Q = (*F)(P);
         Values->operator[](Idx) = Point(X, Y, Q);

@@ -5,6 +5,10 @@
 #include <sstream>
 #include <fstream>
 
+#include <iostream> // for debug
+
+Task TheTask;
+
 double target_function0(double *Point) {
   return Task::target_func0(Point);
 }
@@ -29,21 +33,6 @@ int GetNumOfFuncs(int FuncType) {
     return Task::NumOfFillingFuncs;
   case 3:
     return Task::NumOfLimitFuncs;
-  default:
-    return 0;
-  }
-}
-
-double GetTaskArea(int TaskAreaParam) {
-  switch (TaskAreaParam) {
-  case 0:
-    return Task::Xmin;
-  case 1:
-    return Task::Xmax;
-  case 2:
-    return Task::Ymin;
-  case 3:
-    return Task::Ymax;
   default:
     return 0;
   }
@@ -88,4 +77,8 @@ double Task::limit_func2(double *Point) {
   double g1 = x - 0.75;
   double g2 = 2 * y - 1;
   return max(g1, g2);
+}
+
+void GetVariableArea(int VarNo, double *Area) {
+  copy(TheTask.VariablesArea[VarNo].begin(), TheTask.VariablesArea[VarNo].end(), Area);
 }
