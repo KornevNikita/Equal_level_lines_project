@@ -33,17 +33,20 @@
       System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
       System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
       System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+      System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.tBox_CalculationTime = new System.Windows.Forms.TextBox();
       this.btn_PictureParameteres = new System.Windows.Forms.Button();
       this.btn_Functions = new System.Windows.Forms.Button();
+      this.label5 = new System.Windows.Forms.Label();
+      this.tBox_CriteriaToDrow = new System.Windows.Forms.TextBox();
       this.btn_LinesParameters = new System.Windows.Forms.Button();
       this.btn_Variables = new System.Windows.Forms.Button();
       this.button2 = new System.Windows.Forms.Button();
       this.label_TaskDim = new System.Windows.Forms.Label();
       this.tBox_TaskDim = new System.Windows.Forms.TextBox();
-      this.label5 = new System.Windows.Forms.Label();
-      this.tBox_CriteriaToDrow = new System.Windows.Forms.TextBox();
       this.btn_load_path = new System.Windows.Forms.Button();
       this.tBox_DllPath = new System.Windows.Forms.TextBox();
       this.btn_Run = new System.Windows.Forms.Button();
@@ -61,7 +64,6 @@
       this.groupBox5 = new System.Windows.Forms.GroupBox();
       this.label_SectionTime = new System.Windows.Forms.Label();
       this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-      this.tBox_CalculationTime = new System.Windows.Forms.TextBox();
       this.tBox_OptNumIters = new System.Windows.Forms.TextBox();
       this.btn_DoOptIter = new System.Windows.Forms.Button();
       this.btn_FindOptSol = new System.Windows.Forms.Button();
@@ -78,6 +80,8 @@
       this.tBox_NumOfMeasurements = new System.Windows.Forms.TextBox();
       this.tBox_CurrentNumOfIters = new System.Windows.Forms.TextBox();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
+      this.chart_SolutionRecord = new System.Windows.Forms.DataVisualization.Charting.Chart();
+      this.button1 = new System.Windows.Forms.Button();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
@@ -85,6 +89,7 @@
       this.groupBox5.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.DGV_OptimizerSolution)).BeginInit();
       this.groupBox2.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.chart_SolutionRecord)).BeginInit();
       this.SuspendLayout();
       // 
       // pictureBox1
@@ -123,6 +128,15 @@
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Optimization task parameters";
       // 
+      // tBox_CalculationTime
+      // 
+      this.tBox_CalculationTime.Location = new System.Drawing.Point(6, 155);
+      this.tBox_CalculationTime.Name = "tBox_CalculationTime";
+      this.tBox_CalculationTime.ReadOnly = true;
+      this.tBox_CalculationTime.Size = new System.Drawing.Size(73, 24);
+      this.tBox_CalculationTime.TabIndex = 44;
+      this.tBox_CalculationTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
       // btn_PictureParameteres
       // 
       this.btn_PictureParameteres.AutoSize = true;
@@ -146,6 +160,25 @@
       this.btn_Functions.Text = "Functions";
       this.btn_Functions.UseVisualStyleBackColor = true;
       this.btn_Functions.Click += new System.EventHandler(this.button5_Click);
+      // 
+      // label5
+      // 
+      this.label5.AutoSize = true;
+      this.label5.Location = new System.Drawing.Point(133, 156);
+      this.label5.Name = "label5";
+      this.label5.Size = new System.Drawing.Size(106, 18);
+      this.label5.TabIndex = 53;
+      this.label5.Text = "Func# to draw:";
+      // 
+      // tBox_CriteriaToDrow
+      // 
+      this.tBox_CriteriaToDrow.Location = new System.Drawing.Point(245, 153);
+      this.tBox_CriteriaToDrow.Name = "tBox_CriteriaToDrow";
+      this.tBox_CriteriaToDrow.ReadOnly = true;
+      this.tBox_CriteriaToDrow.Size = new System.Drawing.Size(50, 24);
+      this.tBox_CriteriaToDrow.TabIndex = 38;
+      this.tBox_CriteriaToDrow.Text = "0";
+      this.tBox_CriteriaToDrow.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // btn_LinesParameters
       // 
@@ -200,25 +233,6 @@
       this.tBox_TaskDim.TabIndex = 9;
       this.tBox_TaskDim.Text = "0";
       this.tBox_TaskDim.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
-      // label5
-      // 
-      this.label5.AutoSize = true;
-      this.label5.Location = new System.Drawing.Point(133, 156);
-      this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(106, 18);
-      this.label5.TabIndex = 53;
-      this.label5.Text = "Func# to draw:";
-      // 
-      // tBox_CriteriaToDrow
-      // 
-      this.tBox_CriteriaToDrow.Location = new System.Drawing.Point(245, 153);
-      this.tBox_CriteriaToDrow.Name = "tBox_CriteriaToDrow";
-      this.tBox_CriteriaToDrow.ReadOnly = true;
-      this.tBox_CriteriaToDrow.Size = new System.Drawing.Size(50, 24);
-      this.tBox_CriteriaToDrow.TabIndex = 38;
-      this.tBox_CriteriaToDrow.Text = "0";
-      this.tBox_CriteriaToDrow.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // btn_load_path
       // 
@@ -408,15 +422,6 @@
       this.openFileDialog1.FileName = "openFileDialog1";
       this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
       // 
-      // tBox_CalculationTime
-      // 
-      this.tBox_CalculationTime.Location = new System.Drawing.Point(6, 155);
-      this.tBox_CalculationTime.Name = "tBox_CalculationTime";
-      this.tBox_CalculationTime.ReadOnly = true;
-      this.tBox_CalculationTime.Size = new System.Drawing.Size(73, 24);
-      this.tBox_CalculationTime.TabIndex = 44;
-      this.tBox_CalculationTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-      // 
       // tBox_OptNumIters
       // 
       this.tBox_OptNumIters.Location = new System.Drawing.Point(245, 55);
@@ -561,6 +566,8 @@
       // 
       // groupBox2
       // 
+      this.groupBox2.Controls.Add(this.chart_SolutionRecord);
+      this.groupBox2.Controls.Add(this.button1);
       this.groupBox2.Controls.Add(this.DGV_OptimizerSolution);
       this.groupBox2.Controls.Add(this.btn_set_optimizer);
       this.groupBox2.Controls.Add(this.tBox_OptNumIters);
@@ -576,16 +583,39 @@
       this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
       this.groupBox2.Location = new System.Drawing.Point(4, 200);
       this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(305, 206);
+      this.groupBox2.Size = new System.Drawing.Size(305, 483);
       this.groupBox2.TabIndex = 61;
       this.groupBox2.TabStop = false;
       this.groupBox2.Text = "Optimizer parameteres";
+      // 
+      // chart_SolutionRecord
+      // 
+      chartArea2.Name = "ChartArea1";
+      this.chart_SolutionRecord.ChartAreas.Add(chartArea2);
+      this.chart_SolutionRecord.Location = new System.Drawing.Point(6, 204);
+      this.chart_SolutionRecord.Name = "chart_SolutionRecord";
+      series2.ChartArea = "ChartArea1";
+      series2.Name = "Series1";
+      this.chart_SolutionRecord.Series.Add(series2);
+      this.chart_SolutionRecord.Size = new System.Drawing.Size(289, 265);
+      this.chart_SolutionRecord.TabIndex = 54;
+      this.chart_SolutionRecord.Text = "chart3";
+      // 
+      // button1
+      // 
+      this.button1.AutoSize = true;
+      this.button1.Location = new System.Drawing.Point(6, 87);
+      this.button1.Name = "button1";
+      this.button1.Size = new System.Drawing.Size(111, 28);
+      this.button1.TabIndex = 61;
+      this.button1.Text = "Solution chart";
+      this.button1.UseVisualStyleBackColor = true;
       // 
       // FormMain
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(1467, 681);
+      this.ClientSize = new System.Drawing.Size(1467, 711);
       this.Controls.Add(this.groupBox2);
       this.Controls.Add(this.groupBox5);
       this.Controls.Add(this.dataGridView2);
@@ -604,6 +634,7 @@
       ((System.ComponentModel.ISupportInitialize)(this.DGV_OptimizerSolution)).EndInit();
       this.groupBox2.ResumeLayout(false);
       this.groupBox2.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.chart_SolutionRecord)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -656,6 +687,8 @@
     private System.Windows.Forms.Button btn_DoOptIter;
     private System.Windows.Forms.TextBox tBox_OptNumIters;
     private System.Windows.Forms.GroupBox groupBox2;
+    private System.Windows.Forms.Button button1;
+    private System.Windows.Forms.DataVisualization.Charting.Chart chart_SolutionRecord;
   }
 }
 

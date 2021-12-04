@@ -105,7 +105,7 @@ namespace Equal_level_lines_UI
     public int NumberOfTargetFunctions;
     public int NumberOfLimitFunctions;
     public int NumberOfFillingFunctions;
-    Point3D OptimizerSolution = new Point3D();
+    public Point3D OptimizerSolution = new Point3D();
     public bool CalculatedSolution = false;
     public List<PointF> OptimizerPoints = new List<PointF>();
     public int NumPointsOnLastIteration = 0;
@@ -119,6 +119,7 @@ namespace Equal_level_lines_UI
     public TaskFunction[] TheTaskFunctions;
     public bool DrawGrid = false, DrawLimit = false, DrawFilling = false;
     public int NGridLines = 0;
+    public List<double> Solutions = new List<double>();
 
     public struct TaskFunction
     {
@@ -164,6 +165,9 @@ namespace Equal_level_lines_UI
       LimitColor = Color.LightGreen;
       chart2.ChartAreas[0].AxisX.LabelStyle.Format = "{ 0.000 }";
       DGV_OptimizerSolution.RowCount = 1;
+      chart_SolutionRecord.Series["Series1"].ChartType =
+          System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+      chart_SolutionRecord.ChartAreas[0].AxisX.Minimum = 0;
     }
 
     public class eque_lines
@@ -601,7 +605,7 @@ namespace Equal_level_lines_UI
         btn_LinesParameters.Enabled = true;
         btn_PictureParameteres.Enabled = true;
         btn_set_optimizer.Enabled = true;
-        tBox_CriteriaToDrow.Enabled = true;
+        tBox_CriteriaToDrow.ReadOnly = false;
         btn_OpenOptimizer.Enabled = true;
         setImportingDllPath(DllPath, DllPath.Length);
 
@@ -896,6 +900,8 @@ namespace Equal_level_lines_UI
       doIterations(int.Parse(tBox_NumItersPerClick.Text));
       GetMeasurements();
       GetSolution();
+      Solutions.Add(OptimizerSolution.Z);
+      chart_SolutionRecord.Series["Series1"].Points.AddXY(Solutions.Count - 1, OptimizerSolution.Z);
     }
 
     //private void CBox_AddYaxis_CheckedChanged(object sender, EventArgs e)
