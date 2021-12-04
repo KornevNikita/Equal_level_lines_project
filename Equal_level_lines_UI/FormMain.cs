@@ -8,7 +8,7 @@ using System.Web.UI.DataVisualization.Charting;
 
 namespace Equal_level_lines_UI
 {
-  public partial class Form1 : Form
+  public partial class FormMain : Form
   {
     // ============== Equal_level_lines.dll import functions: ===============
 
@@ -90,8 +90,8 @@ namespace Equal_level_lines_UI
     // ============ End of UI_to_optimizer_adapter.dll import functions ===========
 
 
-    public static int GridLinesThickness = 1, PicWidth, PicHeight, NumOfFuncs = 8;
-    public static bool AddGrid, AddXAxis, AddYAxis, CalcLimit, ExpensiveLimit,
+    public int GridLinesThickness = 1, PicWidth, PicHeight, NumOfFuncs = 8;
+    public bool AddXAxis, AddYAxis, CalcLimit, ExpensiveLimit,
       EnableSignatures;
     HashSet<int> GridFuncIdxSet = new HashSet<int>();
     public static int NumOfGridRows = 0;
@@ -115,6 +115,25 @@ namespace Equal_level_lines_UI
     public int NumOfLimitFuncs = 0;
     public int NumOfFillingFuncs = 0;
     public int TaskDim = 0;
+    public TaskVariable[] TheTaskVariables;
+    public TaskFunction[] TheTaskFunctions;
+    public bool DrawGrid = false, DrawLimit = false, DrawFilling = false;
+    public int NGridLines = 0;
+
+    public struct TaskFunction
+    {
+      public int Mode;
+      public int Density;
+      public Color Col;
+    }
+
+    public struct TaskVariable
+    {
+      public bool Fixed;
+      public double Value;
+      public double Min;
+      public double Max;
+    }
 
     public struct MyPoint
     {
@@ -138,12 +157,13 @@ namespace Equal_level_lines_UI
       public int Count;
     }
 
-    public Form1()
+    public FormMain()
     {
       InitializeComponent();
       GridColor = colorDialog1.Color;
       LimitColor = Color.LightGreen;
       chart2.ChartAreas[0].AxisX.LabelStyle.Format = "{ 0.000 }";
+      DGV_OptimizerSolution.RowCount = 1;
     }
 
     public class eque_lines
@@ -155,12 +175,12 @@ namespace Equal_level_lines_UI
       public Color color;
       public int TheN, TheM1, TheM2, TheM3, TheM;
 
-      public eque_lines(DataGridViewRow row, int N, int M)
+      public eque_lines(int Idx, TaskFunction TheTaskFunction, int N, int M)
       {
-        FuncIdx = (int)row.Cells[0].Value;
-        Mode = (int)row.Cells[1].Value;
-        Density = (int)row.Cells[2].Value;
-        color = (Color)row.Cells[3].Value;
+        FuncIdx = Idx;
+        Mode = TheTaskFunction.Mode;
+        Density = TheTaskFunction.Density;
+        color = TheTaskFunction.Col;
         pDat = new MyPoint[(N + 1) * (N + 1)];
         pQ = new double[M + 1];
       }
@@ -176,7 +196,7 @@ namespace Equal_level_lines_UI
         {
           int FuncIdxToDraw = int.Parse(tBox_CriteriaToDrow.Text);
           if (Eque_lines[I].FuncIdx == FuncIdxToDraw && Eque_lines[I].Mode == 1 ||
-              Eque_lines[I].Mode == 3 && cBox_DrawLimit.Checked)
+              Eque_lines[I].Mode == 3 && DrawLimit)
           {
             Dictionary<int, bool> LineSignatures = new Dictionary<int, bool>();
             int NumberOfFirstLine = 999; // number of first line that <= 0
@@ -307,7 +327,7 @@ namespace Equal_level_lines_UI
             }
           }
 
-          if (Eque_lines[I].Mode == 2 && cBox_filling.Checked)
+          if (Eque_lines[I].Mode == 2 && DrawFilling)
           {
             for (i = 0; i < pic.Width / LimitFactor; ++i)
               for (j = 0; j < pic.Height / LimitFactor; ++j)
@@ -335,7 +355,7 @@ namespace Equal_level_lines_UI
         g.DrawLine(p, pic.Width / 2, 0, pic.Width / 2, pic.Height);
       }
 
-      if (AddGrid)
+      if (DrawGrid)
       {
         Pen p = new Pen(GridColor, GridLinesThickness);
         float h = pic.Width / (NumOfGridLnes + 1);
@@ -371,10 +391,10 @@ namespace Equal_level_lines_UI
       {
         //Console.WriteLine($"X = {OptimizerPoints[i].X}, Y = {OptimizerPoints[i].Y}");
         SolidBrush brush = new SolidBrush(Color.Red);
-        float area_width = float.Parse(dataGridView3.Rows[0].Cells[2].Value.ToString()) -
-          float.Parse(dataGridView3.Rows[0].Cells[1].Value.ToString());
-        float area_height = float.Parse(dataGridView3.Rows[1].Cells[2].Value.ToString()) -
-          float.Parse(dataGridView3.Rows[1].Cells[1].Value.ToString());
+        float area_width = (float)TheTaskVariables[0].Max -
+          (float)TheTaskVariables[0].Min;
+        float area_height = (float)TheTaskVariables[1].Max -
+          (float)TheTaskVariables[1].Min;
         //Console.WriteLine($"area_width = {area_width}, area_height = {area_height}");
         float X, Y;
         if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
@@ -395,10 +415,10 @@ namespace Equal_level_lines_UI
       for (i = k; i < OptimizerPoints.Count; i++)
       {
         SolidBrush brush = new SolidBrush(Color.Red);
-        float area_width = float.Parse(dataGridView3.Rows[0].Cells[2].Value.ToString()) -
-          float.Parse(dataGridView3.Rows[0].Cells[1].Value.ToString());
-        float area_height = float.Parse(dataGridView3.Rows[1].Cells[2].Value.ToString()) -
-          float.Parse(dataGridView3.Rows[1].Cells[1].Value.ToString());
+        float area_width = (float)TheTaskVariables[0].Max -
+          (float)TheTaskVariables[0].Min;
+        float area_height = (float)TheTaskVariables[1].Max -
+          (float)TheTaskVariables[1].Min;
         float X, Y;
         if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
         {
@@ -418,10 +438,10 @@ namespace Equal_level_lines_UI
       if (CalculatedSolution)
       {
         SolidBrush brush = new SolidBrush(Color.Cyan);
-        float area_width = float.Parse(dataGridView3.Rows[0].Cells[2].Value.ToString()) -
-          float.Parse(dataGridView3.Rows[0].Cells[1].Value.ToString());
-        float area_height = float.Parse(dataGridView3.Rows[1].Cells[2].Value.ToString()) -
-          float.Parse(dataGridView3.Rows[1].Cells[1].Value.ToString());
+        float area_width = (float)TheTaskVariables[0].Max -
+          (float)TheTaskVariables[0].Min;
+        float area_height = (float)TheTaskVariables[1].Max -
+          (float)TheTaskVariables[1].Min;
         float X, Y;
         if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
         {
@@ -468,11 +488,11 @@ namespace Equal_level_lines_UI
       Stopwatch stopwatch = new Stopwatch();
       stopwatch.Start();
 
-      EnableSignatures = cBox_EnableSignatures.Checked;
+      //EnableSignatures = cBox_EnableSignatures.Checked;
 
-      Eque_lines = new eque_lines[dataGridView1.Rows.Count];
-      for (int i = 0; i < dataGridView1.Rows.Count; i++)
-        Eque_lines[i] = new eque_lines(dataGridView1.Rows[i], N, M);
+      Eque_lines = new eque_lines[TheTaskFunctions.Length];
+      for (int i = 0; i < TheTaskFunctions.Length; i++)
+        Eque_lines[i] = new eque_lines(i, TheTaskFunctions[i], N, M);
 
       int[] NumbersOfFixedVars = new int[TaskDim - 2];
       double[] ValuesOfFixedVars = new double[TaskDim - 2];
@@ -481,27 +501,23 @@ namespace Equal_level_lines_UI
       int[] NumbersOfVariables = new int[2];
       if (NumOfTargetFuncs != 0)
       {
-        N = int.Parse(dataGridView4.Rows[0].Cells[0].Value.ToString());
-        M1 = int.Parse(dataGridView4.Rows[0].Cells[1].Value.ToString());
-        M2 = int.Parse(dataGridView4.Rows[0].Cells[2].Value.ToString());
-        M3 = int.Parse(dataGridView4.Rows[0].Cells[3].Value.ToString());
         allocMem(N, M1, M2, M3);
 
         // all other variables except two must be fixed
         double[] Area = new double[4];
         int k = 0, l = 0;
-        for (int i = 0; i < dataGridView3.RowCount; i++) // find (2 non-fixed variables borders / values of fixed vars)
+        for (int i = 0; i < TheTaskVariables.Length; i++) // find (2 non-fixed variables borders / values of fixed vars)
         {
-          if (!bool.Parse(dataGridView3.Rows[i].Cells[1].Value.ToString())) // if non-fixed
+          if (!TheTaskVariables[i].Fixed) // if non-fixed
           {
-            NumbersOfVariables[l++] = int.Parse(dataGridView3.Rows[i].Cells[0].Value.ToString()); // numbers (№) if variables
-            Area[k++] = double.Parse(dataGridView3.Rows[i].Cells[3].Value.ToString()); // min
-            Area[k++] = double.Parse(dataGridView3.Rows[i].Cells[4].Value.ToString()); // max
+            NumbersOfVariables[l++] = i; // numbers (№) if variables
+            Area[k++] = TheTaskVariables[i].Min; // min
+            Area[k++] = TheTaskVariables[i].Max; // max
           }
           else 
           {
-            NumbersOfFixedVars[NFixedVariables] = int.Parse(dataGridView3.Rows[i].Cells[0].Value.ToString()); // numbers (№) of fixed variables
-            ValuesOfFixedVars[NFixedVariables++] = double.Parse(dataGridView3.Rows[i].Cells[2].Value.ToString()); // values of these variables
+            NumbersOfFixedVars[NFixedVariables] = i; // numbers (№) of fixed variables
+            ValuesOfFixedVars[NFixedVariables++] = TheTaskVariables[i].Value; // values of these variables
           }
         }
         Xmin = Area[0];
@@ -511,19 +527,19 @@ namespace Equal_level_lines_UI
         setArea(Area[0], Area[1], Area[2], Area[3]);
       }
 
-      for (int i = 0; i < dataGridView1.Rows.Count; i++)
+      for (int i = 0; i < TheTaskFunctions.Length; i++)
       {
-        if (Eque_lines[i].Mode != 2)
+        if (TheTaskFunctions[i].Mode != 2)
         {
-          calculate(Eque_lines[i].FuncIdx, Eque_lines[i].Mode, NumbersOfVariables, NFixedVariables, NumbersOfFixedVars, ValuesOfFixedVars);
-          GetDataFromDll(Eque_lines[i].FuncIdx, i, N, M + 1);
+          calculate(i, TheTaskFunctions[i].Mode, NumbersOfVariables, NFixedVariables, NumbersOfFixedVars, ValuesOfFixedVars);
+          GetDataFromDll(i, i, N, M + 1);
         }
         else
         {
           PicWidth = pictureBox1.Width;
           PicHeight = pictureBox1.Height;
 
-          calculateFilling(Eque_lines[i].FuncIdx, Eque_lines[i].Density,
+          calculateFilling(i, TheTaskFunctions[i].Density,
             pictureBox1.Width, pictureBox1.Height);
           GetLimitData(i);
         }
@@ -531,18 +547,18 @@ namespace Equal_level_lines_UI
 
       pictureBox1.Invalidate();
 
-      label_Time.Text = "Time: " + stopwatch.Elapsed.TotalSeconds.ToString();
-      label_Time.BackColor = Color.LightGreen;
+      tBox_CalculationTime.Text = Math.Round(stopwatch.Elapsed.TotalSeconds, 6).ToString();
+      tBox_CalculationTime.BackColor = Color.LightGreen;
       btn_section.Enabled = true;
       btn_section_cancel.Enabled = true;
       btn_section_clear.Enabled = true;
     }
 
-    private void CBox_AddXaxis_CheckedChanged(object sender, EventArgs e)
-    {
-      AddXAxis = cBox_AddXaxis.Checked;
-      pictureBox1.Invalidate();
-    }
+    //private void CBox_AddXaxis_CheckedChanged(object sender, EventArgs e)
+    //{
+    //  AddXAxis = cBox_AddXaxis.Checked;
+    //  pictureBox1.Invalidate();
+    //}
 
     static class NativeMethods
     {
@@ -580,7 +596,13 @@ namespace Equal_level_lines_UI
       if (pDll != IntPtr.Zero)
       {
         btn_Run.Enabled = true;
+        btn_Variables.Enabled = true;
+        btn_Functions.Enabled = true;
+        btn_LinesParameters.Enabled = true;
+        btn_PictureParameteres.Enabled = true;
         btn_set_optimizer.Enabled = true;
+        tBox_CriteriaToDrow.Enabled = true;
+        btn_OpenOptimizer.Enabled = true;
         setImportingDllPath(DllPath, DllPath.Length);
 
         btn_load_path.BackColor = Color.LightGreen;
@@ -627,6 +649,8 @@ namespace Equal_level_lines_UI
         NumOfTargetFuncs = getNumOfFuncs(1);
         NumOfLimitFuncs = getNumOfFuncs(2);
         NumOfFillingFuncs = getNumOfFuncs(3);
+        int TotalNumberOfFunctions = NumOfTargetFuncs + NumOfLimitFuncs + NumOfFillingFuncs;
+        TheTaskFunctions = new TaskFunction[TotalNumberOfFunctions];
         N = getTaskLinesCalcParams(0);
         M1 = getTaskLinesCalcParams(1);
         M2 = getTaskLinesCalcParams(2);
@@ -635,25 +659,40 @@ namespace Equal_level_lines_UI
 
         int Density = NumOfFillingFuncs != 0 ? getDensity() : 0;
         TaskDim = getTaskDim();
+        TheTaskVariables = new TaskVariable[TaskDim];
 
         double[] VarArea = new double[2];
         for (int i = 0; i < TaskDim; i++)
         {
           getVariableArea(i, VarArea);
-          dataGridView3.Rows.Add(i, false, 0, VarArea[0], VarArea[1]);
+          TheTaskVariables[i].Fixed = false;
+          TheTaskVariables[i].Value = 0;
+          TheTaskVariables[i].Min = VarArea[0];
+          TheTaskVariables[i].Max = VarArea[1];
         }
 
-        dataGridView4.Rows.Add(N, M1, M2, M3);
         tBox_TaskDim.Text = TaskDim.ToString();
 
         for (int i = 0; i < NumOfTargetFuncs; ++i)
-          dataGridView1.Rows.Add(i, 1, 0, Color.Black);
+        {
+          TheTaskFunctions[i].Mode = 1;
+          TheTaskFunctions[i].Density = 0;
+          TheTaskFunctions[i].Col = Color.Black;
+        }
         int NumOfTargLimFuncs = NumOfTargetFuncs + NumOfLimitFuncs;
         for (int i = NumOfTargetFuncs; i < NumOfTargLimFuncs; ++i)
-          dataGridView1.Rows.Add(i, 3, 0, Color.Gray);
+        {
+          TheTaskFunctions[i].Mode = 3;
+          TheTaskFunctions[i].Density = 0;
+          TheTaskFunctions[i].Col = Color.Gray;
+        }
         int NumOfTargLimFillFuncs = NumOfTargLimFuncs + NumOfFillingFuncs;
         for (int i = NumOfTargLimFuncs; i < NumOfTargLimFillFuncs; ++i)
-          dataGridView1.Rows.Add(i, 2, Density, Color.LightGray);
+        {
+          TheTaskFunctions[i].Mode = 2;
+          TheTaskFunctions[i].Density = Density;
+          TheTaskFunctions[i].Col = Color.LightGray;
+        }
       }
     }
 
@@ -678,10 +717,46 @@ namespace Equal_level_lines_UI
       tBox_DllPath.Text = openFileDialog1.FileName;
     }
 
+    private void label2_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void tBox_CurrentNumOfIters_TextChanged(object sender, EventArgs e)
+    {
+
+    }
+
     private void button3_Click(object sender, EventArgs e)
     {
-      Form2 f2 = new Form2();
+      FormVariables f2 = new FormVariables(this);
+      for (int i = 0; i < TaskDim; i++)
+        f2.dataGridView1.Rows.Add(i, TheTaskVariables[i].Fixed, TheTaskVariables[i].Value,
+                                  TheTaskVariables[i].Min, TheTaskVariables[i].Max);
       f2.Show();
+    }
+
+    private void button4_Click(object sender, EventArgs e)
+    {
+      FormLinesParameters LP = new FormLinesParameters(this);
+      LP.Show();
+    }
+
+    private void button5_Click(object sender, EventArgs e)
+    {
+      FormFunctions form = new FormFunctions();
+      if (TaskLoaded)
+      {
+        for (int i = 0; i < TheTaskFunctions.Length; i++)
+          form.dataGridView1.Rows.Add(i, TheTaskFunctions[i].Mode, TheTaskFunctions[i].Density, TheTaskFunctions[i].Col);
+      }
+      form.Show();
+    }
+
+    private void button1_Click_1(object sender, EventArgs e)
+    {
+      FormPictureParameters F = new FormPictureParameters(this);
+      F.Show();
     }
 
     private void Chart1_MouseClick(object sender, MouseEventArgs e)
@@ -788,6 +863,7 @@ namespace Equal_level_lines_UI
       //GetMeasurements();
       btn_DoOptIter.Enabled = true;
       btn_FindOptSol.Enabled = true;
+      btn_set_optimizer.BackColor = Color.LightGreen;
     }
 
     private void GetSolution()
@@ -795,9 +871,12 @@ namespace Equal_level_lines_UI
       OptimizerSolution.X = (float)getOptimizerSolutionCoords(0);
       OptimizerSolution.Y = (float)getOptimizerSolutionCoords(1);
       OptimizerSolution.Z = (float)getOptimizerSolution();
-      tBox_OptSolX.Text = Math.Round(OptimizerSolution.X, 5).ToString();
-      tBox_OptSolY.Text = Math.Round(OptimizerSolution.Y, 5).ToString();
-      tBox_OptSolQ.Text = Math.Round(OptimizerSolution.Z, 5).ToString();
+      DGV_OptimizerSolution.Rows[0].Cells[0].Value = Math.Round(OptimizerSolution.X, 6);
+      DGV_OptimizerSolution.Rows[0].Cells[1].Value = Math.Round(OptimizerSolution.Y, 6);
+      DGV_OptimizerSolution.Rows[0].Cells[2].Value = Math.Round(OptimizerSolution.Z, 6);
+      //tBox_OptSolX.Text = Math.Round(OptimizerSolution.X, 5).ToString();
+      //tBox_OptSolY.Text = Math.Round(OptimizerSolution.Y, 5).ToString();
+      //tBox_OptSolQ.Text = Math.Round(OptimizerSolution.Z, 5).ToString();
       CalculatedSolution = true;
     }
 
@@ -819,23 +898,23 @@ namespace Equal_level_lines_UI
       GetSolution();
     }
 
-    private void CBox_AddYaxis_CheckedChanged(object sender, EventArgs e)
-    {
-      AddYAxis = cBox_AddYaxis.Checked;
-      pictureBox1.Invalidate();
-    }
+    //private void CBox_AddYaxis_CheckedChanged(object sender, EventArgs e)
+    //{
+    //  AddYAxis = cBox_AddYaxis.Checked;
+    //  pictureBox1.Invalidate();
+    //}
 
-    private void Button1_Click(object sender, EventArgs e)
-    {
-      colorDialog1.ShowDialog();
-      GridColor = colorDialog1.Color;
-    }
+    //private void Button1_Click(object sender, EventArgs e)
+    //{
+    //  colorDialog1.ShowDialog();
+    //  GridColor = colorDialog1.Color;
+    //}
 
-    private void CBox_AddGrid_CheckedChanged(object sender, EventArgs e)
-    {
-      AddGrid = cBox_AddGrid.Checked;
-      pictureBox1.Invalidate();
-    }
+    //private void CBox_AddGrid_CheckedChanged(object sender, EventArgs e)
+    //{
+    //  AddGrid = cBox_AddGrid.Checked;
+    //  pictureBox1.Invalidate();
+    //}
 
     public static void GetDataFromDll(int FuncIdx, int rowIdx, int N, int M)
     {
@@ -864,7 +943,7 @@ namespace Equal_level_lines_UI
       Marshal.FreeCoTaskMem(ptrSubLevelValues);
     }
 
-    public static void GetLimitData(int rowIdx)
+    public void GetLimitData(int rowIdx)
     {
       int Density = Eque_lines[rowIdx].Density;
       int length = PicWidth / Density * PicHeight / Density;
@@ -889,7 +968,7 @@ namespace Equal_level_lines_UI
       e.Graphics.SmoothingMode =
         System.Drawing.Drawing2D.SmoothingMode.HighQuality;
       Bitmap bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-      SendLines(e.Graphics, pictureBox1, int.Parse(tBox_NumOfGridLines.Text), 4);
+      SendLines(e.Graphics, pictureBox1, NGridLines, 4);
       pictureBox1.Image = bmp;
     }
   }
