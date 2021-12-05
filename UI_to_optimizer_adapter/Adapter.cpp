@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Adapter.h"
 
+#include <vector>
+
 double XMin = 0.0, XMax = 0.0, YMin = 0.0, YMax = 0.0;
 double SolutionCoords[2] = { 0.0, 0.0 };
 double Solution = 0.0;
@@ -12,6 +14,8 @@ MyConditionFunction *aConditionFunction;
 int MeasurementsNumber = 0;
 int Iteration = 0;
 int NumIterations = 0;
+
+std::vector<double> Measurements;
 
 void setImportingDllPath2(char *ImportingDllPath, int Length) {
   ImportingDllPath2 = std::string(ImportingDllPath);
@@ -55,8 +59,26 @@ void setOptimizerParameters(int FuncIdx, int LimitIdx) {
   Direct::SetDParameters(&*aParameters, Method::ExtDir_diag);
 }
 
-int runOptimizer() {
-  if (Iteration < NumIterations)
+void runOptimizer(int NIterations, double *Solutions) {
+  double *Ptr = new double[2];
+
+  for (int i = 0; i < NIterations; ++i) {
+    Direct::DoIteration();
+    Solutions[i] = Direct::GetCurrentSolution();
+
+    int Count = getNewMeasurementsCountOnLastIteration();
+    MeasurementsNumber += Count;
+    for (int i = 1; i <= Count; ++i) {
+      Direct::GetNewPointCoords(Ptr, i, 0, 1);
+      Measurements.push_back(Ptr[0]);
+      Measurements.push_back(Ptr[1]);
+    }
+  }
+
+  Ptr = SolutionCoords;
+  Direct::GetMinimumCoords(Ptr, aParameters->dimention);
+  Solution = Direct::GetCurrentSolution();
+  /*if (Iteration < NumIterations)
   {
     Direct::DoIteration();
     ++Iteration;
@@ -69,7 +91,7 @@ int runOptimizer() {
       Solution = Direct::GetCurrentSolution();
       return 0;
     }
-  }
+  }*/
 }
 
 void doIterations(int NumOfIterations) {
@@ -107,4 +129,10 @@ void getMeasurementsOnLastIteration(double* Measurements) {
   }
   copy(NewMeasurements.begin(), NewMeasurements.end(), Measurements);
   delete[] Ptr;
+}
+
+int getMeasurementsNumber() { return MeasurementsNumber; }
+
+void getMeasurements(double* TheMeasurements) {
+  std::copy(Measurements.begin(), Measurements.end(), TheMeasurements);
 }

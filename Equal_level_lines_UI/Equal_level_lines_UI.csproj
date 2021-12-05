@@ -75,12 +75,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormSolutionChart.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormSolutionChart.Designer.cs">
-      <DependentUpon>FormSolutionChart.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormFunctions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,9 +127,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormPictureParameters.resx">
       <DependentUpon>FormPictureParameters.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormSolutionChart.resx">
-      <DependentUpon>FormSolutionChart.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormVariables.resx">
       <DependentUpon>FormVariables.cs</DependentUpon>

@@ -110,7 +110,13 @@ void setOptimizerParameters(int FuncIdx, int LimitIdx);
 // расчетов оптимизатора, число итераций фиксируется в качестве параметра и не
 // может быть изменено
 extern "C" __declspec(dllexport)
-int runOptimizer();
+void runOptimizer(int NIterations, double* Solutions);
+
+extern "C" __declspec(dllexport)
+int getMeasurementsNumber();
+
+extern "C" __declspec(dllexport)
+void getMeasurements(double *Measurements);
 
 // Аналогичный приведённому выше методу алгоритм, отличающийся тем, что
 // выполняет изменяемое число (NumOfIterations) итераций (нужен для того,

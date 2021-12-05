@@ -67,7 +67,7 @@ namespace Equal_level_lines_UI
     public static extern void setOptimizerParameters(int FuncIdx, int LimitIdx);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int runOptimizer();
+    public static extern void runOptimizer(int NIterations, double[] Solutions);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
     public static extern double getOptimizerSolutionCoords(int NumCoord);
@@ -86,6 +86,12 @@ namespace Equal_level_lines_UI
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
     public static extern int getCurrentNumberOfIterations();
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int getMeasurementsNumber();
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void getMeasurements(double[] Measurements);
 
     // ============ End of UI_to_optimizer_adapter.dll import functions ===========
 
@@ -119,7 +125,7 @@ namespace Equal_level_lines_UI
     public TaskFunction[] TheTaskFunctions;
     public bool DrawGrid = false, DrawLimit = false, DrawFilling = false;
     public int NGridLines = 0;
-    public List<double> Solutions = new List<double>();
+    public List<double> SolutionsList = new List<double>();
 
     public struct TaskFunction
     {
@@ -731,6 +737,11 @@ namespace Equal_level_lines_UI
 
     }
 
+    private void button1_Click(object sender, EventArgs e)
+    {
+
+    }
+
     private void button3_Click(object sender, EventArgs e)
     {
       FormVariables f2 = new FormVariables(this);
@@ -886,13 +897,31 @@ namespace Equal_level_lines_UI
 
     private void btn_FindOptSol_Click(object sender, EventArgs e)
     {
-      int OptimizerIsWorking = 1;
-      while (OptimizerIsWorking == 1)
-      {
-        OptimizerIsWorking = runOptimizer();
-        GetMeasurements();
-      }
+      int NIterations = int.Parse(tBox_OptNumIters.Text);
+      //int OptimizerIsWorking = 1;
+      //while (OptimizerIsWorking == 1)
+      //{
+      //  OptimizerIsWorking = runOptimizer();
+      //  GetMeasurements();
+      //}
+      //GetSolution();
+      double[] Solutions = new double[NIterations];
+      runOptimizer(NIterations, Solutions);
       GetSolution();
+      int NMeasurements = getMeasurementsNumber();
+      double[] NewMeasurements = new double[NMeasurements * 2];
+      getMeasurements(NewMeasurements);
+
+      for (int i = 0; i < NMeasurements; i++)
+      {
+        PointF p = new PointF((float)NewMeasurements[i * 2],
+                              (float)NewMeasurements[i * 2 + 1]);
+        OptimizerPoints.Add(p);
+      }
+
+      chart_SolutionRecord.Series["Series1"].Points.Clear();
+      for (int i = 0; i < Solutions.Length; i++)
+        chart_SolutionRecord.Series["Series1"].Points.AddXY(i, Solutions[i]);
     }
 
     private void Btn_DoOptIter_Click(object sender, EventArgs e)
@@ -900,8 +929,8 @@ namespace Equal_level_lines_UI
       doIterations(int.Parse(tBox_NumItersPerClick.Text));
       GetMeasurements();
       GetSolution();
-      Solutions.Add(OptimizerSolution.Z);
-      chart_SolutionRecord.Series["Series1"].Points.AddXY(Solutions.Count - 1, OptimizerSolution.Z);
+      SolutionsList.Add(OptimizerSolution.Z);
+      chart_SolutionRecord.Series["Series1"].Points.AddXY(SolutionsList.Count - 1, OptimizerSolution.Z);
     }
 
     //private void CBox_AddYaxis_CheckedChanged(object sender, EventArgs e)
