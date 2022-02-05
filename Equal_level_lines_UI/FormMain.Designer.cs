@@ -253,7 +253,7 @@
       this.tBox_DllPath.Name = "tBox_DllPath";
       this.tBox_DllPath.Size = new System.Drawing.Size(289, 24);
       this.tBox_DllPath.TabIndex = 2;
-      this.tBox_DllPath.Text = "OptimizationTask.dll";
+      this.tBox_DllPath.Text = "TestMultiDimOptTask.dll";
       this.tBox_DllPath.TextChanged += new System.EventHandler(this.tBox_DllPath_TextChanged);
       // 
       // btn_Run

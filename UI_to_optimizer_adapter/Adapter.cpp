@@ -3,8 +3,8 @@
 
 #include <vector>
 
-double XMin = 0.0, XMax = 0.0, YMin = 0.0, YMax = 0.0;
-double SolutionCoords[2] = { 0.0, 0.0 };
+double *VariablesBounds;
+double *SolutionCoords;
 double Solution = 0.0;
 
 Parameters *aParameters;
@@ -19,14 +19,19 @@ std::vector<double> Measurements;
 
 void setImportingDllPath2(char *ImportingDllPath, int Length) {
   ImportingDllPath2 = std::string(ImportingDllPath);
+  std::cout << ImportingDllPath2 << std::endl;
 }
 
-void setOptimizerArea(double TheXMin, double TheXMax, double TheYMin,
-                      double TheYMax) {
-  XMin = TheXMin;
-  XMax = TheXMax;
-  YMin = TheYMin;
-  YMax = TheYMax;
+void setOptimizerArea(double* TheVariablesBounds) {
+  VariablesBounds = new double[TaskDim * 2];
+  for (int i = 0; i < TaskDim * 2; ++i) {
+    VariablesBounds[i] = TheVariablesBounds[i];
+    //cout << VariablesBounds[i] << endl;
+  }
+}
+
+void setTaskDim(int TheTaskDim) {
+  TaskDim = TheTaskDim;
 }
 
 void setNumOptimizerIterations(int NumIters) {
@@ -34,17 +39,19 @@ void setNumOptimizerIterations(int NumIters) {
 }
 
 void setOptimizerParameters(int FuncIdx, int LimitIdx) {
+  SolutionCoords = new double[TaskDim];
   aParameters = new Parameters;
   aTargetFunction = new MyTargetFunction(FuncIdx);
   aConditionFunction = new MyConditionFunction(LimitIdx);
-  aTargetFunction->setArea(XMin, YMin, XMax, YMax);
-  aConditionFunction->SetArea(XMin, YMin, XMax, YMax);
+  aTargetFunction->setArea(VariablesBounds);
+  aConditionFunction->setArea(VariablesBounds);
   aParameters->testFunction = &*aTargetFunction;
   aParameters->conditionFunction = &*aConditionFunction;
   aParameters->thresholdNumberIntervals = NumIterations;
   aParameters->numberIterationsMutiple = 2;
+  aParameters->mu = 0.3;
   aParameters->epsilon = 0.5;
-  aParameters->epsilon1 = 0.1;
+  aParameters->epsilon1 = 0.5;
   aParameters->epsilon2 = 0.0001;
   aParameters->delta = 0.0;
   aParameters->delta1 = -0.1;
@@ -54,17 +61,18 @@ void setOptimizerParameters(int FuncIdx, int LimitIdx) {
   aParameters->gamma2 = 2.0;
   aParameters->LocalItNum = -1;
   aParameters->GlobalItNum = -1;
-  aParameters->dimention = 2;
+  aParameters->dimention = TaskDim;
   aParameters->concurrencyIsAllowed = false;
   Direct::SetDParameters(&*aParameters, Method::ExtDir_diag);
 }
 
 void runOptimizer(int NIterations, double *Solutions) {
-  double *Ptr = new double[2];
+  double *Ptr = new double[TaskDim];
 
   for (int i = 0; i < NIterations; ++i) {
     Direct::DoIteration();
     Solutions[i] = Direct::GetCurrentSolution();
+    cout << Solutions[i] << endl;
 
     int Count = getNewMeasurementsCountOnLastIteration();
     MeasurementsNumber += Count;
@@ -78,20 +86,6 @@ void runOptimizer(int NIterations, double *Solutions) {
   Ptr = SolutionCoords;
   Direct::GetMinimumCoords(Ptr, aParameters->dimention);
   Solution = Direct::GetCurrentSolution();
-  /*if (Iteration < NumIterations)
-  {
-    Direct::DoIteration();
-    ++Iteration;
-    MeasurementsNumber = Direct::GetMeasurementsNumber();
-    if (Iteration < NumIterations)
-      return 1;
-    else {
-      double *Ptr = SolutionCoords;
-      Direct::GetMinimumCoords(Ptr, aParameters->dimention);
-      Solution = Direct::GetCurrentSolution();
-      return 0;
-    }
-  }*/
 }
 
 void doIterations(int NumOfIterations) {
@@ -100,14 +94,16 @@ void doIterations(int NumOfIterations) {
   double *Ptr = SolutionCoords;
   Direct::GetMinimumCoords(Ptr, aParameters->dimention);
   Solution = Direct::GetCurrentSolution();
+  cout << Solution << endl;
 }
 
 int getCurrentNumberOfIterations() {
   return Iteration;
 }
 
-double getOptimizerSolutionCoords(int NumCoord) {
-  return SolutionCoords[NumCoord];
+void getOptimizerSolutionCoords(double *Coordinates) {
+  for (int i = 0; i < TaskDim; ++i)
+    Coordinates[i] = SolutionCoords[i];
 }
 
 double getOptimizerSolution() {

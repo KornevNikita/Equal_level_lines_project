@@ -10,9 +10,11 @@
 
 using namespace std;
 
-typedef double (*Import_func)(double, double);
+typedef double (*Import_func)(double *);
 
 string ImportingDllPath2;
+
+int TaskDim;
 
 #include <iostream>
 using namespace std; // temp
@@ -39,24 +41,24 @@ class MyTargetFunction : public TestFunction
   Import_func IFunc;
 
 public:
-  MyTargetFunction(int FuncIdx) : TestFunction(2) {
+  MyTargetFunction(int FuncIdx) : TestFunction(TaskDim) {
     parseImportFunction(IFunc, FunctionType::Target_function, FuncIdx);
-  };
+  }
 
-  void setArea(double X1, double Y1, double X2, double Y2) {
-    bottomLeft[0] = X1;
-    bottomLeft[1] = Y1;
-    topRight[0] = X2;
-    topRight[1] = Y2;
+  void setArea(double *VariablesBounds) {
+    int k = 0;
+    for (int i = 0; i < TaskDim; ++i) {
+      bottomLeft[i] = VariablesBounds[k++];
+      topRight[i] = VariablesBounds[k++];
+    }  
   }
 
   FunctionValue f(CoordinateValue *Point)
   {
-    CoordinateValue _pointForIntermediateCalculations[2];
+    CoordinateValue *_pointForIntermediateCalculations =
+      new CoordinateValue[TaskDim];
     rescale(Point, _pointForIntermediateCalculations);
-    CoordinateValue X = _pointForIntermediateCalculations[0];
-    CoordinateValue Y = _pointForIntermediateCalculations[1];
-    return (*IFunc)(X, Y);
+    return (*IFunc)(_pointForIntermediateCalculations);
   }
 };
 
@@ -65,24 +67,24 @@ class MyConditionFunction : public TestFunction
   Import_func IFunc;
 
 public:
-  MyConditionFunction(int LimitIdx) : TestFunction(2) {
+  MyConditionFunction(int LimitIdx) : TestFunction(TaskDim) {
     parseImportFunction(IFunc, FunctionType::Limit_function, LimitIdx);
-  };
-
-  void SetArea(double X1, double Y1, double X2, double Y2) {
-    bottomLeft[0] = X1;
-    bottomLeft[1] = Y1;
-    topRight[0] = X2;
-    topRight[1] = Y2;
   }
 
-  FunctionValue f(CoordinateValue *Point)
+  void setArea(double *VariablesBounds) {
+    int k = 0;
+    for (int i = 0; i < TaskDim; ++i) {
+      bottomLeft[i] = VariablesBounds[k++];
+      topRight[i] = VariablesBounds[k++];
+    }
+  }
+
+  FunctionValue f(CoordinateValue* Point)
   {
-    CoordinateValue _pointForIntermediateCalculations[2];
+    CoordinateValue* _pointForIntermediateCalculations =
+      new CoordinateValue[TaskDim];
     rescale(Point, _pointForIntermediateCalculations);
-    CoordinateValue x = _pointForIntermediateCalculations[0];
-    CoordinateValue y = _pointForIntermediateCalculations[1];
-    return (*IFunc)(x, y);
+    return (*IFunc)(_pointForIntermediateCalculations);
   }
 };
 
@@ -94,7 +96,10 @@ void setImportingDllPath2(char *ImportingDllPath, int Length);
 // Метод для установки границ области, в которой будет производиться расчет
 // импортируемых математических функций
 extern "C" __declspec(dllexport)
-void setOptimizerArea(double XMin, double XMax, double YMin, double YMax);
+void setOptimizerArea(double *VariablesBounds);
+
+extern "C" __declspec(dllexport)
+void setTaskDim(int TaskDim);
 
 // Метод для установки числа итераций методов оптимизации, после которого
 // выполнение алгоритма будет остановлено
@@ -140,7 +145,7 @@ void getMeasurementsOnLastIteration(double *Measurements);
 
 // Метод для получения координат решения, найденного оптимизатором
 extern "C" __declspec(dllexport)
-double getOptimizerSolutionCoords(int NumCoord);
+void getOptimizerSolutionCoords(double* Coordinates);
 
 // Метод для получения решения, найденного оптимизатором
 extern "C" __declspec(dllexport)

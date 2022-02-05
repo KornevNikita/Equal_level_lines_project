@@ -21,9 +21,12 @@ namespace Equal_level_lines_UI
 
     private void button1_Click(object sender, EventArgs e)
     {
+      form1.NumOfFixedVariables = 0;
       for (int i = 0; i < dataGridView1.RowCount; i++)
       {
         form1.TheTaskVariables[i].Fixed = bool.Parse(dataGridView1.Rows[i].Cells[1].Value.ToString());
+        if (form1.TheTaskVariables[i].Fixed == true)
+          form1.NumOfFixedVariables++;
         form1.TheTaskVariables[i].Value = double.Parse(dataGridView1.Rows[i].Cells[2].Value.ToString());
         form1.TheTaskVariables[i].Min = double.Parse(dataGridView1.Rows[i].Cells[3].Value.ToString());
         form1.TheTaskVariables[i].Max = double.Parse(dataGridView1.Rows[i].Cells[4].Value.ToString());

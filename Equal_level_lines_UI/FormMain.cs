@@ -57,8 +57,14 @@ namespace Equal_level_lines_UI
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
     public static extern void setImportingDllPath2(string _ImportingDllPath, int length);
 
+    //[DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    //public static extern void setOptimizerArea(double _XMin, double _XMax, double _YMin, double _YMax);
+
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void setOptimizerArea(double _XMin, double _XMax, double _YMin, double _YMax);
+    public static extern void setTaskDim(int TaskDim);
+
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void setOptimizerArea(double[] VariablesBounds);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
     public static extern void setNumOptimizerIterations(int NumIters);
@@ -70,7 +76,7 @@ namespace Equal_level_lines_UI
     public static extern void runOptimizer(int NIterations, double[] Solutions);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern double getOptimizerSolutionCoords(int NumCoord);
+    public static extern void getOptimizerSolutionCoords(double[] Coordinates);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
     public static extern double getOptimizerSolution();
@@ -111,7 +117,7 @@ namespace Equal_level_lines_UI
     public int NumberOfTargetFunctions;
     public int NumberOfLimitFunctions;
     public int NumberOfFillingFunctions;
-    public Point3D OptimizerSolution = new Point3D();
+    public double[] OptimalPointCoordsAndFuncValue;
     public bool CalculatedSolution = false;
     public List<PointF> OptimizerPoints = new List<PointF>();
     public int NumPointsOnLastIteration = 0;
@@ -122,10 +128,15 @@ namespace Equal_level_lines_UI
     public int NumOfFillingFuncs = 0;
     public int TaskDim = 0;
     public TaskVariable[] TheTaskVariables;
+    public int NumOfFixedVariables = 0;
     public TaskFunction[] TheTaskFunctions;
     public bool DrawGrid = false, DrawLimit = false, DrawFilling = false;
     public int NGridLines = 0;
     public List<double> SolutionsList = new List<double>();
+    IntPtr pDll; // task library
+    double[] FixedVariablesValues;
+    int[] NumbersOfNonFixedVariables;
+    int[] NumbersOfFixedVariables;
 
     public struct TaskFunction
     {
@@ -455,15 +466,15 @@ namespace Equal_level_lines_UI
         float X, Y;
         if (Xmin < 0 && Xmax < 0 && Ymin >= 0 && Ymax > 0)
         {
-          X = (OptimizerSolution.X - (float)Xmin) / area_width * pictureBox1.Width;
-          Y = pictureBox1.Height - (OptimizerSolution.Y / area_height) * pictureBox1.Height;
+          X = ((float)OptimalPointCoordsAndFuncValue[0] - (float)Xmin) / area_width * pictureBox1.Width;
+          Y = pictureBox1.Height - ((float)OptimalPointCoordsAndFuncValue[1] / area_height) * pictureBox1.Height;
         }
         else
         {
-          X = OptimizerSolution.X / area_width * pictureBox1.Width +
+          X = (float)OptimalPointCoordsAndFuncValue[0] / area_width * pictureBox1.Width +
                       pictureBox1.Width / 2;
           Y = pictureBox1.Height / 2 -
-            OptimizerSolution.Y / area_height * pictureBox1.Height;
+            (float)OptimalPointCoordsAndFuncValue[1] / area_height * pictureBox1.Height;
         }
         g.FillEllipse(brush, X, Y, 5, 5);
       }
@@ -516,7 +527,7 @@ namespace Equal_level_lines_UI
         // all other variables except two must be fixed
         double[] Area = new double[4];
         int k = 0, l = 0;
-        for (int i = 0; i < TheTaskVariables.Length; i++) // find (2 non-fixed variables borders / values of fixed vars)
+        for (int i = 0; i < TheTaskVariables.Length; i++) // find 2 non-fixed variables borders
         {
           if (!TheTaskVariables[i].Fixed) // if non-fixed
           {
@@ -601,7 +612,7 @@ namespace Equal_level_lines_UI
     {
       String DllPath = tBox_DllPath.Text.ToString();
 
-      IntPtr pDll = NativeMethods.LoadLibrary(@DllPath);
+      pDll = NativeMethods.LoadLibrary(@DllPath);
 
       if (pDll != IntPtr.Zero)
       {
@@ -866,14 +877,51 @@ namespace Equal_level_lines_UI
         OptimizerPoints.Add(p);
       }
     }
-
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void setFixedVariablesInTaskLibrary(int NumOfFixedVariables,
+                                                         double[] FixedVariablesValues,
+                                                         int[] NumbersOfFixedVariables,
+                                                         int[] NumbersOfNonFixedVariables);
     private void btn_set_optimizer_Click(object sender, EventArgs e)
     {
       String DllPath = tBox_DllPath.Text.ToString();
       setImportingDllPath2(DllPath, DllPath.Length);
-      setOptimizerArea(Xmin, Xmax, Ymin, Ymax);
+      setTaskDim(TaskDim - NumOfFixedVariables);
+
+      double[] VariablesBounds = new double[(TaskDim - NumOfFixedVariables) * 2];
+      int[] NumbersOfNonFixedVariables = new int[TaskDim - NumOfFixedVariables];
+      FixedVariablesValues = new double[NumOfFixedVariables];
+      NumbersOfFixedVariables = new int[NumOfFixedVariables];
+      int j = 0, k = 0, l = 0;
+      for (int i = 0; i < TaskDim; ++i)
+      {
+        if (TheTaskVariables[i].Fixed == false) {
+          NumbersOfNonFixedVariables[j++] = i;
+          VariablesBounds[k++] = TheTaskVariables[i].Min;
+          VariablesBounds[k++] = TheTaskVariables[i].Max;
+        }
+        else {
+          FixedVariablesValues[l] = TheTaskVariables[i].Value;
+          NumbersOfFixedVariables[l++] = i; // №'s of fixed variables
+        }
+      }
+
+      setOptimizerArea(VariablesBounds);
+      // Optimizer is not able to work with n-dim tasks, where some of variables are fixed. Therefore
+      // we need to fix these variables in the task and calculate the target function in n - numOfFixedVariables dim.
+      if (NumOfFixedVariables != 0)
+      {
+        IntPtr pFuncAddr = NativeMethods.GetProcAddress(pDll, "setFixedVariablesInTaskLibrary");
+        setFixedVariablesInTaskLibrary setFixedVariablesInTaskLibrary =
+          (setFixedVariablesInTaskLibrary)Marshal.GetDelegateForFunctionPointer(
+            pFuncAddr,
+            typeof(setFixedVariablesInTaskLibrary));
+        setFixedVariablesInTaskLibrary(NumOfFixedVariables, FixedVariablesValues,
+                                       NumbersOfFixedVariables,
+                                       NumbersOfNonFixedVariables);
+      }
       setNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
-      setOptimizerParameters(int.Parse(tBox_CriteriaToDrow.Text), 2);
+      setOptimizerParameters(int.Parse(tBox_CriteriaToDrow.Text), 1);
       //setOptimizerParameters(int.Parse(tBox_CriteriaToDrow.Text));
       //GetMeasurements();
       btn_DoOptIter.Enabled = true;
@@ -883,15 +931,35 @@ namespace Equal_level_lines_UI
 
     private void GetSolution()
     {
-      OptimizerSolution.X = (float)getOptimizerSolutionCoords(0);
-      OptimizerSolution.Y = (float)getOptimizerSolutionCoords(1);
-      OptimizerSolution.Z = (float)getOptimizerSolution();
-      DGV_OptimizerSolution.Rows[0].Cells[0].Value = Math.Round(OptimizerSolution.X, 6);
-      DGV_OptimizerSolution.Rows[0].Cells[1].Value = Math.Round(OptimizerSolution.Y, 6);
-      DGV_OptimizerSolution.Rows[0].Cells[2].Value = Math.Round(OptimizerSolution.Z, 6);
-      //tBox_OptSolX.Text = Math.Round(OptimizerSolution.X, 5).ToString();
-      //tBox_OptSolY.Text = Math.Round(OptimizerSolution.Y, 5).ToString();
-      //tBox_OptSolQ.Text = Math.Round(OptimizerSolution.Z, 5).ToString();
+      // OptimalPointCoordsAndFuncValue contains solution coords and value:
+      // OptimalPointCoordsAndFuncValue[0] = X_0
+      // OptimalPointCoordsAndFuncValue[1] = X_1
+      // ...
+      // OptimalPointCoordsAndFuncValue[TaskDim - 1] = X_N-1
+      // OptimalPointCoordsAndFuncValue[TaskDim] = F(X_0, X_1, ..., X_N-1) = Q 
+      OptimalPointCoordsAndFuncValue = new double[TaskDim + 1];
+      getOptimizerSolutionCoords(OptimalPointCoordsAndFuncValue);
+      OptimalPointCoordsAndFuncValue[TaskDim] = getOptimizerSolution();
+      DGV_OptimizerSolution.ColumnCount = TaskDim + 1;
+
+      int k = 0, l = 0;
+      for (int i = 0; i < TaskDim; i++)
+      {
+        DGV_OptimizerSolution.Columns[i].HeaderText = "X" + i;
+        if (k < NumOfFixedVariables && i == NumbersOfFixedVariables[k])
+        {
+          DGV_OptimizerSolution.Rows[0].Cells[i].Value = FixedVariablesValues[k++];
+        }
+        else
+        {
+          DGV_OptimizerSolution.Columns[i].HeaderText = "X" + i;
+          DGV_OptimizerSolution.Rows[0].Cells[i].Value = Math.Round(OptimalPointCoordsAndFuncValue[l++], 6);
+        }
+
+      }
+
+      DGV_OptimizerSolution.Columns[TaskDim].HeaderText = "Q";
+      DGV_OptimizerSolution.Rows[0].Cells[TaskDim].Value = OptimalPointCoordsAndFuncValue[TaskDim];
       CalculatedSolution = true;
     }
 
@@ -929,8 +997,8 @@ namespace Equal_level_lines_UI
       doIterations(int.Parse(tBox_NumItersPerClick.Text));
       GetMeasurements();
       GetSolution();
-      SolutionsList.Add(OptimizerSolution.Z);
-      chart_SolutionRecord.Series["Series1"].Points.AddXY(SolutionsList.Count - 1, OptimizerSolution.Z);
+      SolutionsList.Add(OptimalPointCoordsAndFuncValue[TaskDim]);
+      chart_SolutionRecord.Series["Series1"].Points.AddXY(SolutionsList.Count - 1, OptimalPointCoordsAndFuncValue[TaskDim]);
     }
 
     //private void CBox_AddYaxis_CheckedChanged(object sender, EventArgs e)
