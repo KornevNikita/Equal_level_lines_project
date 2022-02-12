@@ -26,6 +26,7 @@ namespace Equal_level_lines_UI
       F.M1 = int.Parse(dataGridView1.Rows[0].Cells[1].Value.ToString());
       F.M2 = int.Parse(dataGridView1.Rows[0].Cells[2].Value.ToString());
       F.M3 = int.Parse(dataGridView1.Rows[0].Cells[3].Value.ToString());
+      this.Close();
     }
   }
 }

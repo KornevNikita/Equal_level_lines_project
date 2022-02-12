@@ -28,20 +28,24 @@
     /// </summary>
     private void InitializeComponent()
     {
-      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-      System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-      System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-      System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+      System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+      System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+      System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
       this.pictureBox1 = new System.Windows.Forms.PictureBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.label4 = new System.Windows.Forms.Label();
+      this.tBox_CurrentTaskDim = new System.Windows.Forms.TextBox();
+      this.label3 = new System.Windows.Forms.Label();
+      this.tBox_LimitToDraw = new System.Windows.Forms.TextBox();
       this.tBox_CalculationTime = new System.Windows.Forms.TextBox();
       this.btn_PictureParameteres = new System.Windows.Forms.Button();
       this.btn_Functions = new System.Windows.Forms.Button();
       this.label5 = new System.Windows.Forms.Label();
-      this.tBox_CriteriaToDrow = new System.Windows.Forms.TextBox();
+      this.tBox_CriteriaToDraw = new System.Windows.Forms.TextBox();
       this.btn_LinesParameters = new System.Windows.Forms.Button();
       this.btn_Variables = new System.Windows.Forms.Button();
       this.button2 = new System.Windows.Forms.Button();
@@ -68,7 +72,7 @@
       this.btn_DoOptIter = new System.Windows.Forms.Button();
       this.btn_FindOptSol = new System.Windows.Forms.Button();
       this.tBox_NumItersPerClick = new System.Windows.Forms.TextBox();
-      this.textBox1 = new System.Windows.Forms.TextBox();
+      this.tBox_OptimizerDllPath = new System.Windows.Forms.TextBox();
       this.btn_set_optimizer = new System.Windows.Forms.Button();
       this.btn_OpenOptimizer = new System.Windows.Forms.Button();
       this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -82,6 +86,7 @@
       this.groupBox2 = new System.Windows.Forms.GroupBox();
       this.chart_SolutionRecord = new System.Windows.Forms.DataVisualization.Charting.Chart();
       this.button1 = new System.Windows.Forms.Button();
+      this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
       ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
       this.groupBox1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
@@ -107,11 +112,15 @@
       // groupBox1
       // 
       this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
+      this.groupBox1.Controls.Add(this.label4);
+      this.groupBox1.Controls.Add(this.tBox_CurrentTaskDim);
+      this.groupBox1.Controls.Add(this.label3);
+      this.groupBox1.Controls.Add(this.tBox_LimitToDraw);
       this.groupBox1.Controls.Add(this.tBox_CalculationTime);
       this.groupBox1.Controls.Add(this.btn_PictureParameteres);
       this.groupBox1.Controls.Add(this.btn_Functions);
       this.groupBox1.Controls.Add(this.label5);
-      this.groupBox1.Controls.Add(this.tBox_CriteriaToDrow);
+      this.groupBox1.Controls.Add(this.tBox_CriteriaToDraw);
       this.groupBox1.Controls.Add(this.btn_LinesParameters);
       this.groupBox1.Controls.Add(this.btn_Variables);
       this.groupBox1.Controls.Add(this.button2);
@@ -127,6 +136,44 @@
       this.groupBox1.TabIndex = 1;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Optimization task parameters";
+      // 
+      // label4
+      // 
+      this.label4.AutoSize = true;
+      this.label4.Location = new System.Drawing.Point(96, 126);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(57, 18);
+      this.label4.TabIndex = 57;
+      this.label4.Text = "Current";
+      // 
+      // tBox_CurrentTaskDim
+      // 
+      this.tBox_CurrentTaskDim.Location = new System.Drawing.Point(159, 123);
+      this.tBox_CurrentTaskDim.Name = "tBox_CurrentTaskDim";
+      this.tBox_CurrentTaskDim.ReadOnly = true;
+      this.tBox_CurrentTaskDim.Size = new System.Drawing.Size(30, 24);
+      this.tBox_CurrentTaskDim.TabIndex = 56;
+      this.tBox_CurrentTaskDim.Text = "0";
+      this.tBox_CurrentTaskDim.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Location = new System.Drawing.Point(106, 156);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(47, 18);
+      this.label3.TabIndex = 55;
+      this.label3.Text = "Limit#";
+      // 
+      // tBox_LimitToDraw
+      // 
+      this.tBox_LimitToDraw.Location = new System.Drawing.Point(159, 153);
+      this.tBox_LimitToDraw.Name = "tBox_LimitToDraw";
+      this.tBox_LimitToDraw.ReadOnly = true;
+      this.tBox_LimitToDraw.Size = new System.Drawing.Size(30, 24);
+      this.tBox_LimitToDraw.TabIndex = 54;
+      this.tBox_LimitToDraw.Text = "1";
+      this.tBox_LimitToDraw.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // tBox_CalculationTime
       // 
@@ -164,21 +211,21 @@
       // label5
       // 
       this.label5.AutoSize = true;
-      this.label5.Location = new System.Drawing.Point(133, 156);
+      this.label5.Location = new System.Drawing.Point(210, 156);
       this.label5.Name = "label5";
-      this.label5.Size = new System.Drawing.Size(106, 18);
+      this.label5.Size = new System.Drawing.Size(49, 18);
       this.label5.TabIndex = 53;
-      this.label5.Text = "Func# to draw:";
+      this.label5.Text = "Func#";
       // 
-      // tBox_CriteriaToDrow
+      // tBox_CriteriaToDraw
       // 
-      this.tBox_CriteriaToDrow.Location = new System.Drawing.Point(245, 153);
-      this.tBox_CriteriaToDrow.Name = "tBox_CriteriaToDrow";
-      this.tBox_CriteriaToDrow.ReadOnly = true;
-      this.tBox_CriteriaToDrow.Size = new System.Drawing.Size(50, 24);
-      this.tBox_CriteriaToDrow.TabIndex = 38;
-      this.tBox_CriteriaToDrow.Text = "0";
-      this.tBox_CriteriaToDrow.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+      this.tBox_CriteriaToDraw.Location = new System.Drawing.Point(265, 153);
+      this.tBox_CriteriaToDraw.Name = "tBox_CriteriaToDraw";
+      this.tBox_CriteriaToDraw.ReadOnly = true;
+      this.tBox_CriteriaToDraw.Size = new System.Drawing.Size(30, 24);
+      this.tBox_CriteriaToDraw.TabIndex = 38;
+      this.tBox_CriteriaToDraw.Text = "0";
+      this.tBox_CriteriaToDraw.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
       // btn_LinesParameters
       // 
@@ -218,18 +265,18 @@
       // label_TaskDim
       // 
       this.label_TaskDim.AutoSize = true;
-      this.label_TaskDim.Location = new System.Drawing.Point(161, 126);
+      this.label_TaskDim.Location = new System.Drawing.Point(195, 126);
       this.label_TaskDim.Name = "label_TaskDim";
-      this.label_TaskDim.Size = new System.Drawing.Size(73, 18);
+      this.label_TaskDim.Size = new System.Drawing.Size(64, 18);
       this.label_TaskDim.TabIndex = 38;
-      this.label_TaskDim.Text = "Task dim:";
+      this.label_TaskDim.Text = "Max dim";
       // 
       // tBox_TaskDim
       // 
-      this.tBox_TaskDim.Location = new System.Drawing.Point(245, 123);
+      this.tBox_TaskDim.Location = new System.Drawing.Point(265, 123);
       this.tBox_TaskDim.Name = "tBox_TaskDim";
       this.tBox_TaskDim.ReadOnly = true;
-      this.tBox_TaskDim.Size = new System.Drawing.Size(50, 24);
+      this.tBox_TaskDim.Size = new System.Drawing.Size(30, 24);
       this.tBox_TaskDim.TabIndex = 9;
       this.tBox_TaskDim.Text = "0";
       this.tBox_TaskDim.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -311,17 +358,17 @@
       // 
       this.chart2.BorderlineColor = System.Drawing.Color.Black;
       this.chart2.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Solid;
-      chartArea1.Name = "ChartArea1";
-      this.chart2.ChartAreas.Add(chartArea1);
-      legend1.Enabled = false;
-      legend1.Name = "Legend1";
-      this.chart2.Legends.Add(legend1);
+      chartArea3.Name = "ChartArea1";
+      this.chart2.ChartAreas.Add(chartArea3);
+      legend2.Enabled = false;
+      legend2.Name = "Legend1";
+      this.chart2.Legends.Add(legend2);
       this.chart2.Location = new System.Drawing.Point(1009, 9);
       this.chart2.Name = "chart2";
-      series1.ChartArea = "ChartArea1";
-      series1.Legend = "Legend1";
-      series1.Name = "Series1";
-      this.chart2.Series.Add(series1);
+      series3.ChartArea = "ChartArea1";
+      series3.Legend = "Legend1";
+      series3.Name = "Series1";
+      this.chart2.Series.Add(series3);
       this.chart2.Size = new System.Drawing.Size(450, 450);
       this.chart2.TabIndex = 6;
       this.chart2.Text = "chart1";
@@ -340,28 +387,28 @@
       this.dataGridView2.AllowUserToAddRows = false;
       this.dataGridView2.AllowUserToDeleteRows = false;
       this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-      dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-      dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-      dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-      dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-      dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-      dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-      this.dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+      dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+      dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+      dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+      dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+      dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+      dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+      this.dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
       this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
       this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column9,
             this.Column10,
             this.Column11,
             this.Column12});
-      dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-      dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-      dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-      dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-      dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-      dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-      dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-      this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle2;
+      dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+      dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+      dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+      dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+      dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+      dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+      dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+      this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle4;
       this.dataGridView2.Location = new System.Drawing.Point(1184, 465);
       this.dataGridView2.Name = "dataGridView2";
       this.dataGridView2.ReadOnly = true;
@@ -464,14 +511,14 @@
       this.tBox_NumItersPerClick.Text = "1";
       this.tBox_NumItersPerClick.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
       // 
-      // textBox1
+      // tBox_OptimizerDllPath
       // 
-      this.textBox1.Location = new System.Drawing.Point(6, 23);
-      this.textBox1.Name = "textBox1";
-      this.textBox1.ReadOnly = true;
-      this.textBox1.Size = new System.Drawing.Size(289, 24);
-      this.textBox1.TabIndex = 54;
-      this.textBox1.Text = "Optimizer.dll (work in progress)";
+      this.tBox_OptimizerDllPath.Enabled = false;
+      this.tBox_OptimizerDllPath.Location = new System.Drawing.Point(6, 23);
+      this.tBox_OptimizerDllPath.Name = "tBox_OptimizerDllPath";
+      this.tBox_OptimizerDllPath.Size = new System.Drawing.Size(289, 24);
+      this.tBox_OptimizerDllPath.TabIndex = 54;
+      this.tBox_OptimizerDllPath.Text = "Optimizer.dll";
       // 
       // btn_set_optimizer
       // 
@@ -496,6 +543,7 @@
       this.btn_OpenOptimizer.TabIndex = 56;
       this.btn_OpenOptimizer.Text = "Open";
       this.btn_OpenOptimizer.UseVisualStyleBackColor = true;
+      this.btn_OpenOptimizer.Click += new System.EventHandler(this.btn_OpenOptimizer_Click);
       // 
       // Column3
       // 
@@ -577,7 +625,7 @@
       this.groupBox2.Controls.Add(this.btn_FindOptSol);
       this.groupBox2.Controls.Add(this.label1);
       this.groupBox2.Controls.Add(this.tBox_NumItersPerClick);
-      this.groupBox2.Controls.Add(this.textBox1);
+      this.groupBox2.Controls.Add(this.tBox_OptimizerDllPath);
       this.groupBox2.Controls.Add(this.btn_OpenOptimizer);
       this.groupBox2.Controls.Add(this.label2);
       this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -590,13 +638,13 @@
       // 
       // chart_SolutionRecord
       // 
-      chartArea2.Name = "ChartArea1";
-      this.chart_SolutionRecord.ChartAreas.Add(chartArea2);
+      chartArea4.Name = "ChartArea1";
+      this.chart_SolutionRecord.ChartAreas.Add(chartArea4);
       this.chart_SolutionRecord.Location = new System.Drawing.Point(6, 204);
       this.chart_SolutionRecord.Name = "chart_SolutionRecord";
-      series2.ChartArea = "ChartArea1";
-      series2.Name = "Series1";
-      this.chart_SolutionRecord.Series.Add(series2);
+      series4.ChartArea = "ChartArea1";
+      series4.Name = "Series1";
+      this.chart_SolutionRecord.Series.Add(series4);
       this.chart_SolutionRecord.Size = new System.Drawing.Size(289, 265);
       this.chart_SolutionRecord.TabIndex = 54;
       this.chart_SolutionRecord.Text = "chart3";
@@ -604,6 +652,7 @@
       // button1
       // 
       this.button1.AutoSize = true;
+      this.button1.Enabled = false;
       this.button1.Location = new System.Drawing.Point(6, 87);
       this.button1.Name = "button1";
       this.button1.Size = new System.Drawing.Size(111, 28);
@@ -611,6 +660,10 @@
       this.button1.Text = "Solution chart";
       this.button1.UseVisualStyleBackColor = true;
       this.button1.Click += new System.EventHandler(this.button1_Click);
+      // 
+      // openFileDialog2
+      // 
+      this.openFileDialog2.FileName = "openFileDialog2";
       // 
       // FormMain
       // 
@@ -657,7 +710,7 @@
     private System.Windows.Forms.DataGridView dataGridView2;
     private System.Windows.Forms.GroupBox groupBox5;
     private System.Windows.Forms.Label label5;
-    private System.Windows.Forms.TextBox tBox_CriteriaToDrow;
+    private System.Windows.Forms.TextBox tBox_CriteriaToDraw;
     private System.Windows.Forms.Label label_SectionTime;
     private System.Windows.Forms.Label label_TaskDim;
     private System.Windows.Forms.TextBox tBox_TaskDim;
@@ -682,7 +735,7 @@
     private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
     private System.Windows.Forms.Button btn_OpenOptimizer;
     private System.Windows.Forms.Button btn_set_optimizer;
-    private System.Windows.Forms.TextBox textBox1;
+    private System.Windows.Forms.TextBox tBox_OptimizerDllPath;
     private System.Windows.Forms.TextBox tBox_NumItersPerClick;
     private System.Windows.Forms.Button btn_FindOptSol;
     private System.Windows.Forms.Button btn_DoOptIter;
@@ -690,6 +743,11 @@
     private System.Windows.Forms.GroupBox groupBox2;
     private System.Windows.Forms.Button button1;
     private System.Windows.Forms.DataVisualization.Charting.Chart chart_SolutionRecord;
+    private System.Windows.Forms.OpenFileDialog openFileDialog2;
+    private System.Windows.Forms.Label label4;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.TextBox tBox_LimitToDraw;
+    public System.Windows.Forms.TextBox tBox_CurrentTaskDim;
   }
 }
 

@@ -121,15 +121,16 @@ namespace Equal_level_lines_UI
       this.button1.TabIndex = 31;
       this.button1.Text = "Apply";
       this.button1.UseVisualStyleBackColor = true;
+      this.button1.Click += new System.EventHandler(this.button1_Click);
       // 
-      // Form1
+      // FormFunctions
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(346, 235);
       this.Controls.Add(this.button1);
       this.Controls.Add(this.dataGridView1);
-      this.Name = "Form1";
+      this.Name = "FormFunctions";
       this.Text = "Form1";
       ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
       this.ResumeLayout(false);

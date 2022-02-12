@@ -31,6 +31,9 @@ namespace Equal_level_lines_UI
         form1.TheTaskVariables[i].Min = double.Parse(dataGridView1.Rows[i].Cells[3].Value.ToString());
         form1.TheTaskVariables[i].Max = double.Parse(dataGridView1.Rows[i].Cells[4].Value.ToString());
       }
+      form1.CurrentTaskDim = form1.TaskDim - form1.NumOfFixedVariables;
+      form1.tBox_CurrentTaskDim.Text = form1.CurrentTaskDim.ToString();
+      this.Close();
     }
   }
 }

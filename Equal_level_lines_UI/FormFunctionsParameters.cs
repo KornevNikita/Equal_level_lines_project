@@ -18,5 +18,10 @@ namespace Equal_level_lines_UI
       InitializeComponent();
       this.F = F;
     }
+
+    private void button2_Click(object sender, EventArgs e)
+    {
+      this.Close();
+    }
   }
 }

@@ -129,6 +129,7 @@ namespace Equal_level_lines_UI
     public int TaskDim = 0;
     public TaskVariable[] TheTaskVariables;
     public int NumOfFixedVariables = 0;
+    public int CurrentTaskDim = 0;
     public TaskFunction[] TheTaskFunctions;
     public bool DrawGrid = false, DrawLimit = false, DrawFilling = false;
     public int NGridLines = 0;
@@ -215,7 +216,7 @@ namespace Equal_level_lines_UI
       {
         if (Eque_lines[I] != null)
         {
-          int FuncIdxToDraw = int.Parse(tBox_CriteriaToDrow.Text);
+          int FuncIdxToDraw = int.Parse(tBox_CriteriaToDraw.Text);
           if (Eque_lines[I].FuncIdx == FuncIdxToDraw && Eque_lines[I].Mode == 1 ||
               Eque_lines[I].Mode == 3 && DrawLimit)
           {
@@ -622,7 +623,8 @@ namespace Equal_level_lines_UI
         btn_LinesParameters.Enabled = true;
         btn_PictureParameteres.Enabled = true;
         btn_set_optimizer.Enabled = true;
-        tBox_CriteriaToDrow.ReadOnly = false;
+        tBox_CriteriaToDraw.ReadOnly = false;
+        tBox_LimitToDraw.ReadOnly = false;
         btn_OpenOptimizer.Enabled = true;
         setImportingDllPath(DllPath, DllPath.Length);
 
@@ -693,6 +695,7 @@ namespace Equal_level_lines_UI
         }
 
         tBox_TaskDim.Text = TaskDim.ToString();
+        tBox_CurrentTaskDim.Text = TaskDim.ToString();
 
         for (int i = 0; i < NumOfTargetFuncs; ++i)
         {
@@ -760,6 +763,13 @@ namespace Equal_level_lines_UI
         f2.dataGridView1.Rows.Add(i, TheTaskVariables[i].Fixed, TheTaskVariables[i].Value,
                                   TheTaskVariables[i].Min, TheTaskVariables[i].Max);
       f2.Show();
+      tBox_CurrentTaskDim.Text = CurrentTaskDim.ToString();
+    }
+
+    private void btn_OpenOptimizer_Click(object sender, EventArgs e)
+    {
+      openFileDialog2.ShowDialog();
+      tBox_OptimizerDllPath.Text = openFileDialog2.FileName;
     }
 
     private void button4_Click(object sender, EventArgs e)
@@ -823,7 +833,7 @@ namespace Equal_level_lines_UI
             double[] Point = new double[PointSize];
             Point[0] = X1 + Hx * i;
             Point[1] = Y1 + Hy * i;
-            int FuncIdx = int.Parse(tBox_CriteriaToDrow.Text);
+            int FuncIdx = int.Parse(tBox_CriteriaToDraw.Text);
             double Q = calculateTargetFunction(Point, FuncIdx);
             Point3D p3d = new Point3D((float)Point[0], (float)Point[1], (float)Q);
             SectionPoints[i] = p3d;
@@ -921,7 +931,8 @@ namespace Equal_level_lines_UI
                                        NumbersOfNonFixedVariables);
       }
       setNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
-      setOptimizerParameters(int.Parse(tBox_CriteriaToDrow.Text), 1);
+      setOptimizerParameters(int.Parse(tBox_CriteriaToDraw.Text),
+                             int.Parse(tBox_LimitToDraw.Text));
       //setOptimizerParameters(int.Parse(tBox_CriteriaToDrow.Text));
       //GetMeasurements();
       btn_DoOptIter.Enabled = true;

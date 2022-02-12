@@ -35,6 +35,7 @@ namespace Equal_level_lines_UI
       F.DrawFilling = cBox_DrawFilling.Checked;
       F.NGridLines = int.Parse(tBox_NumOfGridLines.Text);
       F.GridLinesThickness = int.Parse(tBox_GridLinesThickness.Text);
+      this.Close();
     }
   }
 }
