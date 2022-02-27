@@ -55,10 +55,11 @@ namespace Equal_level_lines_UI
     // ============== UI_to_optimizer_adapter.dll import functions: ===============
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void setImportingDllPath2(string _ImportingDllPath, int length);
+    public static extern void setImportingDllPath2(string TaskDllPath,
+                                                   string OptAdapterDllPath);
 
-    //[DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
-    //public static extern void setOptimizerArea(double _XMin, double _XMax, double _YMin, double _YMax);
+    [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void setTaskDllPath(string OptimizerDllPath);
 
     [DllImport(dll2, CallingConvention = CallingConvention.Cdecl)]
     public static extern void setTaskDim(int TaskDim);
@@ -576,12 +577,6 @@ namespace Equal_level_lines_UI
       btn_section_clear.Enabled = true;
     }
 
-    //private void CBox_AddXaxis_CheckedChanged(object sender, EventArgs e)
-    //{
-    //  AddXAxis = cBox_AddXaxis.Checked;
-    //  pictureBox1.Invalidate();
-    //}
-
     static class NativeMethods
     {
       [DllImport("kernel32.dll")]
@@ -895,7 +890,8 @@ namespace Equal_level_lines_UI
     private void btn_set_optimizer_Click(object sender, EventArgs e)
     {
       String DllPath = tBox_DllPath.Text.ToString();
-      setImportingDllPath2(DllPath, DllPath.Length);
+      String OptDllPath = tBox_OptimizerDllPath.Text.ToString();
+      setImportingDllPath2(DllPath, OptDllPath);
       setTaskDim(TaskDim - NumOfFixedVariables);
 
       double[] VariablesBounds = new double[(TaskDim - NumOfFixedVariables) * 2];
@@ -933,8 +929,6 @@ namespace Equal_level_lines_UI
       setNumOptimizerIterations(int.Parse(tBox_OptNumIters.Text));
       setOptimizerParameters(int.Parse(tBox_CriteriaToDraw.Text),
                              int.Parse(tBox_LimitToDraw.Text));
-      //setOptimizerParameters(int.Parse(tBox_CriteriaToDrow.Text));
-      //GetMeasurements();
       btn_DoOptIter.Enabled = true;
       btn_FindOptSol.Enabled = true;
       btn_set_optimizer.BackColor = Color.LightGreen;
@@ -977,13 +971,6 @@ namespace Equal_level_lines_UI
     private void btn_FindOptSol_Click(object sender, EventArgs e)
     {
       int NIterations = int.Parse(tBox_OptNumIters.Text);
-      //int OptimizerIsWorking = 1;
-      //while (OptimizerIsWorking == 1)
-      //{
-      //  OptimizerIsWorking = runOptimizer();
-      //  GetMeasurements();
-      //}
-      //GetSolution();
       double[] Solutions = new double[NIterations];
       runOptimizer(NIterations, Solutions);
       GetSolution();
@@ -1011,24 +998,6 @@ namespace Equal_level_lines_UI
       SolutionsList.Add(OptimalPointCoordsAndFuncValue[TaskDim]);
       chart_SolutionRecord.Series["Series1"].Points.AddXY(SolutionsList.Count - 1, OptimalPointCoordsAndFuncValue[TaskDim]);
     }
-
-    //private void CBox_AddYaxis_CheckedChanged(object sender, EventArgs e)
-    //{
-    //  AddYAxis = cBox_AddYaxis.Checked;
-    //  pictureBox1.Invalidate();
-    //}
-
-    //private void Button1_Click(object sender, EventArgs e)
-    //{
-    //  colorDialog1.ShowDialog();
-    //  GridColor = colorDialog1.Color;
-    //}
-
-    //private void CBox_AddGrid_CheckedChanged(object sender, EventArgs e)
-    //{
-    //  AddGrid = cBox_AddGrid.Checked;
-    //  pictureBox1.Invalidate();
-    //}
 
     public static void GetDataFromDll(int FuncIdx, int rowIdx, int N, int M)
     {

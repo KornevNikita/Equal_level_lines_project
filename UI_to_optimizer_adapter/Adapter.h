@@ -1,97 +1,18 @@
 #include <iostream>
 #include <string>
-#include <vector>
 
 #include <Windows.h>
 
-#include "CoreDll/Direct.h"
-#include "CoreDll/parameters.h"
-#include "CoreDll/test_functions.h"
-
 using namespace std;
 
-typedef double (*Import_func)(double *);
-
-string ImportingDllPath2;
-
-int TaskDim;
-
-#include <iostream>
-using namespace std; // temp
-
-enum FunctionType {
-  Target_function,
-  Limit_function
-};
-
-void parseImportFunction(Import_func& IFunc, FunctionType FT, int FuncIdx) {
-  wstring PathWString = wstring(ImportingDllPath2.begin(),
-                                ImportingDllPath2.end());
-  LPCWSTR PathLPCWSTR = PathWString.c_str();
-  HINSTANCE HDll = LoadLibrary(PathLPCWSTR);
-  string FuncName =
-    FT == FunctionType::Target_function ? string("target_function")
-                                        : string("limit_function");
-  FuncName += to_string(FuncIdx);
-  IFunc = (Import_func)GetProcAddress(HDll, FuncName.c_str());
-}
-
-class MyTargetFunction : public TestFunction
-{
-  Import_func IFunc;
-
-public:
-  MyTargetFunction(int FuncIdx) : TestFunction(TaskDim) {
-    parseImportFunction(IFunc, FunctionType::Target_function, FuncIdx);
-  }
-
-  void setArea(double *VariablesBounds) {
-    int k = 0;
-    for (int i = 0; i < TaskDim; ++i) {
-      bottomLeft[i] = VariablesBounds[k++];
-      topRight[i] = VariablesBounds[k++];
-    }  
-  }
-
-  FunctionValue f(CoordinateValue *Point)
-  {
-    CoordinateValue *_pointForIntermediateCalculations =
-      new CoordinateValue[TaskDim];
-    rescale(Point, _pointForIntermediateCalculations);
-    return (*IFunc)(_pointForIntermediateCalculations);
-  }
-};
-
-class MyConditionFunction : public TestFunction
-{
-  Import_func IFunc;
-
-public:
-  MyConditionFunction(int LimitIdx) : TestFunction(TaskDim) {
-    parseImportFunction(IFunc, FunctionType::Limit_function, LimitIdx);
-  }
-
-  void setArea(double *VariablesBounds) {
-    int k = 0;
-    for (int i = 0; i < TaskDim; ++i) {
-      bottomLeft[i] = VariablesBounds[k++];
-      topRight[i] = VariablesBounds[k++];
-    }
-  }
-
-  FunctionValue f(CoordinateValue* Point)
-  {
-    CoordinateValue* _pointForIntermediateCalculations =
-      new CoordinateValue[TaskDim];
-    rescale(Point, _pointForIntermediateCalculations);
-    return (*IFunc)(_pointForIntermediateCalculations);
-  }
-};
+string TaskDllPath;
+string OptimizerAdapterDllPath;
+HINSTANCE HDll; // Optimizer adapter DLL descriptor
 
 // Служебный метод для установки пути к DLL с задачей оптимизации, из которой
 // будут импортированы целевая функция и функции-ограничения
 extern "C" __declspec(dllexport)
-void setImportingDllPath2(char *ImportingDllPath, int Length);
+void setImportingDllPath2(char *TaskDllPath, char *OptAdapterDllPath);
 
 // Метод для установки границ области, в которой будет производиться расчет
 // импортируемых математических функций
